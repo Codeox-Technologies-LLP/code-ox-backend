@@ -1,17 +1,22 @@
 const Content = require('../models/webModel');
 
 //post
+
 exports.createContent = async (req, res) => {
   try {
-    const files = req.files; 
-    const images = files.map(file => ({ image: file.path }));
+    if (!req.file || req.file.length === 0) {
+      return res.status(400).json({ message: 'No files were uploaded.' });
+    }
+    
+    
+    const image = req.file.path ;
 
     const newContent = await Content.create({
       heading: req.body.heading,
       subheading: req.body.subheading,
       description: req.body.description,
       buttonLink: req.body.buttonLink,
-      images: images,
+      image: image,
     });
 
     res.status(201).json(newContent);
