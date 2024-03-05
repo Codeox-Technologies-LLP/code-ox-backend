@@ -14,14 +14,22 @@ const addQuery = async(req, res) => {
      if (validateEmail(email)){
          const newquery = new querymodel({email,name,phone,message,countryCode});
          await newquery.save()
-   res.status(201).json({message:"Query submitted successfully"})
+   res.status(201).json({statusCode:201,
+    success:true
+    ,message:"Query submitted successfully"})
 } else {
     console.log('Email is invalid');
-    res.status(400).json({ message: "Invalid email address" }); 
+    res.status(400).json({ statusCode: 400,
+        success: false,
+        error: "Internal server error",
+        message: "Invalid email" }); 
 }
   } catch (error) {
     console.log(error)   
-    res.status(500).json({error:error.message})
+    res.status(500).json({statusCode: 500,
+        success: false,
+        error: "Internal server error",
+        message: "Query submission failed"})
   }
  
 };
@@ -37,7 +45,10 @@ const getQuery =async(req, res) => {
      .limit(limit)
      const totalCount= await querymodel.countDocuments();
      const totalPages = Math.ceil(totalCount/limit)
-     res.status(200).json({message:"Query listing successfull",
+     res.status(200).json({
+        statusCode:200,
+        success:true,
+        message:"Query listing successfull",
      data,
     metaData:{
         totalpages:totalCount,
@@ -45,7 +56,10 @@ const getQuery =async(req, res) => {
         currentpage:page
     }})
    } catch (error) {
-    res.status(500).json({error:error.message})
+    res.status(500).json({ statusCode: 500,
+        success: false,
+        error: "Internal server error",
+        message: "Query listing failed"})
    }
    };
    
