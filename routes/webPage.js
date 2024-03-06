@@ -36,7 +36,7 @@ router.post('/content', upload.single('image'), contentController.createContent)
 
 router.get('/content', contentController.getAllContent);
 
-router.put('/content/:id', contentController.updateContent);
+router.put('/content/:id', upload.single('image'), contentController.updateContent);
 
 
 
