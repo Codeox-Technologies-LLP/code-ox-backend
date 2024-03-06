@@ -1,7 +1,7 @@
 // models/webModel.js
 const mongoose = require('mongoose');
 
-const contentSchema = new mongoose.Schema({
+const caseStudiesSchema = new mongoose.Schema({
   heading: {
     type: String,
     required: true,
@@ -26,6 +26,6 @@ const contentSchema = new mongoose.Schema({
 
 );
 
-const Content = mongoose.model('Content', contentSchema);
+const  caseStudies = mongoose.model('case-studies', caseStudiesSchema);
 
-module.exports = Content;
+module.exports = caseStudies;

@@ -32,15 +32,15 @@ function handleMulterErrors(err, req, res, next) {
 
 
 
-router.post('/content', upload.single('image'), contentController.createContent);
+router.post('/case-studies', upload.single('image'), contentController.createCatergories);
 
-router.get('/content', contentController.getAllContent);
+router.get('/case-studies', contentController.getAllCatergories);
 
-router.put('/content/:id', upload.single('image'), contentController.updateContent);
+router.put('/case-studies/:id', upload.single('image'), contentController.updateCatergories);
 
 
 
-router.delete('/content/:id', contentController.deleteContent);
+router.delete('/case-studies/:id', contentController.deleteCatergories);
 
 
 router.use(handleMulterErrors)

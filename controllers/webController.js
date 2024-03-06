@@ -1,20 +1,20 @@
-const Content = require('../models/webModel');
+const Catergories = require('../models/webModel');
 
 //post
-exports.createContent = async (req, res) => {
+exports.createCatergories = async (req, res) => {
   try {
     if (!req.file || req.file.length === 0) {
       return res.status(400).json({ success: false, message: 'No files were uploaded.' });
     }
     const image = req.file.path;
-    const newContent = await Content.create({
+    const newCatergories = await Catergories.create({
       heading: req.body.heading,
       subheading: req.body.subheading,
       description: req.body.description,
       buttonLink: req.body.buttonLink,
       image: image,
     });
-    res.status(201).json({ success: true, statusCode: 200, message: 'webContent created successfully', data: newContent });
+    res.status(201).json({ success: true, statusCode: 200, message: 'webCatergories created successfully', data: newCatergories });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -22,10 +22,10 @@ exports.createContent = async (req, res) => {
 
 
 //get
-exports.getAllContent = async (req, res) => {
+exports.getAllCatergories = async (req, res) => {
   try {
-    const allContent = await Content.find();
-    res.status(200).json({ statusCode: 200, success: true, message: "Successfully retrieved all content", data: allContent });
+    const allCatergories = await Catergories.find();
+    res.status(200).json({ statusCode: 200, success: true, message: "Successfully retrieved all Catergories", data: allCatergories });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -33,7 +33,7 @@ exports.getAllContent = async (req, res) => {
 
 //update
 
-exports.updateContent = async (req, res, next) => {
+exports.updateCatergories = async (req, res, next) => {
   try {
     console.log("Request Body:", req.body, req.file, req.params.id);
     if (!req.file) {
@@ -47,15 +47,15 @@ exports.updateContent = async (req, res, next) => {
       buttonLink: req.body.buttonLink
     };
 
-    // Update the content with the new values
-    const updatedContent = await Content.findByIdAndUpdate(req.params.id, updatedFields, { new: true });
+    // Update the Catergories with the new values
+    const updatedCatergories = await Catergories.findByIdAndUpdate(req.params.id, updatedFields, { new: true });
 
-    // Check if content is found and updated
-    if (updatedContent) {
-      res.status(200).json({ success: true, statusCode: 200, message: "Content updated successfully", data: updatedContent });
+    // Check if Catergories is found and updated
+    if (updatedCatergories) {
+      res.status(200).json({ success: true, statusCode: 200, message: "Catergories updated successfully", data: updatedCatergories });
     } else {
-      // Content not found with the provided ID
-      res.status(404).json({ success: false, message: "Content not found" });
+      // Catergories not found with the provided ID
+      res.status(404).json({ success: false, message: "Catergories not found" });
     }
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -63,15 +63,15 @@ exports.updateContent = async (req, res, next) => {
 };
 
 //delete
-exports.deleteContent = async (req, res) => {
+exports.deleteCatergories = async (req, res) => {
   try {
-    const deletedContent = await Content.findByIdAndDelete(req.params.id);
-    if (!deletedContent) {
-      return res.status(404).json({ success: false, message: 'Content not found' });
+    const deletedCatergories = await Catergories.findByIdAndDelete(req.params.id);
+    if (!deletedCatergories) {
+      return res.status(404).json({ success: false, statusCode:404, message: 'Catergories not found' });
     }
-    res.status(200).json({ success: true, statusCode: 200, message: 'Content deleted successfully' });
+    res.status(200).json({ success: true, statusCode: 200, message: 'Catergories deleted successfully' });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ statusCode:500 ,message: 'Internal server error', });
   }
 };
 
