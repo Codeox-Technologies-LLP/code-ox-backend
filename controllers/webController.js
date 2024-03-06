@@ -56,7 +56,7 @@ exports.updateContent = async (req, res, next) => {
 
     // Check if content is found and updated
     if (updatedContent) {
-      res.status(200).json({ success: true, message: "Content updated successfully", data: updatedContent });
+      res.status(200).json({ success: true, statusCode: 200, message: "Content updated successfully", data: updatedContent });
     } else {
       // Content not found with the provided ID
       res.status(404).json({ success: false, message: "Content not found" });
