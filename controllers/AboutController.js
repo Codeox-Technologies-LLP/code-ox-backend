@@ -36,9 +36,6 @@ exports.createAbout = async (req, res) => {
 exports.getAllAbout = async (req, res) => {
     try {
         const aboutData = await aboutContent.find();
-        if (!aboutData || aboutData.length === 0) {
-            return res.status(404).json({ message: "No about content found" });
-        }
         res.status(200).json(aboutData);
     } catch (error) {
         console.error(error);
