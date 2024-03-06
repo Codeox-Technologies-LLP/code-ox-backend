@@ -17,16 +17,16 @@ const aboutSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    gif: {
-        type: String,
-        required: true,
-    },
+    // gif: {
+    //     type: String,
+    //     required: true,
+    // },
     imageCards: [
         {
-            image: {
-                type: String,
-                required: true
-            },
+            // image: {
+            //     type: String,
+            //     required: true
+            // },
             cardHeading: {
                 type: String,
                 required: true

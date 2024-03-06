@@ -12,6 +12,8 @@ const dotenvConfig = dotenv.config({
 ///path
 const contentRouter = require('./routes/webPage');
 app.use('/api', contentRouter);
+const aboutRouter = require('./routes/About')
+app.use('/api', aboutRouter);
 
 const mongoose = require("mongoose");
 console.log(process.env.MONGO);
@@ -28,5 +30,4 @@ mongoose
   });
 
 
-  //multer
-  
+//multer

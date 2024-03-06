@@ -14,7 +14,7 @@ exports.createContent = async (req, res) => {
       buttonLink: req.body.buttonLink,
       image: image,
     });
-    res.status(201).json({ success: true, statusCode: 200, message: 'Content created successfully', data: newContent });
+    res.status(201).json({ success: true, statusCode: 200, message: 'webContent created successfully', data: newContent });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -35,14 +35,10 @@ exports.getAllContent = async (req, res) => {
 
 exports.updateContent = async (req, res, next) => {
   try {
-    console.log("Request Body:", req.body, req.file, req.params.id); // Log the request body, file, and ID
-
-    // Check if an image file is uploaded
+    console.log("Request Body:", req.body, req.file, req.params.id);
     if (!req.file) {
       return res.status(400).json({ success: false, message: "No image file uploaded" });
     }
-
-    // Create an object with updated fields
     const updatedFields = {
       image: req.file.path,
       heading: req.body.heading,
