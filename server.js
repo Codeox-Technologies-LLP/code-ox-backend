@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const mongoose = require("mongoose");
 const  router  = require('./Routes/Routes');
+
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -11,6 +12,7 @@ app.use('/api',router)
 const dotenvConfig = dotenv.config({
   path: path.resolve(__dirname, "./config", "config.env"),
 });
+
 
 
 mongoose
