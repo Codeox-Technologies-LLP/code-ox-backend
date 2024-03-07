@@ -1,7 +1,7 @@
 const express = require('express');
 const {addQuery,getQuery, getCountry}=require('../Controllers/ContactUsControllers')
 const {addFooterData}=require('../Controllers/FooterController')
-const CaseStudiesController = require('../Controllers/CaseStudiesController');
+const {addCaseStudies} = require('../Controllers/CaseStudiesController');
 const multer=require('multer');
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -33,6 +33,6 @@ router.post('/contactus',addQuery);
 router.get('/contactus',getQuery);
 router.get('/all-countries',getCountry);
 router.post('/add-footer-data',upload.single('image'),addFooterData);
-router.post('/case-studies', upload.single('image'), CaseStudiesController.createCatergories);
+router.post('/case-studies', upload.single('image'), addCaseStudies);
 router.use(handleMulterErrors)
 module.exports=router
