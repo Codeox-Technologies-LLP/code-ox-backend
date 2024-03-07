@@ -1,7 +1,7 @@
 const caseStudiesModel = require('../Model/caseStudies');
 
 //post
-exports.createCatergories = async (req, res) => {
+const addCaseStudies = async (req, res) => {
   try {
 
     const image = req.file.path
@@ -44,4 +44,4 @@ exports.createCatergories = async (req, res) => {
 //delete
 
 
-
+module.exports={addCaseStudies}
