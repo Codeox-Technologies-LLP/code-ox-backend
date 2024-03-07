@@ -30,22 +30,33 @@ const addCaseStudies = async (req, res) => {
 };
 
 //get
-
-
- const getCaseStudies = async (req, res,next) => {
+const getCaseStudies = async (req, res, next) => {
   try {
-    const categories = req.params.id;
-    const caseStudiesData = await caseStudiesModel.find(categories);
-    if(!caseStudiesData){
-      next(new ErrorHandler('casestudies not',400))
-      return res
+    const category = req.query.category ? req.query.category.toLowerCase() : null; 
+    let caseStudiesData = await caseStudiesModel.find(); 
 
+    // Filter the data
+    if (category) {
+      caseStudiesData = caseStudiesData.filter(caseStudy => 
+        caseStudy.caseStudies.some(study => study.categories.toLowerCase() === category)
+      );
+      // Now caseStudiesData only contains projects that have at least one case study matching the category
+      // If you want to include only the matching case studies, you can further filter here
+      caseStudiesData.forEach(caseStudy => {
+        caseStudy.caseStudies = caseStudy.caseStudies.filter(study => study.categories.toLowerCase() === category);
+      });
     }
+
+    if (caseStudiesData.length === 0) {
+      return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
+    }
+
     return res.status(200).json({ statusCode: 200, success: true, caseStudies: caseStudiesData });
   } catch (err) {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
 
 
 
