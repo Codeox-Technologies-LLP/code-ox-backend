@@ -2,8 +2,11 @@ const express = require('express');
 const {addQuery,getQuery, getCountry}=require('../Controllers/ContactUsControllers')
 const {addFooterData}=require('../Controllers/FooterController')
 const {addCaseStudies} = require('../Controllers/CaseStudiesController');
+const path= require('path')
 const multer=require('multer');
+var upload = multer({ storage: storage ,limits: { fileSize: 2 * 1024 * 1024 } })
 const router = express.Router();
+
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './public/images/');
@@ -15,7 +18,7 @@ const storage = multer.diskStorage({
     }
   });
   
-var upload = multer({ storage: storage ,limits: { fileSize: 2 * 1024 * 1024 } })
+
 
 // Error handling middleware
 function handleMulterErrors(err, req, res, next) {
