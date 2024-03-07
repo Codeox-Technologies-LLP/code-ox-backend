@@ -84,14 +84,6 @@ const getQuery = async (req, res) => {
 };
 
 const getCountry = async (req, res) => {
-  const options = {
-    method: "GET",
-    url: "https://country-info.p.rapidapi.com/",
-    headers: {
-      "X-RapidAPI-Key": "7b9f17d9f7msh6921d6a7eb959a1p1ae313jsn675b7c579702",
-      "X-RapidAPI-Host": "country-info.p.rapidapi.com",
-    },
-  };
   try {
    
      

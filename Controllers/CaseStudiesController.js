@@ -7,8 +7,7 @@ const addCaseStudies = async (req, res) => {
     const image = req.file.path
   
     const data = {
-      
-  
+ 
         title: req.body.title,
         subtitle: req.body.subtitle,
         caseStudiesDescription: req.body.caseStudiesDescription,
