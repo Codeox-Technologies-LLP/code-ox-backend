@@ -4,7 +4,7 @@ const {addFooterData}=require('../Controllers/FooterController')
 const {addCaseStudies} = require('../Controllers/CaseStudiesController');
 const path= require('path')
 const multer=require('multer');
-var upload = multer({ storage: storage ,limits: { fileSize: 2 * 1024 * 1024 } })
+
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() +   path.extname(file.originalname));
     }
   });
-  
+  var upload = multer({ storage: storage ,limits: { fileSize: 2 * 1024 * 1024 } })
 
 
 // Error handling middleware
