@@ -3,20 +3,18 @@ const {Schema}= mongoose
 
 
 const footerSchema= new Schema({
-logo:{
+address:{
     type:String,
     required:true
-,
-navMenu:[{
-    menuheading:{
-        type:String,
-        required:true
-    },
-    menulist:{
-        type: Array,
-        required: true
-    }
-}],
+},
+email:{
+    type:String,
+    required:true
+},
+phone:{
+    type:String,
+    required:true
+},
 socialmedia:[{
     name:{    
         type:String,
@@ -31,10 +29,6 @@ socialmedia:[{
         required:true
     }
 }]
-
-}
-
-
 })
 
 const footerModel=mongoose.model('footer',footerSchema)
