@@ -1,4 +1,4 @@
-const WebModel = require('../models/webModel');
+const caseStudiesModel = require('../Model/caseStudies');
 
 //post
 exports.createCatergories = async (req, res) => {
@@ -18,7 +18,7 @@ exports.createCatergories = async (req, res) => {
 
     }
     
-      const response= await WebModel.findOneAndUpdate({}, {
+      const response= await caseStudiesModel.findOneAndUpdate({}, {
      
       $set: {
         heading: req.body.heading,

@@ -41,6 +41,6 @@ const caseStudySchema = new mongoose.Schema({
   }]
 });
 
-const WebModel = mongoose.model('WebModel', caseStudySchema);
+const caseStudiesModel = mongoose.model('case-studies', caseStudySchema);
 
-module.exports = WebModel;
+module.exports = caseStudiesModel;
