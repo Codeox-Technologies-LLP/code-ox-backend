@@ -1,7 +1,7 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
 const { addFooterData } = require('../Controllers/FooterController')
-const { addCaseStudies, getCaseStudies } = require('../Controllers/CaseStudiesController');
+const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
 const path = require('path')
 const multer = require('multer');
 
@@ -37,7 +37,11 @@ router.post('/contactus', addQuery);
 router.get('/contactus', getQuery);
 router.get('/all-countries', getCountry);
 router.post('/add-footer-data', upload.single('image'), addFooterData);
+
+///case-studies
 router.post('/case-studies', upload.single('image'), addCaseStudies);
 router.get('/case-studies', getCaseStudies);
+router.put('/case-studies/:id', updateCaseStudies);
+router.delete('/case-studies/:id', deleteCaseStudy);
 router.use(handleMulterErrors)
 module.exports = router
