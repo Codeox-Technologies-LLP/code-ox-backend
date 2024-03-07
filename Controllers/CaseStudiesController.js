@@ -62,7 +62,10 @@ const getCaseStudies = async (req, res, next) => {
 const updateCaseStudies = async (req, res) => {
   try {
     const id = req.params.id; // Assuming you are passing the ID in the request parameters
-    
+
+    console.log("Request Body:", req.body); // Log request body
+    console.log("Request File:", req.file); // Log uploaded file if exists
+
     const data = {
       title: req.body.title,
       subtitle: req.body.subtitle,
@@ -72,16 +75,19 @@ const updateCaseStudies = async (req, res) => {
       image: req.file ? req.file.path : null, // Check if file exists
     };
 
+    console.log("Data:", data); // Log data object
+
     const response = await caseStudiesModel.findByIdAndUpdate(id, {
       $push: { caseStudies: data },
     }, { new: true });
-    console.log(response);
+    console.log("Response:", response); // Log response from database
 
     return res.status(200).json({ statusCode: 200, success: true, message: "Case study updated successfully", data: response });
   } catch (err) {
     res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
 
 
 //delete
