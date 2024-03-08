@@ -61,10 +61,17 @@ const getCaseStudies = async (req, res, next) => {
 //update
 const updateCaseStudies = async (req, res) => {
   try {
-    const id = req.params.id; // Assuming you are passing the ID in the request parameters
+    const caseStudyId = req.body.caseStudyId;
+    const id = req.params.id;
 
-    console.log("Request Body:", req.body); // Log request body
-    console.log("Request File:", req.file); // Log uploaded file if exists
+    // Validate the request body to ensure all required fields are present
+    if (!caseStudyId || !id || !req.body.title || !req.body.subtitle || !req.body.caseStudiesDescription || !req.body.buttonLink || !req.body.categories) {
+      console.log("Missing required fields in the request body.");
+      return res.status(400).json({ statusCode: 400, success: false, message: "Missing required fields in the request body" });
+    }
+
+    console.log("Request Body:", req.body);
+    console.log("Request File:", req.file);
 
     const data = {
       title: req.body.title,
@@ -72,21 +79,50 @@ const updateCaseStudies = async (req, res) => {
       caseStudiesDescription: req.body.caseStudiesDescription,
       buttonLink: req.body.buttonLink,
       categories: req.body.categories,
-      image: req.file ? req.file.path : null, // Check if file exists
+      image: req.file ? req.file.path : null,
     };
 
-    console.log("Data:", data); // Log data object
+    console.log("Data:", data);
 
-    const response = await caseStudiesModel.findByIdAndUpdate(id, {
-      $push: { caseStudies: data },
-    }, { new: true });
-    console.log("Response:", response); // Log response from database
+    // Perform the update operation
+    const updatedCaseStudy = await caseStudiesModel.findOneAndUpdate(
+      { "_id": id, "caseStudies._id": caseStudyId }, // Filter for the specific case study using both main document ID and case study ID
+      {
+        "$set": {
+          "caseStudies.$[elem].title": data.title,
+          "caseStudies.$[elem].subtitle": data.subtitle,
+          "caseStudies.$[elem].caseStudiesDescription": data.caseStudiesDescription,
+          "caseStudies.$[elem].buttonLink": data.buttonLink,
+          "caseStudies.$[elem].categories": data.categories,
+          "caseStudies.$[elem].image": data.image
+        }
+      },
+      { 
+        new: true, // Return the updated document
+        arrayFilters: [{ "elem._id": caseStudyId }] // Filter to update the array element with matching ID
+      }
+    );
 
-    return res.status(200).json({ statusCode: 200, success: true, message: "Case study updated successfully", data: response });
+    // Check if the updatedCaseStudy is null, indicating no matching document was found
+    if (!updatedCaseStudy) {
+      console.log("Failed to update case study: Case study not found.");
+      return res.status(404).json({ statusCode: 404, success: false, message: "Case study not found" });
+    }
+
+    console.log("Case study updated successfully.");
+
+    // If the updatedCaseStudy is not null, it means the update was successful
+    return res.status(200).json({ statusCode: 200, success: true, message: "Case study updated successfully", data: updatedCaseStudy });
   } catch (err) {
-    res.status(500).json({ statusCode: 500, success: false, message: err.message });
+    // Handle any errors that occur during the update operation
+    console.error("Error:", err);
+    return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
+
+
+
 
 
 

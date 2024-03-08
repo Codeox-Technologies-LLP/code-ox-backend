@@ -41,7 +41,7 @@ router.post('/add-footer-data', upload.single('image'), addFooterData);
 ///case-studies
 router.post('/case-studies', upload.single('image'), addCaseStudies);
 router.get('/case-studies', getCaseStudies);
-router.put('/case-studies/:id', updateCaseStudies);
+router.put('/case-studies/:id', upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', deleteCaseStudy);
 router.use(handleMulterErrors)
 module.exports = router
