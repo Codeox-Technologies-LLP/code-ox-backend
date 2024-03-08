@@ -1,5 +1,6 @@
 const footerModel = require('../Model/Footer');
 
+//ADD FOOTER DATA
 const addFooterData=async(req,res)=>{
 try {
    console.log(req.file,req.body)
@@ -21,6 +22,7 @@ try {
 }   
 }
 
+//GET FOOTER DATA
 const getFooterData=async(req,res)=>{
 try {
     const response =await footerModel.find({})
@@ -32,5 +34,39 @@ try {
 }
 
 
+//UPDATE FOOTER DATA
+const updateFooteData =async(req,res)=>{
+  try {
+    const id= req.params.id;
+      
+    const data={
+        email:req.body.email,
+        address:req.body.address,
+        phone:req.body.phone,
+        'socialmedia.$[elem].name': req.body.name,
+        'socialmedia.$[elem].icon': req.file.path, 
+        'socialmedia.$[elem].link': req.body.link   
+       }
+       const response = await  footerModel.findOneAndUpdate({},{$set:data},{arrayFilters:[{'elem._id':id}], new: true }
+       
+       )
+       res.send(200).json({statusCode:200,success:true,message:"updating successful",data:response})
+  } catch (error) {
+    res.status(500).json({statusCode:500,success:false,message:error.message})  
+  }
+}
 
-module.exports={addFooterData,getFooterData}
+//DELETE FOOTER DATA
+const deleteFooter =async(req,res)=>{
+   try {
+    const id = req.params.id;
+    const data = await footerModel.findOneAndUpdate({}, { $pull: { socialmedia: { _id: id } } },{new:true})
+    console.log(data);
+    res.send(200).json({statusCode:200,success:true,message:"deleting successful"})
+   } catch (error) {
+    res.status(500).json({statusCode:500,success:false,message:error.message})  
+   }
+}
+
+
+module.exports={addFooterData,getFooterData ,updateFooteData,deleteFooter}
