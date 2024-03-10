@@ -12,9 +12,7 @@ const addCaseStudies = async (req, res) => {
       categories: req.body.categories,
       image: image,
     }
-    
       const response= await caseStudiesModel.findOneAndUpdate({}, {
-     
       $set: {
         heading: req.body.heading,
         subheading: req.body.subheading,
@@ -56,79 +54,39 @@ const getCaseStudies = async (req, res, next) => {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
-
-
 //update
-const updateCaseStudies = async (req, res) => {
+const updateCaseStudies = async (req, res, next) => {
   try {
-    const caseStudyId = req.body.caseStudyId;
-    const id = req.params.id;
+    const newData = req.body;
+    const caseStudyId = req.params.caseStudyId; // Assuming you are passing the case study ID in the URL
 
-    // Validate the request body to ensure all required fields are present
-    if (!caseStudyId || !id || !req.body.title || !req.body.subtitle || !req.body.caseStudiesDescription || !req.body.buttonLink || !req.body.categories) {
-      console.log("Missing required fields in the request body.");
-      return res.status(400).json({ statusCode: 400, success: false, message: "Missing required fields in the request body" });
-    }
+    console.log("Received request to update case study:", caseStudyId);
+    console.log("New data:", newData);
 
-    console.log("Request Body:", req.body);
-    console.log("Request File:", req.file);
-
-    const data = {
-      title: req.body.title,
-      subtitle: req.body.subtitle,
-      caseStudiesDescription: req.body.caseStudiesDescription,
-      buttonLink: req.body.buttonLink,
-      categories: req.body.categories,
-      image: req.file ? req.file.path : null,
-    };
-
-    console.log("Data:", data);
-
-    // Perform the update operation
-    const updatedCaseStudy = await caseStudiesModel.findOneAndUpdate(
-      { "_id": id, "caseStudies._id": caseStudyId }, // Filter for the specific case study using both main document ID and case study ID
-      {
-        "$set": {
-          "caseStudies.$[elem].title": data.title,
-          "caseStudies.$[elem].subtitle": data.subtitle,
-          "caseStudies.$[elem].caseStudiesDescription": data.caseStudiesDescription,
-          "caseStudies.$[elem].buttonLink": data.buttonLink,
-          "caseStudies.$[elem].categories": data.categories,
-          "caseStudies.$[elem].image": data.image
-        }
-      },
-      { 
-        new: true, // Return the updated document
-        arrayFilters: [{ "elem._id": caseStudyId }] // Filter to update the array element with matching ID
-      }
+    const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
+      { 'caseStudies._id': caseStudyId }, // Query condition to find the nested case study
+      { $set: { 'caseStudies.$': newData } }, // Update data for the nested case study
+      { new: true } // Options: return updated document
     );
 
-    // Check if the updatedCaseStudy is null, indicating no matching document was found
-    if (!updatedCaseStudy) {
-      console.log("Failed to update case study: Case study not found.");
-      return res.status(404).json({ statusCode: 404, success: false, message: "Case study not found" });
+    console.log("Updated case studies:", updatedCaseStudies);
+
+    if (!updatedCaseStudies) {
+      console.log("No case studies found for the provided ID.");
+      return res.status(404).json({ statusCode: 404, success: false, message: 'No case study found for the provided ID.' });
     }
 
     console.log("Case study updated successfully.");
-
-    // If the updatedCaseStudy is not null, it means the update was successful
-    return res.status(200).json({ statusCode: 200, success: true, message: "Case study updated successfully", data: updatedCaseStudy });
+    return res.status(200).json({ statusCode: 200, success: true, message: 'Case study updated successfully.', updatedCaseStudy: updatedCaseStudies });
   } catch (err) {
-    // Handle any errors that occur during the update operation
-    console.error("Error:", err);
+    console.error("Error updating case study:", err);
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
 
 
 
-
-
-
-
 //delete
-
-
 const deleteCaseStudy = async (req, res) => {
   try {
     const caseStudyId = req.params.id; // Assuming you are passing the case study ID in the URL
