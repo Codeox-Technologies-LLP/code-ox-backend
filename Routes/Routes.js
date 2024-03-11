@@ -1,5 +1,4 @@
 const express = require('express');
-
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
 const path = require('path')
@@ -35,16 +34,12 @@ function handleMulterErrors(err, req, res, next) {
   next(err);
 }
  
-////
 
-///case-studies
 
-router.get('/case-studies', getCaseStudies);
-// router.put('/case-studies/:id', upload.single('image'), updateCaseStudies);
-router.put('/case-studies/:caseStudyId',upload.single('image'), updateCaseStudies);
-router.delete('/case-studies/:id', deleteCaseStudy);
-
-router.post('/contactus',addQuery);
+router.get('/case-studies',authenticate, getCaseStudies);
+router.put('/case-studies/:caseStudyId',authenticate,upload.single('image'), updateCaseStudies);
+router.delete('/case-studies/:id',authenticate,deleteCaseStudy);
+router.post('/contactus',authenticate,addQuery);
 router.get('/contactus',authenticate,authenticate,getQuery);
 router.get('/all-countries',getCountry);
 router.post('/add-footer-data',authenticate,upload.single('image'),addFooterData);

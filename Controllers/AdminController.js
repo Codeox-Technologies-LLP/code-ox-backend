@@ -29,7 +29,7 @@ const adminLogin=async(req,res)=>{
             return res.status(401).json({ statusCode: 401, success: false, message: 'Invalid credentials' });
          }
         
-         const token = jwt.sign({ userId: user._id, username: user.username },'meow', { expiresIn: '3d' });
+         const token = jwt.sign({ userId: user._id, username: user.username },process.env.JWT, { expiresIn: '3d' });
          res.status(200).json({ statusCode: 200, success: true, message: 'Login successful', data: user,token:token });
     } catch (error) {
         res.status(500).json({statusCode:500,success:false,message:error.message}) 
