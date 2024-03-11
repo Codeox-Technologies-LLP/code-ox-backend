@@ -58,24 +58,27 @@ const getCaseStudies = async (req, res, next) => {
 const updateCaseStudies = async (req, res, next) => {
   try {
     const newData = req.body;
-    const caseStudyId = req.params.caseStudyId; // Assuming you are passing the case study ID in the URL
+    const caseStudyId = req.params.caseStudyId;
 
-    console.log("Received request to update case study:", caseStudyId);
-    console.log("New data:", newData);
+    // console.log("Received request to update case study:", caseStudyId);
+    // console.log("New data:", newData);
+
+    // Check if an image was uploaded
+    if (req.file) {
+      // If an image was uploaded, update the newData with the new image path
+      newData.image = req.file.path;
+    }
 
     const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
-      { 'caseStudies._id': caseStudyId }, // Query condition to find the nested case study
-      { $set: { 'caseStudies.$': newData } }, // Update data for the nested case study
-      { new: true } // Options: return updated document
+      { 'caseStudies._id': caseStudyId },
+      { $set: { 'caseStudies.$': newData } },
+      { new: true }
     );
-
-    console.log("Updated case studies:", updatedCaseStudies);
-
+    // console.log("Updated case studies:", updatedCaseStudies);
     if (!updatedCaseStudies) {
       console.log("No case studies found for the provided ID.");
       return res.status(404).json({ statusCode: 404, success: false, message: 'No case study found for the provided ID.' });
     }
-
     console.log("Case study updated successfully.");
     return res.status(200).json({ statusCode: 200, success: true, message: 'Case study updated successfully.', updatedCaseStudy: updatedCaseStudies });
   } catch (err) {
@@ -83,6 +86,7 @@ const updateCaseStudies = async (req, res, next) => {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
 
 
 
