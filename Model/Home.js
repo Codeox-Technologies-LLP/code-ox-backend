@@ -57,41 +57,11 @@ const homeSectionSchema = new Schema({
             type: String,
             required: true,
         },
-        servicesSubHeading: {
+        servicesDescripation: {
             type: String,
             required: true,
         },
     }],
-    // showreelHeading: {
-    //     type: String,
-    //     required: true
-    // },
-    // showreelDescription: {
-    //     type: String,
-    //     required: true,
-    // },
-    // showreelHeading1: {
-    //     type: String,
-    //     required: true,
-    // },
-    // showreelDescription2: {
-    //     type: String,
-    //     required: true,
-    // },
-    // showreelButton: {
-    //     type: String,
-    //     required: true,
-    // },
-    // showreelButtonLink: {
-    //     type: String,
-    //     required: true,
-    // },
-    // shoWreel: [{
-    //     categories: {
-    //         type: String,
-    //         required: true
-    //     }
-    // }],
     WhyCodeOxHeading: {
         type: String,
         // required: true
@@ -105,7 +75,7 @@ const homeSectionSchema = new Schema({
             type: String,
             required: true,
         },
-        WhyCodeOxDescription: {
+        Description: {
             type: String,
             required: true,
         },

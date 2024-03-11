@@ -6,7 +6,7 @@ const multer = require('multer');
 const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require('../Controllers/FooterController');
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
 const { authenticate } = require('../Controllers/AuthController')
-const { addHome } = require('../Controllers/HomeController')
+const { addHome, getHome } = require('../Controllers/HomeController')
 
 
 
@@ -50,6 +50,9 @@ router.put('/update-footerdata/:id', authenticate, upload.single('image'), updat
 router.delete('/delete-footer/:id', authenticate, deleteFooter)
 router.post('/create-admin', addAdmin);
 router.post('/admin-login', adminLogin)
+///home
 router.post('/home', upload.single('image'), addHome);
+router.get('/home', getHome)
+
 router.use(handleMulterErrors)
 module.exports = router

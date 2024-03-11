@@ -63,12 +63,9 @@ const updateCaseStudies = async (req, res, next) => {
     const newData = req.body;
     const caseStudyId = req.params.caseStudyId;
 
-    // console.log("Received request to update case study:", caseStudyId);
-    // console.log("New data:", newData);
-
-    // Check if an image was uploaded
+ 
     if (req.file) {
-      // If an image was uploaded, update the newData with the new image path
+    
       newData.image = req.file.path;
     }
 
@@ -77,7 +74,7 @@ const updateCaseStudies = async (req, res, next) => {
       { $set: { 'caseStudies.$': newData } },
       { new: true }
     );
-    // console.log("Updated case studies:", updatedCaseStudies);
+
     if (!updatedCaseStudies) {
       console.log("No case studies found for the provided ID.");
       return res.status(404).json({ statusCode: 404, success: false, message: 'No case study found for the provided ID.' });
