@@ -1,9 +1,14 @@
 const express = require('express');
+
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
-const { addFooterData } = require('../Controllers/FooterController')
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
 const path = require('path')
 const multer = require('multer');
+const {addFooterData,getFooterData,updateFooteData,deleteFooter}=require('../Controllers/FooterController');
+const {addAdmin,adminLogin}=require('../Controllers/AdminController');
+const {authenticate}=require('../Controllers/AuthController')
+
+
 
 const router = express.Router();
 
@@ -32,17 +37,23 @@ function handleMulterErrors(err, req, res, next) {
  
 ////
 
-//Contact us routes
-router.post('/contactus', addQuery);
-router.get('/contactus', getQuery);
-router.get('/all-countries', getCountry);
-router.post('/add-footer-data', upload.single('image'), addFooterData);
-
 ///case-studies
-router.post('/case-studies', upload.single('image'), addCaseStudies);
+
 router.get('/case-studies', getCaseStudies);
 // router.put('/case-studies/:id', upload.single('image'), updateCaseStudies);
 router.put('/case-studies/:caseStudyId',upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', deleteCaseStudy);
+
+router.post('/contactus',addQuery);
+router.get('/contactus',authenticate,authenticate,getQuery);
+router.get('/all-countries',getCountry);
+router.post('/add-footer-data',authenticate,upload.single('image'),addFooterData);
+router.post('/case-studies', authenticate,upload.single('image'), addCaseStudies);
+router.get('/get-footer-data',authenticate, getFooterData);
+router.put('/update-footerdata/:id',authenticate, upload.single('image'),updateFooteData);
+router.delete('/delete-footer/:id',authenticate,deleteFooter)
+router.post('/create-admin',addAdmin);
+router.post('/admin-login',adminLogin)
+
 router.use(handleMulterErrors)
 module.exports = router

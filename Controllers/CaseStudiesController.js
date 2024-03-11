@@ -5,12 +5,15 @@ const addCaseStudies = async (req, res) => {
   try {
     const image = req.file.path
     const data = {
+
       title: req.body.title,
       subtitle: req.body.subtitle,
       caseStudiesDescription: req.body.caseStudiesDescription,
       buttonLink: req.body.buttonLink,
       categories: req.body.categories,
       image: image,
+
+
     }
       const response= await caseStudiesModel.findOneAndUpdate({}, {
       $set: {
