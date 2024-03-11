@@ -3,7 +3,7 @@ const footerModel = require('../Model/Footer');
 //ADD FOOTER DATA
 const addFooterData=async(req,res)=>{
 try {
-   console.log(req.file,req.body)
+  
    const data={
     name:req.body.name,
     icon:req.file.path,
@@ -17,6 +17,7 @@ try {
       },$push:{socialmedia:data}},{ new: true, upsert: true })
 
    res.status(200).json({statusCode:200,success:true,message:"footer data submitted successfully"})
+
 } catch (error) {
     res.status(500).json({statusCode:500,success:false,message:error.message})
 }   
