@@ -6,7 +6,7 @@ const multer = require('multer');
 const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require('../Controllers/FooterController');
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
 const { authenticate } = require('../Controllers/AuthController')
-const { addHome, getHome } = require('../Controllers/HomeController')
+const { addHome, getHome, updateHome, updatedHome, } = require('../Controllers/HomeController')
 
 
 
@@ -37,7 +37,7 @@ function handleMulterErrors(err, req, res, next) {
 
 
 
-router.get('/case-studies',  getCaseStudies);
+router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:caseStudyId', authenticate, upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
 router.post('/contactus', authenticate, addQuery);
@@ -54,5 +54,11 @@ router.post('/admin-login', adminLogin)
 router.post('/home', upload.single('image'), addHome);
 router.get('/home', getHome)
 
+router.put('/home/:id', upload.single('image'), updatedHome);
+
+
+
+
 router.use(handleMulterErrors)
+
 module.exports = router

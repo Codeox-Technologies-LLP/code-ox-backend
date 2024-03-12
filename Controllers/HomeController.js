@@ -21,7 +21,7 @@ const addHome = async (req, res) => {
         const newServices = {
             image: image,
             servicesHeading: req.body.servicesHeading,
-            servicesSubHeading: req.body.servicesSubHeading,
+            servicesDescripation: req.body.servicesDescripation,
             WhyCodeOxHeading: req.body.WhyCodeOxHeading,
             WhyCodeOxDescription: req.body.WhyCodeOxDescription
         };
@@ -32,7 +32,7 @@ const addHome = async (req, res) => {
         }
         const newWhyCodeOx = {
             image: image,
-            WhyCodeOxDescription: req.body.WhyCodeOxDescription,
+            description: req.body.description,
         };
         req.body.WhyCodeOx.push(newWhyCodeOx);
 
@@ -102,4 +102,75 @@ const getHome = async (req, res) => {
     }
 };
 
-module.exports = { addHome ,getHome };
+
+
+///delte method
+const deleteById = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const deletedHome = await homeModel.findByIdAndDelete(id);
+        if (deletedHome) {
+            return res.status(404).json({ message: "Home not found" });
+        }
+        console.log("Deleted Home:", deletedHome);
+        res.status(200).json({ message: "Home deleted successfully" });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(400).json({ message: error.message });
+    }
+};
+
+//update
+const updatedHome = async (req, res) => {
+    const { id } = req.params;
+    const updatedData = req.body;
+    try {
+        console.log("Updating home document with ID:", id);
+        console.log("Updated data:", updatedData);
+
+      
+        const existingHome = await homeModel.findById(id);
+        if (!existingHome) {
+            return res.status(404).json({ message: "Home document not found" });
+        }
+
+    
+        let imagePath = existingHome.image; 
+        if (req.file) {
+            imagePath = req.file.path;
+         
+            updatedData.image = imagePath;
+        }
+
+        const updatedDocument = await homeModel.findByIdAndUpdate(
+            id,
+            { ...updatedData, image: imagePath }, 
+            { new: true }
+        );
+
+        console.log("Updated home document:", updatedDocument);
+
+    
+        if (!updatedDocument) {
+            return res.status(404).json({ message: "Failed to update home document" });
+        }
+
+        
+        res.status(200).json(updatedDocument);
+    } catch (err) {
+        console.error("Error updating home document:", err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+module.exports = { addHome, getHome, updatedHome };
