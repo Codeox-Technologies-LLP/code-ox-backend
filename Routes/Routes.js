@@ -6,7 +6,7 @@ const multer = require('multer');
 const {addFooterData,getFooterData,updateFooteData,deleteFooter}=require('../Controllers/FooterController');
 const {addAdmin,adminLogin}=require('../Controllers/AdminController');
 const {authenticate}=require('../Controllers/AuthController')
-
+const {addProjects, getProjects,updateProjects,deleteProjects}=require('../Controllers/ErpController')
 
 
 const router = express.Router();
@@ -36,19 +36,27 @@ function handleMulterErrors(err, req, res, next) {
  
 
 
-router.get('/case-studies',authenticate, getCaseStudies);
+router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:caseStudyId',authenticate,upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id',authenticate,deleteCaseStudy);
+router.post('/case-studies', authenticate,upload.single('image'), addCaseStudies);
+
 router.post('/contactus',authenticate,addQuery);
 router.get('/contactus',authenticate,authenticate,getQuery);
 router.get('/all-countries',getCountry);
+
 router.post('/add-footer-data',authenticate,upload.single('image'),addFooterData);
-router.post('/case-studies', authenticate,upload.single('image'), addCaseStudies);
-router.get('/get-footer-data',authenticate, getFooterData);
+router.get('/get-footer-data', getFooterData);
 router.put('/update-footerdata/:id',authenticate, upload.single('image'),updateFooteData);
 router.delete('/delete-footer/:id',authenticate,deleteFooter)
+
+router.post('/erp-projects',authenticate,upload.single('image'),addProjects);
+router.get('/erp-projects',getProjects);
+router.put('/erp-projects/:id',authenticate,upload.single('image'),updateProjects);
+router.delete('/erp-projects/:id',authenticate,deleteProjects);
+
 router.post('/create-admin',addAdmin);
-router.post('/admin-login',adminLogin)
+router.post('/admin-login',adminLogin);
 
 router.use(handleMulterErrors)
 module.exports = router
