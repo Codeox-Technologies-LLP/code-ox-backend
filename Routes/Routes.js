@@ -46,7 +46,7 @@ router.put('/case-studies/:caseStudyId',authenticate,upload.single('image'), upd
 router.delete('/case-studies/:id',authenticate,deleteCaseStudy);
 router.post('/case-studies', authenticate,upload.single('image'), addCaseStudies);
 
-router.post('/contactus',authenticate,addQuery);
+router.post('/contactus',addQuery);
 router.get('/contactus',authenticate,authenticate,getQuery);
 router.get('/all-countries',getCountry);
 
