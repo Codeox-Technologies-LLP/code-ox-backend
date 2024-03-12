@@ -3,10 +3,14 @@ const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsCont
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
 const path = require('path')
 const multer = require('multer');
+
 const {addFooterData,getFooterData,updateFooteData,deleteFooter}=require('../Controllers/FooterController');
 const {addAdmin,adminLogin}=require('../Controllers/AdminController');
 const {authenticate}=require('../Controllers/AuthController')
 const {addProjects, getProjects,updateProjects,deleteProjects}=require('../Controllers/ErpController')
+const { addHome, getHome, updateHome, updatedHome, } = require('../Controllers/HomeController')
+
+
 
 
 const router = express.Router();
@@ -33,6 +37,7 @@ function handleMulterErrors(err, req, res, next) {
   }
   next(err);
 }
+
  
 
 
@@ -58,5 +63,21 @@ router.delete('/erp-projects/:id',authenticate,deleteProjects);
 router.post('/create-admin',addAdmin);
 router.post('/admin-login',adminLogin);
 
+
+
+
+
+
+///home
+router.post('/home', upload.single('image'), addHome);
+router.get('/home', getHome)
+
+router.put('/home/:id', upload.single('image'), updatedHome);
+
+
+
+
+
 router.use(handleMulterErrors)
+
 module.exports = router
