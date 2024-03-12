@@ -51,7 +51,7 @@ const updateFooteData =async(req,res)=>{
        const response = await  footerModel.findOneAndUpdate({},{$set:data},{arrayFilters:[{'elem._id':id}], new: true }
        
        )
-       res.send(200).json({statusCode:200,success:true,message:"updating successful",data:response})
+       res.status(200).json({statusCode:200,success:true,message:"updating successful"})
   } catch (error) {
     res.status(500).json({statusCode:500,success:false,message:error.message})  
   }
@@ -63,7 +63,7 @@ const deleteFooter =async(req,res)=>{
     const id = req.params.id;
     const data = await footerModel.findOneAndUpdate({}, { $pull: { socialmedia: { _id: id } } },{new:true})
     console.log(data);
-    res.send(200).json({statusCode:200,success:true,message:"deleting successful"})
+    res.status(200).json({statusCode:200,success:true,message:"deleting successful"})
    } catch (error) {
     res.status(500).json({statusCode:500,success:false,message:error.message})  
    }
