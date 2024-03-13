@@ -10,6 +10,9 @@ const {authenticate}=require('../Controllers/AuthController')
 const {addProjects, getProjects,updateProjects,deleteProjects}=require('../Controllers/ErpController')
 const { addHome, getHome,  updatedHome, } = require('../Controllers/HomeController');
 const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
+const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
+const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
+const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } = require('../Controllers/TestimonialController');
 
 
 
@@ -64,22 +67,30 @@ router.delete('/erp-projects/:id',authenticate,deleteProjects);
 router.post('/create-admin',addAdmin);
 router.post('/admin-login',adminLogin);
 
-
-
-
-
-
 ///home
 router.post('/home', upload.single('image'), addHome);
 router.get('/home', getHome)
 router.put('/home/:id', upload.single('image'), updatedHome);
-
 //showreel
 router.post('/showreel',upload.single('image'),addshowreel)
 router.get('/showreel',getShowreelItems)
 router.put('/showreel/:id', upload.single('image'), updateShowreel);
 router.delete('/showreel/:id', deleteShowreel);
-
+//about
+router.post('/about',upload.single('image'),addAbout);
+router.get('/about',getAbout);
+router.put('about/:id',upload.single('image'),updateAbout)
+router.delete('/about/:id',deleteAbout)
+///servie
+router.post('/service',upload.single('image'),addService)
+router.get('/service',getServices)
+router.put('service/:id',upload.single('image'),updateService)
+router.delete('/service/:id',deleteService)
+//testimonial
+router.post('/testimonial',upload.single('image'),addTestimonial)
+router.get('/testimonial',getTestimonial);
+router.put('/testimonial/:id',upload.single('image'),updateTestimonial);
+router.delete('/testimonial/:id',deleteTestimonial);
 router.use(handleMulterErrors)
 
 module.exports = router

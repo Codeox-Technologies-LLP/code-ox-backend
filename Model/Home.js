@@ -22,46 +22,8 @@ const homeSectionSchema = new Schema({
         required: true
     },
 
-    about: [{
-        aboutContent: {
-            type: String,
-            required: true
-        },
-        image: {
-            type: String,
-            required: true,
-        },
-        content: {
-            type: String,
-            required: true,
-        },
-        aboutButton: {
-            type: String,
-            required: true,
-        },
-        aboutButtonLink: {
-            type: String,
-            required: true,
-        },
-    }],
-    servicesTitle: {
-        type: String,
-        required: true
-    },
-    services: [{
-        image: {
-            type: String,
-            required: true,
-        },
-        servicesHeading: {
-            type: String,
-            required: true,
-        },
-        servicesDescripation: {
-            type: String,
-            required: true,
-        },
-    }],
+   
+  
     WhyCodeOxHeading: {
         type: String,
         // required: true
@@ -70,6 +32,7 @@ const homeSectionSchema = new Schema({
         type: String,
         required: true,
     },
+    
     WhyCodeOx: [{
         image: {
             type: String,

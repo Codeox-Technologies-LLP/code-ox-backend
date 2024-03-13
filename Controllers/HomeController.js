@@ -122,46 +122,78 @@ const deleteById = async (req, res) => {
 
 //update
 const updatedHome = async (req, res) => {
-    const { id } = req.params;
-    const updatedData = req.body;
     try {
-        console.log("Updating home document with ID:", id);
-        console.log("Updated data:", updatedData);
+        console.log("Incoming request body:", req.body);
+        const image = req.file ? req.file.path : null;
 
-      
-        const existingHome = await homeModel.findById(id);
-        if (!existingHome) {
-            return res.status(404).json({ message: "Home document not found" });
+        // Update hero array items
+        if (req.body.hero) {
+            await homeModel.findOneAndUpdate(
+                { 'hero': { $elemMatch: { _id: req.body.hero._id } } },
+                { $set: { 'hero.$': req.body.hero } }
+            );
         }
 
-    
-        let imagePath = existingHome.image; 
-        if (req.file) {
-            imagePath = req.file.path;
-         
-            updatedData.image = imagePath;
+        // Update services array items
+        if (req.body.services) {
+            await homeModel.findOneAndUpdate(
+                { 'services': { $elemMatch: { _id: req.body.services._id } } },
+                { $set: { 'services.$': req.body.services } }
+            );
         }
 
-        const updatedDocument = await homeModel.findByIdAndUpdate(
-            id,
-            { ...updatedData, image: imagePath }, 
-            { new: true }
-        );
-
-        console.log("Updated home document:", updatedDocument);
-
-    
-        if (!updatedDocument) {
-            return res.status(404).json({ message: "Failed to update home document" });
+        // Update WhyCodeOx array items
+        if (req.body.WhyCodeOx) {
+            await homeModel.updateMany(
+                { 'WhyCodeOx': { $elemMatch: { _id: req.body.WhyCodeOx._id } } },
+                { $set: { 'WhyCodeOx.$': req.body.WhyCodeOx } }
+            );
         }
 
-        
-        res.status(200).json(updatedDocument);
-    } catch (err) {
-        console.error("Error updating home document:", err);
-        res.status(500).json({ message: "Internal server error" });
+        // Update Testimonials array items
+        if (req.body.Testimonials) {
+            await homeModel.updateMany(
+                { 'Testimonials': { $elemMatch: { _id: req.body.Testimonials._id } } },
+                { $set: { 'Testimonials.$': req.body.Testimonials } }
+            );
+        }
+
+        // Update KeyWebsiteCollections array items
+        if (req.body.KeyWebsiteCollections) {
+            await homeModel.updateMany(
+                { 'KeyWebsiteCollections': { $elemMatch: { _id: req.body.KeyWebsiteCollections._id } } },
+                { $set: { 'KeyWebsiteCollections.$': req.body.KeyWebsiteCollections } }
+            );
+        }
+
+        // Update Client array items
+        if (req.body.Client) {
+            await homeModel.updateMany(
+                { 'Client': { $elemMatch: { _id: req.body.Client._id } } },
+                { $set: { 'Client.$': req.body.Client } }
+            );
+        }
+
+        // Update about array items
+        if (req.body.about) {
+            await homeModel.updateMany(
+                { 'about': { $elemMatch: { _id: req.body.about._id } } },
+                { $set: { 'about.$': req.body.about } }
+            );
+        }
+
+        res.status(200).json({ message: 'Data updated successfully' });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(400).json({ message: error.message });
     }
 };
+
+
+
+
+
+
 
 
 
