@@ -8,7 +8,8 @@ const {addFooterData,getFooterData,updateFooteData,deleteFooter}=require('../Con
 const {addAdmin,adminLogin}=require('../Controllers/AdminController');
 const {authenticate}=require('../Controllers/AuthController')
 const {addProjects, getProjects,updateProjects,deleteProjects}=require('../Controllers/ErpController')
-const { addHome, getHome, updateHome, updatedHome, } = require('../Controllers/HomeController')
+const { addHome, getHome,  updatedHome, } = require('../Controllers/HomeController');
+const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
 
 
 
@@ -71,12 +72,13 @@ router.post('/admin-login',adminLogin);
 ///home
 router.post('/home', upload.single('image'), addHome);
 router.get('/home', getHome)
-
 router.put('/home/:id', upload.single('image'), updatedHome);
 
-
-
-
+//showreel
+router.post('/showreel',upload.single('image'),addshowreel)
+router.get('/showreel',getShowreelItems)
+router.put('/showreel/:id', upload.single('image'), updateShowreel);
+router.delete('/showreel/:id', deleteShowreel);
 
 router.use(handleMulterErrors)
 
