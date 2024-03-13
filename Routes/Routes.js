@@ -13,6 +13,7 @@ const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = requir
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
 const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } = require('../Controllers/TestimonialController');
+const { addkeywebsitecollection, getKeywebsitecollection, deleteKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
 
 
 
@@ -91,6 +92,12 @@ router.post('/testimonial',upload.single('image'),addTestimonial)
 router.get('/testimonial',getTestimonial);
 router.put('/testimonial/:id',upload.single('image'),updateTestimonial);
 router.delete('/testimonial/:id',deleteTestimonial);
+//keywebsitecollection
+router.post('/keywebsitecollection',upload.single('image'),addkeywebsitecollection)
+router.get('/keywebsitecollection',getKeywebsitecollection);
+router.put('/keywebsitecollection/:id',upload.single('image'),updateTestimonial);
+router.delete('/keywebsitecollection/:id',deleteKeyWebsiteCollection);
+
 router.use(handleMulterErrors)
 
 module.exports = router

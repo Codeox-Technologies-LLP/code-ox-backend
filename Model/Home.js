@@ -32,7 +32,7 @@ const homeSectionSchema = new Schema({
         type: String,
         required: true,
     },
-    
+
     WhyCodeOx: [{
         image: {
             type: String,
@@ -46,41 +46,6 @@ const homeSectionSchema = new Schema({
 
 
 
-
-    Testimonials: [{
-        image: {
-            type: String,
-            required: true,
-        },
-        testimonialsdescription: {
-            type: String,
-            required: true,
-        },
-        authorName: {
-            type: String,
-            required: true,
-        },
-        authorCompany: {
-            type: String,
-            required: true,
-        }
-    }],
-
-
-    KeyWebsiteCollections: [{
-        KeyWebsiteCollectionsHeading: {
-            type: String,
-            required: true,
-        },
-        KeyWebsiteCollectionsDescription: {
-            type: String,
-            required: true,
-        },
-        image: {
-            type: String,
-            required: true,
-        },
-    }],
 
 
     Client: [{
