@@ -22,42 +22,8 @@ const homeSectionSchema = new Schema({
         required: true
     },
 
-   
+
   
-    WhyCodeOxHeading: {
-        type: String,
-        // required: true
-    },
-    WhyCodeOxDescription: {
-        type: String,
-        required: true,
-    },
-
-    WhyCodeOx: [{
-        image: {
-            type: String,
-            required: true,
-        },
-        description: {
-            type: String,
-            required: true,
-        },
-    }],
-
-
-
-
-
-    Client: [{
-        image: {
-            type: String,
-            required: true,
-        },
-        categories: {
-            type: String,
-            required: true
-        }
-    }],
 
 });
 
