@@ -9,7 +9,7 @@ const addService = async (req, res) => {
             return res.status(400).json({ message: 'Image file is required' });
         }
         const serviceItem = new servicesModel({
-            showreel: [{
+            services: [{
                 image: image.path,
                 servicesHeading,
                 servicesDescripation,
@@ -63,9 +63,9 @@ const updateService = async (req, res) => {
             { _id: serviceId, 'showreel._id': req.body.showreelId },
             {
                 $set: {
-                    'showreel.$.image': image.path,
-                    'showreel.$.servicesHeading': servicesHeading,
-                    'showreel.$.servicesDescription': servicesDescription
+                    ' services.$.image': image.path,
+                    ' services.$.servicesHeading': servicesHeading,
+                    ' services.$.servicesDescription': servicesDescription
                 }
             }
         ); 
@@ -77,7 +77,7 @@ const updateService = async (req, res) => {
     }
 };
 
-//delete serviv
+//delete servive
 const deleteService = async (req, res) => {
     try {
         const { serviceId } = req.params;

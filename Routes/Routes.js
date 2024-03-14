@@ -16,6 +16,8 @@ const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } =
 const { addkeywebsitecollection, getKeywebsitecollection, deleteKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
 const { addWhychoose, getWhychoose, updateWhychoose, deleteWhychoose } = require('../Controllers/WhyController');
 const { addclient, getClient, updateClient, deleteClient } = require('../Controllers/ClientController');
+const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
+const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 
 
 
@@ -109,6 +111,17 @@ router.post('/client', upload.single('image'), addclient)
 router.get('/client', getClient);
 router.put('/client/:id', upload.single('image'), updateClient);
 router.delete('/client/:id', deleteClient);
+/// our value
+router.post('/value', upload.single('gif'), addValue)
+router.get('/value', getValue);
+router.put('/value/:id', upload.single('gif'), updateValue);
+router.delete('/value/:id', deleteValue);
+//founder
+router.post('/founder', upload.single('image'), addFounder)
+router.get('/founder', getFounder);
+router.put('/founder/:id', upload.single('image'), updateFounder);
+router.delete('/founder/:id', deleteFounder);
+
 router.use(handleMulterErrors)
 
 module.exports = router

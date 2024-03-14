@@ -5,7 +5,7 @@ const homeSectionSchema = new Schema({
     hero: [{
         image: {
             type: String,
-            // required: true
+            required: true
         },
         heading: {
             type: String,
