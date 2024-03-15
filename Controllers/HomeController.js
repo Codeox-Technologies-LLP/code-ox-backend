@@ -1,176 +1,62 @@
 const homeModel = require('../Model/Home');
 
+//post
 const addHome = async (req, res) => {
     try {
-        console.log("Incoming request body:", req.body);
-        const image = req.file ? req.file.path : null;
-        //hero
-        if (!req.body.hero) {
-            req.body.hero = [];
-        }
-        const newHero = {
-            image: image,
+        const data = {
+            image: req.file.path,
             heading: req.body.heading,
             subHeading: req.body.subHeading,
-        };
-        req.body.hero.push(newHero);
-        //service
-        if (!req.body.services) {
-            req.body.services = [];
+            marqueeText: req.body.marqueeText
         }
-        const newServices = {
-            image: image,
-            servicesHeading: req.body.servicesHeading,
-            servicesDescripation: req.body.servicesDescripation,
-            WhyCodeOxHeading: req.body.WhyCodeOxHeading,
-            WhyCodeOxDescription: req.body.WhyCodeOxDescription
-        };
-        req.body.services.push(newServices);
-        //why code-ox
-        if (!req.body.WhyCodeOx) {
-            req.body.WhyCodeOx = [];
-        }
-        const newWhyCodeOx = {
-            image: image,
-            description: req.body.description,
-        };
-        req.body.WhyCodeOx.push(newWhyCodeOx);
+        const newData = await homeModel.findOneAndUpdate({}, { $push: { hero: data } }, { new: true, upsert: true })
+        res.status(200).json({ statusCode: 200, success: true, message: 'home added successfully' })
 
-        ///testimonial
-        if (!req.body.Testimonials) {
-            req.body.Testimonials = [];
-        }
-        const newTestimonial = {
-            image: image,
-            testimonialsdescription: req.body.testimonialsdescription,
-            authorName: req.body.authorName,
-            authorCompany: req.body.authorCompany,
-
-        };
-        req.body.Testimonials.push(newTestimonial);
-        ///key website coleection
-        if (!req.body.KeyWebsiteCollections) {
-            req.body.KeyWebsiteCollections = [];
-        }
-        const newKeyWebsiteCollections = {
-            KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading,
-            KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription,
-            image: image,
-        };
-        req.body.KeyWebsiteCollections.push(newKeyWebsiteCollections);
-        //client
-        if (!req.body.Client) {
-            req.body.Client = [];
-        }
-        const newClient = {
-            image: image,
-            categories: req.body.categories
-        };
-        req.body.Client.push(newClient);
-        //about
-        if (!req.body.about) {
-            req.body.about = [];
-        }
-        const newAbout = {
-            aboutContent: req.body.aboutContent,
-            image: image,
-            content: req.body.content,
-            aboutButton: req.body.aboutButton,
-            aboutButtonLink: req.body.aboutButtonLink,
-        };
-        req.body.about.push(newAbout);
-        console.log("Updated newHomeData:", req.body);
-        const newHome = new homeModel(req.body);
-        const savedHome = await newHome.save();
-        console.log("Saved Home:", savedHome);
-        res.status(201).json(savedHome);
     } catch (error) {
-        console.error("Error:", error);
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-};
+}
 
-
-///get method
+//get
 const getHome = async (req, res) => {
     try {
-        const homes = await homeModel.find();
-        res.status(200).json(homes);
+        const data = await homeModel.find({})
+        console.log(data)
+        res.status(200).json({ statusCode: 200, message: 'home  fetched successfully', data: data })
     } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-};
-
-
-
-///delte method
-const deleteById = async (req, res) => {
-    try {
-        const { id } = req.body;
-        const deletedHome = await homeModel.findByIdAndDelete(id);
-        if (deletedHome) {
-            return res.status(404).json({ message: "Home not found" });
-        }
-        console.log("Deleted Home:", deletedHome);
-        res.status(200).json({ message: "Home deleted successfully" });
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(400).json({ message: error.message });
-    }
-};
+}
 
 //update
-const updatedHome = async (req, res) => {
-    const { id } = req.params;
-    const updatedData = req.body;
+const updateHome = async (req, res) => {
     try {
-        console.log("Updating home document with ID:", id);
-        console.log("Updated data:", updatedData);
-
-      
-        const existingHome = await homeModel.findById(id);
-        if (!existingHome) {
-            return res.status(404).json({ message: "Home document not found" });
+        const id = req.params.id;
+        const data = {
+            'hero.$[elem].heading': req.body.heading,
+            'hero.$[elem].image': req.file.path,
+            'hero.$[elem].subHeading': req.body.subHeading,
+            'hero.$[elem].marqueeText': req.body.marqueeText,
         }
 
-    
-        let imagePath = existingHome.image; 
-        if (req.file) {
-            imagePath = req.file.path;
-         
-            updatedData.image = imagePath;
-        }
+        const response = await homeModel.findOneAndUpdate({}, { $set: data }, { arrayFilters: [{ 'elem._id': id }], new: true })
 
-        const updatedDocument = await homeModel.findByIdAndUpdate(
-            id,
-            { ...updatedData, image: imagePath }, 
-            { new: true }
-        );
-
-        console.log("Updated home document:", updatedDocument);
-
-    
-        if (!updatedDocument) {
-            return res.status(404).json({ message: "Failed to update home document" });
-        }
-
-        
-        res.status(200).json(updatedDocument);
-    } catch (err) {
-        console.error("Error updating home document:", err);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(200).json({ statusCode: 200, message: 'home fetched updated successfully' })
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-};
+}
 
+const deleteHome = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const response = await homeModel.findOneAndUpdate({}, { $pull: { hero: { _id: id } } }, { new: true });
 
+        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
 
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+    }
+}
 
-
-
-
-
-
-
-
-module.exports = { addHome, getHome, updatedHome };
+module.exports = { addHome, getHome, updateHome, deleteHome }
