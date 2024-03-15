@@ -20,6 +20,7 @@ const { addValue, getValue, updateValue, deleteValue } = require('../Controllers
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, updateHome, deleteHome } = require('../Controllers/HomeController');
+const { deleteAboutus, updateAboutus, getAboutus, addAboutus } = require('../Controllers/AboutuspageController');
 
 
 
@@ -33,7 +34,7 @@ const storage = multer.diskStorage({
 
   filename: function (req, file, cb) {
 
-    cb(null, file.originalname); 
+    cb(null, file.originalname);
   }
 });
 var upload = multer({ storage: storage, limits: { fileSize: 2 * 1024 * 1024 } })
@@ -116,7 +117,11 @@ router.put('/client/:id', upload.single('image'), updateClient);
 router.delete('/client/:id', deleteClient);
 
 //about-us-page
-
+//abouts
+router.post('/aboutus', addAboutus)
+router.get('/aboutus', getAboutus)
+router.put('/aboutus/:id', updateAboutus);
+router.delete('/aboutus/:id', deleteAboutus)
 /// our value
 router.post('/value', upload.single('gif'), addValue)
 router.get('/value', getValue);

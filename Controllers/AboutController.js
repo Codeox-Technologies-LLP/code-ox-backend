@@ -1,55 +1,80 @@
 const AboutModel = require('../Model/About');
 
-///add about
+//POST 
+
 const addAbout = async (req, res) => {
-    try {
-      const newAbout = new AboutModel(req.body);
-      await newAbout.save();
-      res.status(201).json(newAbout);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
+  try {
+    const { path: imagePath } = req.file; // Extract the path property from req.file
+    const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+    if (!imagePath) {
+      return res.status(400).json({ message: 'Image file is required' });
     }
+    console.log(req.body, req.file)
+    const data = {
+      image: baseUrl,
+      aboutContent: req.body.aboutContent,
+      descripation: req.body.descripation,
+      aboutButton: req.body.aboutButton,
+      aboutButtonLink: req.body.aboutButtonLink,
+    }
+
+    const newData = await AboutModel.findOneAndUpdate({}, { $push: { about: data } }, { new: true, upsert: true })
+
+    res.status(200).json({ statusCode: 200, success: true, message: 'about projects added successfully' })
+
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, success: false, message: error.message })
   }
-  
-  // GET method to fetch all about sections
-  const getAbout = async (req, res) => {
-    try {
-      const aboutSections = await AboutModel.find();
-      res.json(aboutSections);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  };
+}
 
-  // put method
-  const updateAbout = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const updatedAbout = await AboutModel.findByIdAndUpdate(id, req.body, { new: true });
-      if (!updatedAbout) {
-        return res.status(404).json({ message: 'About section not found' });
-      }
-      res.json(updatedAbout);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
+//GET
+
+const getAbout = async (req, res) => {
+  try {
+    const data = await AboutModel.find({})
+    console.log(data)
+    res.status(200).json({ statusCode: 200, message: 'about projects fetched successfully', data: data })
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, success: false, message: error.message })
   }
+}
 
-  ///deltet
-
-  const deleteAbout = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const deletedAbout = await AboutModel.findByIdAndDelete(id);
-      if (!deletedAbout) {
-        return res.status(404).json({ message: 'About section not found' });
-      }
-      res.json({ message: 'About section deleted successfully' });
-    } catch (err) {
-      res.status(400).json({ message: err.message });
+//UPDATE
+const updateAbout = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = {
+      'about.$[elem].descripation': req.body.descripation, // Corrected field name
+      'about.$[elem].image': req.file.path,
+      'about.$[elem].aboutContent': req.body.aboutContent,
+      'about.$[elem].aboutButton': req.body.aboutButton,
+      'about.$[elem].aboutButtonLink': req.body.aboutButtonLink,
     }
-  }
 
-module.exports ={addAbout,getAbout,updateAbout,deleteAbout}
+    const response = await AboutModel.findOneAndUpdate({}, { $set: data }, { arrayFilters: [{ 'elem._id': id }], new: true })
+
+    res.status(200).json({ statusCode: 200, message: 'about section updated successfully' })
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, success: false, message: error.message })
+  }
+}
+
+
+//DELETE
+
+const deleteAbout = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await AboutModel.findOneAndUpdate({}, { $pull: { about: { _id: id } } }, { new: true });
+
+    res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
+
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, success: false, message: error.message })
+  }
+}
+
+
+module.exports = { addAbout, getAbout, updateAbout, deleteAbout }
 
 //   /about/:id'

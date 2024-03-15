@@ -3,18 +3,20 @@ const { Schema } = mongoose;
 
 const aboutSectionSchema = new Schema({
   about: [{
-    aboutContent: {
+
+    descripation: {
       type: String,
-      required: true
+      required: true,
     },
     image: {
       type: String,
       required: true,
     },
-    content: {
+    aboutContent: {
       type: String,
-      required: true,
+      required: true
     },
+
     aboutButton: {
       type: String,
       required: true,
