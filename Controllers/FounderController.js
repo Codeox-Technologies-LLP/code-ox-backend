@@ -3,9 +3,14 @@ const founderModel = require('../Model/Founder')
 //post 
 const addFounder = async (req, res) => {
     try {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
+           return res.status(400).json({ message: 'Image file is required' });
+        }
         console.log(req.body, req.file)
         const data = {
-            image: req.file.path,
+            image: baseUrl,
             name: req.body.name,
             position: req.body.position,
             role: req.body.role

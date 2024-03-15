@@ -3,8 +3,14 @@ const homeModel = require('../Model/Home');
 //post
 const addHome = async (req, res) => {
     try {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
+           return res.status(400).json({ message: 'Image file is required' });
+        }
+   
         const data = {
-            image: req.file.path,
+            image: baseUrl,
             heading: req.body.heading,
             subHeading: req.body.subHeading,
             marqueeText: req.body.marqueeText

@@ -3,9 +3,15 @@ const WhychooseModel = require('../Model/Whychoose')
 ///post 
 const addWhychoose = async (req, res) => {
     try {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
+            return res.status(400).json({ message: 'Image file is required' });
+        }
+        console.log(req.body, req.file)
         console.log(req.body, req.file)
         const data = {
-            image: req.file.path,
+            image: baseUrl,
             WhyCodeOxHeading: req.body.WhyCodeOxHeading,
             WhyCodeOxDescription: req.body.WhyCodeOxDescription,
             description: req.body.description
@@ -40,7 +46,7 @@ const updateWhychoose = async (req, res) => {
 
         const response = await WhychooseModel.findOneAndUpdate(
             { 'WhyCodeOx._id': id }, // Filter the document to find the array element with this id
-            { $set: data }, 
+            { $set: data },
             { arrayFilters: [{ 'elem._id': id }], new: true }
         );
 
@@ -51,18 +57,18 @@ const updateWhychoose = async (req, res) => {
 };
 
 //delete
-const deleteWhychoose =async(req,res)=>{
+const deleteWhychoose = async (req, res) => {
     try {
-       const id = req.params.id;
-    const response = await WhychooseModel.findOneAndUpdate({},{ $pull: {WhyCodeOx : { _id: id } } },{new:true});
- 
-    res.status(200).json({statusCode:200,success:true,message:"deleting successful"});
-    
- } catch (error) {
-       res.status(500).json({statusCode:500,success:false,message:error.message}) 
+        const id = req.params.id;
+        const response = await WhychooseModel.findOneAndUpdate({}, { $pull: { WhyCodeOx: { _id: id } } }, { new: true });
+
+        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
+
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-   }
+}
 
 
 
-module.exports = { addWhychoose, getWhychoose ,updateWhychoose,deleteWhychoose}
+module.exports = { addWhychoose, getWhychoose, updateWhychoose, deleteWhychoose }

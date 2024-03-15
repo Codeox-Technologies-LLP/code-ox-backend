@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 
   filename: function (req, file, cb) {
 
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname); 
   }
 });
 var upload = multer({ storage: storage, limits: { fileSize: 2 * 1024 * 1024 } })

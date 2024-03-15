@@ -3,9 +3,15 @@ const clientModel = require('../Model/Client')
 // post
 const addclient = async (req, res) => {
     try {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
+            return res.status(400).json({ message: 'Image file is required' });
+        }
+        console.log(req.body, req.file)
         console.log(req.body, req.file)
         const data = {
-            image: req.file.path,
+            image: baseUrl,
             categories: req.body.categories,
 
         }
@@ -41,8 +47,8 @@ const updateClient = async (req, res) => {
         };
 
         const response = await clientModel.findOneAndUpdate(
-            { 'Client._id': id }, 
-            { $set: data }, 
+            { 'Client._id': id },
+            { $set: data },
             { arrayFilters: [{ 'elem._id': id }], new: true } // Options
         );
 
@@ -52,17 +58,17 @@ const updateClient = async (req, res) => {
     }
 };
 ///delete
-const deleteClient =async(req,res)=>{
+const deleteClient = async (req, res) => {
     try {
-       const id = req.params.id;
-    const response = await clientModel.findOneAndUpdate({},{ $pull: {Client : { _id: id } } },{new:true});
- 
-    res.status(200).json({statusCode:200,success:true,message:"deleting successful"});
-    
- } catch (error) {
-       res.status(500).json({statusCode:500,success:false,message:error.message}) 
+        const id = req.params.id;
+        const response = await clientModel.findOneAndUpdate({}, { $pull: { Client: { _id: id } } }, { new: true });
+
+        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
+
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-   }
+}
 
 
-module.exports = { addclient, getClient ,updateClient,deleteClient }
+module.exports = { addclient, getClient, updateClient, deleteClient }
