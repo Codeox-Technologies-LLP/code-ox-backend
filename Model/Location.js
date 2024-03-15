@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const homeSectionSchema = new Schema({
-    hero: [{
-        image: {
-            type: String,
-            required: true
-        },
+const  locationSchema = new Schema({
+    location: [{
+        // image: {
+        //     type: String,
+        //     required: true
+        // },
         heading: {
             type: String,
             required: true,
         },
-        subHeading: {
+        location: {
             type: String,
             required: true,
         },
@@ -28,5 +28,5 @@ const homeSectionSchema = new Schema({
 
 });
 
-const HomeModel = mongoose.model('Home', homeSectionSchema);
-module.exports = HomeModel;
+const locationModel = mongoose.model('location', locationSchema);
+module.exports = locationModel;

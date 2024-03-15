@@ -7,7 +7,7 @@ const addValue = async (req, res) => {
             name: req.body.name,
             gif: req.file.path,
             title: req.body.title,
-            description: req.body.description,
+            descripation: req.body.descripation,
         }
 
         const newData = await valueModel.findOneAndUpdate({}, { $push: { value: data } }, { new: true, upsert: true })
@@ -38,7 +38,7 @@ const updateValue = async (req, res) => {
             'value.$[elem].name': req.body.name,
             'value.$[elem].gif': req.file.path,
             'value.$[elem].title': req.body.title,
-            'value.$[elem].descripation': req.body.description,
+            'value.$[elem].descripation': req.body.descripation,
 
         }
 
@@ -51,17 +51,17 @@ const updateValue = async (req, res) => {
 }
 
 //delete
-const deleteValue =async(req,res)=>{
+const deleteValue = async (req, res) => {
     try {
-       const id = req.params.id;
-    const response = await valueModel.findOneAndUpdate({},{ $pull: {value : { _id: id } } },{new:true});
- 
-    res.status(200).json({statusCode:200,success:true,message:"deleting successful"});
-    
- } catch (error) {
-       res.status(500).json({statusCode:500,success:false,message:error.message}) 
+        const id = req.params.id;
+        const response = await valueModel.findOneAndUpdate({}, { $pull: { value: { _id: id } } }, { new: true });
+
+        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
+
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-   }
+}
 
 
-module.exports = { addValue, getValue ,updateValue ,deleteValue }
+module.exports = { addValue, getValue, updateValue, deleteValue }

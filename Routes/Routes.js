@@ -79,7 +79,6 @@ router.post('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.put('/home/:id', upload.single('image'), updateHome);
 router.delete('/home/:id', deleteHome);
-
 //showreel
 router.post('/showreel', upload.single('image'), addshowreel)
 router.get('/showreel', getShowreelItems)
@@ -115,6 +114,9 @@ router.post('/client', upload.single('image'), addclient)
 router.get('/client', getClient);
 router.put('/client/:id', upload.single('image'), updateClient);
 router.delete('/client/:id', deleteClient);
+
+//about-us-page
+
 /// our value
 router.post('/value', upload.single('gif'), addValue)
 router.get('/value', getValue);
