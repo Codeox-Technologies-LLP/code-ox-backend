@@ -8,7 +8,7 @@ const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require(
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
 const { authenticate } = require('../Controllers/AuthController')
 const { addProjects, getProjects, updateProjects, deleteProjects } = require('../Controllers/ErpController')
-const { addHome, getHome, updatedHome, } = require('../Controllers/HomeController');
+
 const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
@@ -18,6 +18,8 @@ const { addWhychoose, getWhychoose, updateWhychoose, deleteWhychoose } = require
 const { addclient, getClient, updateClient, deleteClient } = require('../Controllers/ClientController');
 const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
+const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
+const { addHome, getHome, updateHome, deleteHome } = require('../Controllers/HomeController');
 
 
 
@@ -73,9 +75,11 @@ router.post('/create-admin', addAdmin);
 router.post('/admin-login', adminLogin);
 
 ///home
-router.post('/home', upload.single('image'), addHome);
+router.post('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
-router.put('/home/:id', upload.single('image'), updatedHome);
+router.put('/home/:id', upload.single('image'), updateHome);
+router.delete('/home/:id', deleteHome);
+
 //showreel
 router.post('/showreel', upload.single('image'), addshowreel)
 router.get('/showreel', getShowreelItems)
@@ -121,7 +125,11 @@ router.post('/founder', upload.single('image'), addFounder)
 router.get('/founder', getFounder);
 router.put('/founder/:id', upload.single('image'), updateFounder);
 router.delete('/founder/:id', deleteFounder);
-
+// team 
+router.post('/team', upload.single('image'), addTeam)
+router.get('/team', getTeam);
+router.put('/team/:id', upload.single('image'), updateTeam);
+router.delete('/team/:id', deleteTeam);
 router.use(handleMulterErrors)
 
 module.exports = router

@@ -14,13 +14,14 @@ const homeSectionSchema = new Schema({
         subHeading: {
             type: String,
             required: true,
-        }
+        },
+        marqueeText: {
+            type: String,
+            required: true
+        },
     }],
 
-    marqueeText: {
-        type: String,
-        required: true
-    },
+    
 
 
   
