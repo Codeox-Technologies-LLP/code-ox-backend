@@ -38,7 +38,7 @@ const addkeywebsitecollection = async (req, res) => {
 
 const getKeywebsitecollection = async (req, res) => {
     try {
-        const data = await keywebsitecollectionModel.find({})
+        const data = await keywebsitecollectionModel.findOne({})
         console.log(data)
         res.status(200).json({ statusCode: 200, message: 'keywebsitecollection projects fetched successfully', data: data })
     } catch (error) {
