@@ -13,7 +13,8 @@ const addHome = async (req, res) => {
             image: baseUrl,
             heading: req.body.heading,
             subHeading: req.body.subHeading,
-            marqueeText: req.body.marqueeText
+            heading1:req.body.heading1,
+            heading2:req.body.heading2
         }
         const newData = await homeModel.findOneAndUpdate({},data, { new: true, upsert: true })
         res.status(200).json({ statusCode: 200, success: true, message: 'home added successfully' })
@@ -26,9 +27,9 @@ const addHome = async (req, res) => {
 //get
 const getHome = async (req, res) => {
     try {
-        const data = await homeModel.find({})
+        const data = await homeModel.findOne()
         console.log(data)
-        res.status(200).json({ statusCode: 200, message: 'home  fetched successfully', data: data })
+        res.status(200).json({ statusCode: 200, message: 'home  fetched successfully',  data:data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
