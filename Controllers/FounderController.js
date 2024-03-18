@@ -28,7 +28,7 @@ const addFounder = async (req, res) => {
 //get
 const getFounder = async (req, res) => {
     try {
-        const data = await founderModel.find({})
+        const data = await founderModel.findOne({})
         console.log(data)
         res.status(200).json({ statusCode: 200, message: 'founder fetched successfully', data: data })
     } catch (error) {

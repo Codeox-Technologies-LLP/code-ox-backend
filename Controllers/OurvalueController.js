@@ -28,7 +28,7 @@ const addValue = async (req, res) => {
 
 const getValue = async (req, res) => {
     try {
-        const data = await valueModel.find({})
+        const data = await valueModel.findOne({})
         console.log(data)
         res.status(200).json({ statusCode: 200, message: 'value fetched successfully', data: data })
     } catch (error) {

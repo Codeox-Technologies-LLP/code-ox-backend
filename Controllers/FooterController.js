@@ -30,7 +30,7 @@ try {
 //GET FOOTER DATA
 const getFooterData=async(req,res)=>{
 try {
-    const response =await footerModel.find({})
+    const response =await footerModel.findOne({})
     console.log(response);
     res.status(200).json({statusCode:200,success:true,message:'footer data fetching successful',data:response})
 } catch (error) {

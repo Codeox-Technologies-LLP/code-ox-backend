@@ -39,7 +39,7 @@ const addCaseStudies = async (req, res) => {
 const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
-    let caseStudiesData = await caseStudiesModel.find();
+    let caseStudiesData = await caseStudiesModel.findOne();
 
     // Filter the data
     if (category) {

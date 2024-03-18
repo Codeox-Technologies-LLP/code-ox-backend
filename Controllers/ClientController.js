@@ -29,7 +29,7 @@ const addclient = async (req, res) => {
 
 const getClient = async (req, res) => {
     try {
-        const data = await clientModel.find({})
+        const data = await clientModel.findOne({})
         console.log(data)
         res.status(200).json({ statusCode: 200, message: 'client  fetched successfully', data: data })
     } catch (error) {
