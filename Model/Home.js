@@ -10,6 +10,14 @@ const homeSectionSchema = new Schema({
             type: String,
             required: true,
         },
+        heading1: {
+            type: String,
+            required: true,
+        },
+        heading2: {
+            type: String,
+            required: true,
+        },
         subHeading: {
             type: String,
             required: true,
