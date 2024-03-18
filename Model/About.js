@@ -19,10 +19,18 @@ const aboutSectionSchema = new Schema({
       type: String,
       required: true,
     },
-    aboutButtonLink: {
+    link:{
+      type:String,
+      required:true
+  },
+    heading:{
       type: String,
       required: true,
     },
+    heading1:{
+      type: String,
+      required: true,
+    }
 });
 
 const AboutModel = mongoose.model('About', aboutSectionSchema);
