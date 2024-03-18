@@ -12,22 +12,27 @@ const addkeywebsitecollection = async (req, res) => {
             return res.status(400).json({ message: 'Image file is required' });
         }
 
-        console.log(req.body, req.file);
-
         const data = {
             image: baseUrl,
-            KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading,
-            KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription
         };
 
-        const newData = await keywebsitecollectionModel.findOneAndUpdate({}, { $push: { keywebsitecollection: data } }, { new: true, upsert: true });
+        const response = await keywebsitecollectionModel.findOneAndUpdate({}, {
+            $set: {
+                KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription,
+                KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading
+            },
+            $push: { keywebsitecollection: data }
+        }, { new: true, upsert: true });
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'keywebsitecollection projects added successfully' });
+        console.log(response);
 
-    } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message });
+        return res.status(201).json({ statusCode: 201, success: true, message: "keywebsitecollection added successfully" });
+    } catch (err) {
+        res.status(500).json({ statusCode: 500, success: false, message: err.message });
     }
 };
+
+
 
 //get 
 

@@ -4,8 +4,14 @@ const { Schema } = mongoose;
 
 const whyChooseSchema = new Schema({
 
-   
-
+    WhyCodeOxDescription: {
+        type: String,
+        required: true,
+    },
+    WhyCodeOxHeading: {
+        type: String,
+        required: true
+    },
     WhyCodeOx: [{
         image: {
             type: String,
@@ -15,15 +21,6 @@ const whyChooseSchema = new Schema({
             type: String,
             required: true,
         },
-        WhyCodeOxDescription: {
-            type: String,
-            required: true,
-        },
-        WhyCodeOxHeading: {
-            type: String,
-            required: true
-        },
-      
     }],
 })
 
