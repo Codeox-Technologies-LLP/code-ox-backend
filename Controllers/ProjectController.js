@@ -1,4 +1,4 @@
-const projectModel = require('../Model/Project')
+const projectModel = require('../Model/ProjectCount')
 
 const addProject = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ const addProject = async (req, res) => {
 
         const newData = await projectModel.findOneAndUpdate({}, { $push: { value: data } }, { new: true, upsert: true })
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'value  projects added successfully' })
+        res.status(200).json({ statusCode: 200, success: true, message: ' projects count added successfully' })
 
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

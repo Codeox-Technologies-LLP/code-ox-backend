@@ -136,6 +136,12 @@ router.post('/team', upload.single('image'), addTeam)
 router.get('/team', getTeam);
 router.put('/team/:id', upload.single('image'), updateTeam);
 router.delete('/team/:id', deleteTeam);
+//project counter
+router.post('/project',  addProjects)
+router.get('/team', getTeam);
+router.put('/team/:id', upload.single('image'), updateTeam);
+router.delete('/team/:id', deleteTeam);
 router.use(handleMulterErrors)
+
 
 module.exports = router

@@ -12,8 +12,8 @@ const addWhychoose = async (req, res) => {
         console.log(req.body, req.file)
         const data = {
             image: baseUrl,
-            WhyCodeOxHeading: req.body.WhyCodeOxHeading,
-            WhyCodeOxDescription: req.body.WhyCodeOxDescription,
+            // WhyCodeOxHeading: req.body.WhyCodeOxHeading,
+            // WhyCodeOxDescription: req.body.WhyCodeOxDescription,
             description: req.body.description
         }
         const newData = await WhychooseModel.findOneAndUpdate({}, { $push: { WhyCodeOx: data } }, { new: true, upsert: true })
