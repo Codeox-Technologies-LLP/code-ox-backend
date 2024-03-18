@@ -19,7 +19,7 @@ const { addclient, getClient, updateClient, deleteClient } = require('../Control
 const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
-const { addHome, getHome, updateHome, deleteHome } = require('../Controllers/HomeController');
+const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
 const { deleteAboutus, updateAboutus, getAboutus, addAboutus } = require('../Controllers/AboutuspageController');
 
 
@@ -76,9 +76,8 @@ router.post('/create-admin', addAdmin);
 router.post('/admin-login', adminLogin);
 
 ///home
-router.post('/home', upload.single('image'), addHome)
+router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
-router.put('/home/:id', upload.single('image'), updateHome);
 router.delete('/home/:id', deleteHome);
 //showreel
 router.post('/showreel', upload.single('image'), addshowreel)
