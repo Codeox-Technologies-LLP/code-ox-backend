@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const aboutSectionSchema = new Schema({
-  about: [{
-
     descripation: {
       type: String,
       required: true,
@@ -25,7 +23,6 @@ const aboutSectionSchema = new Schema({
       type: String,
       required: true,
     },
-  }]
 });
 
 const AboutModel = mongoose.model('About', aboutSectionSchema);
