@@ -30,7 +30,7 @@ const addService = async (req, res) => {
 const getServices = async (req, res) => {
     try {
 
-        const services = await servicesModel.find();
+        const services = await servicesModel.findOne();
 
 
         if (!services || services.length === 0) {

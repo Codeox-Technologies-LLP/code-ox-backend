@@ -29,7 +29,7 @@ const addshowreel = async (req, res) => {
 //get 
 const getShowreelItems = async (req, res) => {
     try {
-        const showreelItems = await showreelModel.find();
+        const showreelItems = await showreelModel.findOne();
         
         
         
