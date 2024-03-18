@@ -2,17 +2,17 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const projectSchema = new Schema({
-    project: [{
+    projectCount: [{
         projectHappyClient: {
-            type: Schema.Types.Mixed, 
+            type: String, 
             required: true
         },
         projectTaskDone: {
-            type: Schema.Types.Mixed, 
+            type: String, 
             required: true
         },
         projectCompleted: {
-            type: Schema.Types.Mixed, 
+            type: String, 
             required: true
         },
 
