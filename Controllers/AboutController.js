@@ -18,7 +18,7 @@ const addAbout = async (req, res) => {
       aboutButtonLink: req.body.aboutButtonLink,
     }
 
-    const newData = await AboutModel.findOneAndUpdate({}, { $push: { about: data } }, { new: true, upsert: true })
+    const newData = await AboutModel.findOneAndUpdate({},data, { new: true, upsert: true })
 
     res.status(200).json({ statusCode: 200, success: true, message: 'about projects added successfully' })
 
@@ -31,13 +31,14 @@ const addAbout = async (req, res) => {
 
 const getAbout = async (req, res) => {
   try {
-    const data = await AboutModel.find({})
-    console.log(data)
-    res.status(200).json({ statusCode: 200, message: 'about projects fetched successfully', data: data })
+    const data = await AboutModel.findOne(); // Corrected method name: findOne
+    console.log(data);
+    res.status(200).json({ statusCode: 200, message: 'About projects fetched successfully', data: data });
   } catch (error) {
-    res.status(500).json({ statusCode: 500, success: false, message: error.message })
+    res.status(500).json({ statusCode: 500, success: false, message: error.message });
   }
-}
+};
+
 
 //UPDATE
 const updateAbout = async (req, res) => {
