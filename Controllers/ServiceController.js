@@ -3,7 +3,7 @@ const servicesModel = require('../Model/Service')
 
 const addService = async (req, res) => {
     try {
-        const { servicesHeading,  servicesDescripation } = req.body;
+        const { servicesHeading, servicesDescripation } = req.body;
         const { path: imagePath } = req.file; // Extract the path property from req.file
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
         if (!imagePath) {
@@ -14,7 +14,7 @@ const addService = async (req, res) => {
                 image: baseUrl,
                 servicesHeading,
                 servicesDescripation,
-              
+
             }]
         });
         const savedserviceItem = await serviceItem.save();
@@ -29,20 +29,20 @@ const addService = async (req, res) => {
 // get service
 const getServices = async (req, res) => {
     try {
-      
+
         const services = await servicesModel.find();
 
-       
+
         if (!services || services.length === 0) {
             return res.status(404).json({ message: 'No services found' });
         }
 
-      
+
         res.status(200).json(services);
     } catch (error) {
         console.error('Error while fetching services:', error);
-        
-      
+
+
         res.status(500).json({ message: 'Server Error' });
     }
 };
@@ -69,11 +69,11 @@ const updateService = async (req, res) => {
                     ' services.$.servicesDescription': servicesDescription
                 }
             }
-        ); 
-        const updatedService = await servicesModel.findById(serviceId); 
+        );
+        const updatedService = await servicesModel.findById(serviceId);
         res.status(200).json(updatedService);
     } catch (error) {
-      console.error('Error while updating service:', error);
+        console.error('Error while updating service:', error);
         res.status(500).json({ message: 'Server Error' });
     }
 };
@@ -95,4 +95,4 @@ const deleteService = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
-module.exports={addService ,getServices ,updateService ,deleteService} 
+module.exports = { addService, getServices, updateService, deleteService } 

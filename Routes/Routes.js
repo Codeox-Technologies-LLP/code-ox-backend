@@ -21,6 +21,7 @@ const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Con
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
 const { deleteAboutus, updateAboutus, getAboutus, addAboutus } = require('../Controllers/AboutuspageController');
+const { addMarquee, getMarquee, updateMarquee, deleteMarquee } = require('../Controllers/MarqueeController');
 
 
 
@@ -142,6 +143,10 @@ router.get('/team', getTeam);
 router.put('/team/:id', upload.single('image'), updateTeam);
 router.delete('/team/:id', deleteTeam);
 router.use(handleMulterErrors)
-
+//marquee
+router.post('/marquee',  addMarquee)
+router.get('/marquee',  getMarquee)
+router.put('/marquee/:id', updateMarquee);
+router.delete('/marquee/:id', deleteMarquee);
 
 module.exports = router

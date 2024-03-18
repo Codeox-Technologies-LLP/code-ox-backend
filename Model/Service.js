@@ -10,15 +10,15 @@ const serviceSchema = new Schema({
         type: [{
             image: {
                 type: String,
-                // required: true,
+                required: true,
             },
             servicesHeading: {
                 type: String,
-                // required: true,
+                required: true,
             },
             servicesDescripation: {
                 type: String,
-                // required: true,
+                required: true,
             },
         }],
       
