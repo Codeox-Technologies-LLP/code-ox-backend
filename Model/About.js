@@ -30,6 +30,10 @@ const aboutSectionSchema = new Schema({
     heading1:{
       type: String,
       required: true,
+    }, 
+    marquee:{
+      type: String,
+      required: true,
     }
 });
 

@@ -17,7 +17,8 @@ const addAbout = async (req, res) => {
       aboutButton: req.body.aboutButton,
       link: req.body.link,
       heading: req.body.heading ,
-      heading1: req.body.heading1 
+      heading1: req.body.heading1 ,
+      marquee:req.body.marquee
       
       
 
