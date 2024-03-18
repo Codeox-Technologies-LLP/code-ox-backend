@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const homeSectionSchema = new Schema({
-    hero: [{
-        image: {
+       image: {
             type: String,
             required: true
         },
@@ -15,16 +14,6 @@ const homeSectionSchema = new Schema({
             type: String,
             required: true,
         },
-        marqueeText: {
-            type: String,
-            required: true
-        },
-    }],
-
-    
-
-
-  
 
 });
 

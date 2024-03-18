@@ -4,13 +4,14 @@ const servicesModel = require('../Model/Service')
 const addService = async (req, res) => {
     try {
         const { servicesHeading,  servicesDescripation } = req.body;
-        const image = req.file;
-        if (!image) {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
         const serviceItem = new servicesModel({
             services: [{
-                image: image.path,
+                image: baseUrl,
                 servicesHeading,
                 servicesDescripation,
               

@@ -5,21 +5,30 @@ const keywebsitecollectionModel = require('../Model/Keywebsitecollection')
 //post
 const addkeywebsitecollection = async (req, res) => {
     try {
-        console.log(req.body, req.file)
-        const data = {
-            image: req.file.path,
-            KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading,
-            KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription
+        const { path: imagePath } = req.file;
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+
+        if (!imagePath) {
+            return res.status(400).json({ message: 'Image file is required' });
         }
 
-        const newData = await keywebsitecollectionModel.findOneAndUpdate({}, { $push: { keywebsitecollection: data } }, { new: true, upsert: true })
+        console.log(req.body, req.file);
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'keywebsitecollection projects added successfully' })
+        const data = {
+            image: baseUrl,
+            KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading,
+            KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription
+        };
+
+        const newData = await keywebsitecollectionModel.findOneAndUpdate({}, { $push: { keywebsitecollection: data } }, { new: true, upsert: true });
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'keywebsitecollection projects added successfully' });
 
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
-}
+};
+
 //get 
 
 const getKeywebsitecollection = async (req, res) => {
@@ -33,32 +42,32 @@ const getKeywebsitecollection = async (req, res) => {
 }
 
 //update
-const updateKeywebsitecollection=async(req,res)=>{
-    try { 
-      const id = req.params.id;
-    const data={
-     'keywebsitecollection.$[elem].KeyWebsiteCollectionsHeading': req.body.KeyWebsiteCollectionsHeading,
-          'keywebsitecollection.$[elem].image': req.file.path, 
-          'keywebsitecollection.$[elem].KeyWebsiteCollectionsDescription': req.body.KeyWebsiteCollectionsDescription 
-    }
-  
-    const response = await  erpModel.findOneAndUpdate({},{$set:data},{arrayFilters:[{'elem._id':id}], new: true })
-  
-    res.status(200).json({statusCode:200,message:'keywebsitecollection fetched successfully'})
-    } catch (error) {
-       res.status(500).json({statusCode:500,success:false,message:error.message}) 
-    }
-   }
+const updateKeywebsitecollection = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const data = {
+            'keywebsitecollection.$[elem].KeyWebsiteCollectionsHeading': req.body.KeyWebsiteCollectionsHeading,
+            'keywebsitecollection.$[elem].image': req.file.path,
+            'keywebsitecollection.$[elem].KeyWebsiteCollectionsDescription': req.body.KeyWebsiteCollectionsDescription
+        }
 
-   //delete
-   const deleteKeyWebsiteCollection = async (req, res) => {
+        const response = await erpModel.findOneAndUpdate({}, { $set: data }, { arrayFilters: [{ 'elem._id': id }], new: true })
+
+        res.status(200).json({ statusCode: 200, message: 'keywebsitecollection fetched successfully' })
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+    }
+}
+
+//delete
+const deleteKeyWebsiteCollection = async (req, res) => {
     try {
         const id = req.params.id;
 
-       
+
         const response = await keywebsitecollectionModel.findOneAndUpdate(
-            {}, 
-            { $pull: { keywebsitecollection: { _id: id } } }, 
+            {},
+            { $pull: { keywebsitecollection: { _id: id } } },
             { new: true }
         );
 
@@ -73,4 +82,4 @@ const updateKeywebsitecollection=async(req,res)=>{
 }
 
 
-module.exports = { addkeywebsitecollection, getKeywebsitecollection,updateKeywebsitecollection,deleteKeyWebsiteCollection }
+module.exports = { addkeywebsitecollection, getKeywebsitecollection, updateKeywebsitecollection, deleteKeyWebsiteCollection }

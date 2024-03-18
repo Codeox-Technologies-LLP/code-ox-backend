@@ -3,9 +3,14 @@ const teamModel = require('../Model/Team')
 //post
 const addTeam = async (req, res) => {
     try {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
+            return res.status(400).json({ message: 'Image file is required' });
+        }
         console.log(req.body, req.file)
         const data = {
-            image: req.file.path,
+            image: baseUrl,
         }
         const newData = await teamModel.findOneAndUpdate({}, { $push: { team: data } }, { new: true, upsert: true })
 

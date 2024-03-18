@@ -9,7 +9,7 @@ app.use(cors({origin:'*'}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use('/api',router)
-
+app.use('/public', express.static(path.join(__dirname, 'public')));
 const dotenvConfig = dotenv.config({
   path: path.resolve(__dirname, "./config", "config.env"),
 });

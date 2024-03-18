@@ -3,7 +3,11 @@ const footerModel = require('../Model/Footer');
 //ADD FOOTER DATA
 const addFooterData=async(req,res)=>{
 try {
-  
+  const { path: imagePath } = req.file; // Extract the path property from req.file
+  const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+  if (!imagePath) {
+      return res.status(400).json({ message: 'Image file is required' });
+  }
    const data={
     name:req.body.name,
     icon:req.file.path,

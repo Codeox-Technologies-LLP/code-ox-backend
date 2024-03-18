@@ -3,13 +3,14 @@ const showreelModel = require('../Model/showreel')
 const addshowreel = async (req, res) => {
     try {
         const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1 } = req.body;
-        const image = req.file;
-        if (!image) {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
         const newShowreelItem = new showreelModel({
             showreel: [{
-                image: image.path,
+                image: baseUrl, // Use the extracted imagePath
                 showreelHeading,
                 showreeldescripation,
                 showreelheading1,
@@ -19,17 +20,22 @@ const addshowreel = async (req, res) => {
         const savedShowreelItem = await newShowreelItem.save();
         res.status(201).json(savedShowreelItem);
     } catch (error) {
-
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
-};
+}; 
+
 
 //get 
 const getShowreelItems = async (req, res) => {
     try {
         const showreelItems = await showreelModel.find();
+        
+        
+        
+     
         res.status(200).json(showreelItems);
+       
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });

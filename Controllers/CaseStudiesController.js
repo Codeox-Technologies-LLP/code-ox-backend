@@ -3,6 +3,11 @@ const caseStudiesModel = require('../Model/caseStudies');
 //post
 const addCaseStudies = async (req, res) => {
   try {
+    const { path: imagePath } = req.file; // Extract the path property from req.file
+    const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+    if (!imagePath) {
+      return res.status(400).json({ message: 'Image file is required' });
+    }
     const image = req.file.path
     const data = {
 
@@ -11,11 +16,11 @@ const addCaseStudies = async (req, res) => {
       caseStudiesDescription: req.body.caseStudiesDescription,
       buttonLink: req.body.buttonLink,
       categories: req.body.categories,
-      image: image,
+      image: baseUrl,
 
 
     }
-      const response= await caseStudiesModel.findOneAndUpdate({}, {
+    const response = await caseStudiesModel.findOneAndUpdate({}, {
       $set: {
         heading: req.body.heading,
         subheading: req.body.subheading,
@@ -33,15 +38,15 @@ const addCaseStudies = async (req, res) => {
 //get
 const getCaseStudies = async (req, res, next) => {
   try {
-    const category = req.query.category ? req.query.category.toLowerCase() : null; 
-    let caseStudiesData = await caseStudiesModel.find(); 
+    const category = req.query.category ? req.query.category.toLowerCase() : null;
+    let caseStudiesData = await caseStudiesModel.find();
 
     // Filter the data
     if (category) {
-      caseStudiesData = caseStudiesData.filter(caseStudy => 
+      caseStudiesData = caseStudiesData.filter(caseStudy =>
         caseStudy.caseStudies.some(study => study.categories.toLowerCase() === category)
       );
-    
+
       // If you want to include only the matching case studies, you can further filter here
       caseStudiesData.forEach(caseStudy => {
         caseStudy.caseStudies = caseStudy.caseStudies.filter(study => study.categories.toLowerCase() === category);
@@ -63,9 +68,9 @@ const updateCaseStudies = async (req, res, next) => {
     const newData = req.body;
     const caseStudyId = req.params.caseStudyId;
 
- 
+
     if (req.file) {
-    
+
       newData.image = req.file.path;
     }
 
@@ -117,4 +122,4 @@ const deleteCaseStudy = async (req, res) => {
 
 
 
-module.exports={addCaseStudies, getCaseStudies,updateCaseStudies,deleteCaseStudy}
+module.exports = { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy }

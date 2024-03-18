@@ -3,13 +3,19 @@ const homeModel = require('../Model/Home');
 //post
 const addHome = async (req, res) => {
     try {
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
+           return res.status(400).json({ message: 'Image file is required' });
+        }
+   
         const data = {
-            image: req.file.path,
+            image: baseUrl,
             heading: req.body.heading,
             subHeading: req.body.subHeading,
             marqueeText: req.body.marqueeText
         }
-        const newData = await homeModel.findOneAndUpdate({}, { $push: { hero: data } }, { new: true, upsert: true })
+        const newData = await homeModel.findOneAndUpdate({},data, { new: true, upsert: true })
         res.status(200).json({ statusCode: 200, success: true, message: 'home added successfully' })
 
     } catch (error) {
@@ -28,24 +34,6 @@ const getHome = async (req, res) => {
     }
 }
 
-//update
-const updateHome = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const data = {
-            'hero.$[elem].heading': req.body.heading,
-            'hero.$[elem].image': req.file.path,
-            'hero.$[elem].subHeading': req.body.subHeading,
-            'hero.$[elem].marqueeText': req.body.marqueeText,
-        }
-
-        const response = await homeModel.findOneAndUpdate({}, { $set: data }, { arrayFilters: [{ 'elem._id': id }], new: true })
-
-        res.status(200).json({ statusCode: 200, message: 'home fetched updated successfully' })
-    } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
-    }
-}
 
 const deleteHome = async (req, res) => {
     try {
@@ -59,4 +47,4 @@ const deleteHome = async (req, res) => {
     }
 }
 
-module.exports = { addHome, getHome, updateHome, deleteHome }
+module.exports = { addHome, getHome, deleteHome }

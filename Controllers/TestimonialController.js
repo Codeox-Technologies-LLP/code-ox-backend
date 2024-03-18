@@ -1,37 +1,43 @@
 const testimonialModel = require('../Model/Testimonial')
 
 //post
-const addTestimonial=async(req,res)=>{
+const addTestimonial = async (req, res) => {
     try {
-    console.log(req.body,req.file)
-     const data ={
-       image:req.file.path,
-       authorName:req.body.authorName,
-       authorCompany:req.body.authorCompany,
-       testimonialsdescription:req.body.testimonialsdescription
-     }
-   
-    const newData= await testimonialModel.findOneAndUpdate({},{$push:{testimonial:data}},{ new: true, upsert: true })
-   
-    res.status(200).json({statusCode:200,success:true,message:'testimonial added successfully'})
-   
-    } catch (error) {
-       res.status(500).json({statusCode:500,success:false,message:error.message}) 
-    }
-   }
+        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        if (!imagePath) {
+            return res.status(400).json({ message: 'Image file is required' });
+        }
+        console.log(req.body, req.file)
+        console.log(req.body, req.file)
+        const data = {
+            image: baseUrl,
+            authorName: req.body.authorName,
+            authorCompany: req.body.authorCompany,
+            testimonialsdescription: req.body.testimonialsdescription
+        }
 
-   //gegt
-   const getTestimonial=async(req,res)=>{
-    try { 
-    const data= await testimonialModel.find({})
-     console.log(data)
-    res.status(200).json({statusCode:200,message:'testimonial fetched successfully',data:data})
+        const newData = await testimonialModel.findOneAndUpdate({}, { $push: { testimonial: data } }, { new: true, upsert: true })
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'testimonial added successfully' })
+
     } catch (error) {
-       res.status(500).json({statusCode:500,success:false,message:error.message}) 
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-   }
-   //update
-   const updateTestimonial = async (req, res) => {
+}
+
+//gegt
+const getTestimonial = async (req, res) => {
+    try {
+        const data = await testimonialModel.find({})
+        console.log(data)
+        res.status(200).json({ statusCode: 200, message: 'testimonial fetched successfully', data: data })
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+    }
+}
+//update
+const updateTestimonial = async (req, res) => {
     try {
         const id = req.params.id;
         const data = {
@@ -57,8 +63,8 @@ const deleteTestimonial = async (req, res) => {
     try {
         const id = req.params.id;
         const response = await testimonialModel.findOneAndUpdate(
-            {}, 
-            { $pull: { testimonial: { _id: id } } }, 
+            {},
+            { $pull: { testimonial: { _id: id } } },
             { new: true }
         );
 
@@ -73,4 +79,4 @@ const deleteTestimonial = async (req, res) => {
 }
 
 
-   module.exports={addTestimonial ,getTestimonial ,updateTestimonial,deleteTestimonial}
+module.exports = { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial }

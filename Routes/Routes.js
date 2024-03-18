@@ -19,7 +19,8 @@ const { addclient, getClient, updateClient, deleteClient } = require('../Control
 const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
-const { addHome, getHome, updateHome, deleteHome } = require('../Controllers/HomeController');
+const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
+const { deleteAboutus, updateAboutus, getAboutus, addAboutus } = require('../Controllers/AboutuspageController');
 
 
 
@@ -33,7 +34,7 @@ const storage = multer.diskStorage({
 
   filename: function (req, file, cb) {
 
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   }
 });
 var upload = multer({ storage: storage, limits: { fileSize: 2 * 1024 * 1024 } })
@@ -75,11 +76,9 @@ router.post('/create-admin', addAdmin);
 router.post('/admin-login', adminLogin);
 
 ///home
-router.post('/home', upload.single('image'), addHome)
+router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
-router.put('/home/:id', upload.single('image'), updateHome);
 router.delete('/home/:id', deleteHome);
-
 //showreel
 router.post('/showreel', upload.single('image'), addshowreel)
 router.get('/showreel', getShowreelItems)
@@ -115,6 +114,13 @@ router.post('/client', upload.single('image'), addclient)
 router.get('/client', getClient);
 router.put('/client/:id', upload.single('image'), updateClient);
 router.delete('/client/:id', deleteClient);
+
+//about-us-page
+//abouts
+router.post('/aboutus', addAboutus)
+router.get('/aboutus', getAboutus)
+router.put('/aboutus/:id', updateAboutus);
+router.delete('/aboutus/:id', deleteAboutus)
 /// our value
 router.post('/value', upload.single('gif'), addValue)
 router.get('/value', getValue);

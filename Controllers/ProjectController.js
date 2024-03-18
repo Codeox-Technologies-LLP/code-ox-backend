@@ -1,22 +1,15 @@
-const valueModel = require('../Model/Ourvalue')
-//post
-const addValue = async (req, res) => {
+const projectModel = require('../Model/Project')
+
+const addProject = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; // Extract the path property from req.file
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-           return res.status(400).json({ message: 'Image file is required' });
-        }
-        console.log(req.body, req.file)
-        console.log(req.body, req.file)
+
         const data = {
-            name: req.body.name,
-            gif: baseUrl,
-            title: req.body.title,
-            descripation: req.body.descripation,
+            projectHappyClient: req.body.projectHappyClient,
+            projectTaskDone: req.body.projectTaskDone,
+            projectCompleted: req.body.projectCompleted,
         }
 
-        const newData = await valueModel.findOneAndUpdate({}, { $push: { value: data } }, { new: true, upsert: true })
+        const newData = await projectModel.findOneAndUpdate({}, { $push: { value: data } }, { new: true, upsert: true })
 
         res.status(200).json({ statusCode: 200, success: true, message: 'value  projects added successfully' })
 
@@ -26,7 +19,7 @@ const addValue = async (req, res) => {
 }
 //get
 
-const getValue = async (req, res) => {
+const getProject = async (req, res) => {
     try {
         const data = await valueModel.find({})
         console.log(data)
@@ -37,7 +30,7 @@ const getValue = async (req, res) => {
 }
 
 //update
-const updateValue = async (req, res) => {
+const updateProject = async (req, res) => {
     try {
         const id = req.params.id;
         const data = {
@@ -57,7 +50,7 @@ const updateValue = async (req, res) => {
 }
 
 //delete
-const deleteValue = async (req, res) => {
+const deleteProject = async (req, res) => {
     try {
         const id = req.params.id;
         const response = await valueModel.findOneAndUpdate({}, { $pull: { value: { _id: id } } }, { new: true });
@@ -69,5 +62,4 @@ const deleteValue = async (req, res) => {
     }
 }
 
-
-module.exports = { addValue, getValue, updateValue, deleteValue }
+module.exports = { addProject, getAbout, updateAbout, deleteAbout }
