@@ -2,12 +2,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const serviceSchema = new Schema({
-    // servicesTitle: {
-    //     type: String,
-    //     required: true
-    // },
-    services: {
-        type: [{
+ 
+   
+      
             image: {
                 type: String,
                 required: true,
@@ -20,9 +17,9 @@ const serviceSchema = new Schema({
                 type: String,
                 required: true,
             },
-        }],
+    
       
-    }
+    
 });
 
 const servicesModel = mongoose.model('service', serviceSchema);

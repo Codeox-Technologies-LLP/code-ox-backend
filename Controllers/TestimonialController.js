@@ -5,31 +5,38 @@ const addTestimonial = async (req, res) => {
     try {
         const { path: imagePath } = req.file; // Extract the path property from req.file
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
-        console.log(req.body, req.file)
-        console.log(req.body, req.file)
+
         const data = {
             image: baseUrl,
             authorName: req.body.authorName,
             authorCompany: req.body.authorCompany,
             testimonialsdescription: req.body.testimonialsdescription
-        }
+        };
 
-        const newData = await testimonialModel.findOneAndUpdate({}, { $push: { testimonial: data } }, { new: true, upsert: true })
+        // Create a new testimonial instance
+        const newTestimonial = new testimonialModel(data);
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'testimonial added successfully' })
+        // Save the new testimonial to the database
+        await newTestimonial.save();
+
+        // Respond with success message
+        res.status(200).json({ statusCode: 200, success: true, message: 'Testimonial added successfully' });
 
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        // Respond with error message
+        res.status(500).json({ statusCode: 500, success: false, message: 'Server Error' });
     }
-}
+};
+
 
 //gegt
 const getTestimonial = async (req, res) => {
     try {
-        const data = await testimonialModel.findOne({})
+        const data = await testimonialModel.find()
         console.log(data)
         res.status(200).json({ statusCode: 200, message: 'testimonial fetched successfully', data: data })
     } catch (error) {
