@@ -1,4 +1,5 @@
 const clientModel = require('../Model/Client')
+const mongoose = require('mongoose');
 
 // post
 const addclient = async (req, res) => {
@@ -8,17 +9,18 @@ const addclient = async (req, res) => {
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
-        console.log(req.body, req.file)
-        console.log(req.body, req.file)
+        console.log(req.body.category, req.file)
+       
         const data = {
             image: baseUrl,
-            categories: req.body.categories,
+            category: req.body.category,
 
         }
 
-        const newData = await clientModel.findOneAndUpdate({}, { $push: { Client: data } }, { new: true, upsert: true })
+        const newData = clientModel(data)
+        const response= await newData.save()
 
-        res.status(200).json({ statusCode: 200, success: true, message: ' Client projects added successfully' })
+        res.status(200).json({ statusCode: 200, success: true, message: ' Client projects added successfully' ,response})
 
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
@@ -29,23 +31,23 @@ const addclient = async (req, res) => {
 
 const getClient = async (req, res, next) => {
     try {
-        const category = req.query.categories ? req.query.categories.toLowerCase() : null;
-        let clientData = await clientModel.findOne();
+        const category = req.query.category ? req.query.category.toLowerCase() : null;
+        let Data = await clientModel.find({});
 
-        if (!clientData) {
+        if (!Data) {
             return res.status(404).json({ statusCode: 404, success: false, message: 'No client found.' });
         }
 
         if (category) {
-            clientData.Client = clientData.Client.filter(caseStudy =>
-                caseStudy.categories.toLowerCase() === category
-            );
-            if (clientData.Client.length === 0) {
+            let Data = await clientModel.find({category:category});
+
+            if (Data.length === 0) {
                 return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
             }
+            return res.status(200).json({ statusCode: 200, success: true, client: Data })
         }
 
-        return res.status(200).json({ statusCode: 200, success: true, client: clientData });
+        return res.status(200).json({ statusCode: 200, success: true, client: Data });
     } catch (err) {
         return res.status(500).json({ statusCode: 500, success: false, message: err.message });
     }
@@ -57,27 +59,45 @@ const getClient = async (req, res, next) => {
 const updateClient = async (req, res) => {
     try {
         const id = req.params.id;
-        const data = {
-            'Client.$[elem].categories': req.body.categories,
-            'Client.$[elem].image': req.file.path,
-        };
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+        }
 
-        const response = await clientModel.findOneAndUpdate(
-            { 'Client._id': id },
-            { $set: data },
-            { arrayFilters: [{ 'elem._id': id }], new: true } // Options
+        const {  category } = req.body;
+        const  image  = req.file?.path;
+        const baseUrl = `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}`;
+        const update = {
+            image:baseUrl,
+            category:category
+        };
+      
+        
+        const updatedClient = await clientModel.findOneAndUpdate(
+            { _id: id }, 
+            update, 
+            { new: true } 
         );
 
-        res.status(200).json({ statusCode: 200, message: 'Client project updated successfully', updatedData: response });
+   
+        if (!updatedClient) {
+            return res.status(404).json({ statusCode: 404, message: 'Client not found' });
+        }
+
+        res.status(200).json({ statusCode: 200,success: true, message: 'Client updated successfully', updatedClient });
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message });
+        console.error(error);
+        res.status(500).json({ statusCode: 500,success: false, message: 'Internal server error' });
     }
 };
 ///delete
 const deleteClient = async (req, res) => {
     try {
         const id = req.params.id;
-        const response = await clientModel.findOneAndUpdate({}, { $pull: { Client: { _id: id } } }, { new: true });
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+        }
+         
+        await clientModel.findOneAndDelete({_id:id});
 
         res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
 
