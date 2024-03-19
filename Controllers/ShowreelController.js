@@ -2,53 +2,68 @@ const showreelModel = require('../Model/showreel')
 
 const addshowreel = async (req, res) => {
     try {
-        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1 } = req.body;
-        const { path: imagePath } = req.file; // Extract the path property from req.file
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1, categories } = req.body;
+        const { path: imagePath } = req.file;
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        // Create a new showreel item
         const newShowreelItem = new showreelModel({
-            showreel: [{
-                image: baseUrl, // Use the extracted imagePath
-                showreelHeading,
-                showreeldescripation,
-                showreelheading1,
-                showreeldescripation1
-            }]
+            image: baseUrl,
+            showreelHeading,
+            showreeldescripation,
+            showreelheading1,
+            showreeldescripation1,
+            categories,
+            link: req.body.link
         });
+
         const savedShowreelItem = await newShowreelItem.save();
         res.status(201).json(savedShowreelItem);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server Error' });
-    }
-}; 
-
-
-//get 
-const getShowreelItems = async (req, res) => {
-    try {
-        const showreelItems = await showreelModel.findOne();
-        
-        
-        
-     
-        res.status(200).json(showreelItems);
-       
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({ message: 'Server Error', statusCode: 500 });
     }
 };
+
+//get 
+const getShowreelItems = async (req, res, next) => {
+    try {
+        const category = req.query.categories ? req.query.categories.toLowerCase() : null;
+        let showreelData = await showreelModel.find();
+
+        // Filter the data
+        if (category) {
+            showreelData = showreelData.filter(item => item.categories.toLowerCase() === category.toLowerCase()
+            );
+        }
+
+
+        if (showreelData.length === 0) {
+            return res.status(404).json({
+                statusCode: 404, success: false, message: 'No showreel items found for the provided category.'
+            });
+        }
+
+        return res.status(200).json({
+            statusCode: 200, success: true, showreelItems: showreelData
+        });
+    } catch (err) {
+        return res.status(500).json({
+            statusCode: 500, success: false, message: err.message
+        });
+    }
+};
+
 
 //updte
 const updateShowreel = async (req, res) => {
     try {
         const { id } = req.params;
         console.log('Requested ID:', id);
-        
-        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1 } = req.body;
+
+        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1, categories, link } = req.body;
         console.log('Updated data:', req.body);
 
         const image = req.file;
@@ -66,7 +81,9 @@ const updateShowreel = async (req, res) => {
                     'showreel.$[elem].showreelHeading': showreelHeading,
                     'showreel.$[elem].showreeldescripation': showreeldescripation,
                     'showreel.$[elem].showreelheading1': showreelheading1,
-                    'showreel.$[elem].showreeldescripation1': showreeldescripation1
+                    'showreel.$[elem].showreeldescripation1': showreeldescripation1,
+                    'showreel.$[elem].categories': categories,
+                    'showreel.$[elem].link': link // Corrected from ' link' to 'link'
                 }
             },
             { new: true, arrayFilters: [{ 'elem._id': id }] } // Filter the array element by its ID
@@ -79,9 +96,10 @@ const updateShowreel = async (req, res) => {
         res.status(200).json(updatedShowreelItem);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({ message: 'Server Error', statusCode: 500 });
     }
 };
+
 
 //detle
 const deleteShowreel = async (req, res) => {
@@ -107,4 +125,4 @@ const deleteShowreel = async (req, res) => {
 
 
 
-module.exports = { addshowreel, getShowreelItems, updateShowreel,deleteShowreel  }
+module.exports = { addshowreel, getShowreelItems, updateShowreel, deleteShowreel }

@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 const {Schema}=mongoose;
 
 const testimonial=new Schema({
-testimonial:[{
+
     image: {
         type: String,
         required: true,
@@ -19,7 +19,7 @@ testimonial:[{
         type: String,
         required: true,
     }
-}]
+
 })
 const testimonialModel = mongoose.model('testimonial',testimonial);
 

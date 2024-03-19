@@ -10,12 +10,12 @@ const addService = async (req, res) => {
             return res.status(400).json({ message: 'Image file is required' });
         }
         const serviceItem = new servicesModel({
-            services: [{
+           
                 image: baseUrl,
                 servicesHeading,
                 servicesDescripation,
 
-            }]
+            
         });
         const savedserviceItem = await serviceItem.save();
         res.status(201).json(savedserviceItem);
@@ -30,7 +30,7 @@ const addService = async (req, res) => {
 const getServices = async (req, res) => {
     try {
 
-        const services = await servicesModel.findOne();
+        const services = await servicesModel.find();
 
 
         if (!services || services.length === 0) {
