@@ -2,16 +2,15 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose
 
 const clientSchema = new Schema({
-    Client: [{
+
         image: {
             type: String,
             required: true,
         },
-        categories: {
+        category: {
             type: String,
             required: true
         }
-    }],
 
 })
 
