@@ -9,7 +9,7 @@ const authenticate = (req,res,next)=>{
     }
 
     jwt.verify(token,process.env.JWT,(err,decode)=>{
-        console.log(token,err)
+     
          if(err){
             return res.status(403).json({ statusCode: 403, success: false, message: 'Invalid token' });
          }
