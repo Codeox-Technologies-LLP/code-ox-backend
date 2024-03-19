@@ -20,7 +20,7 @@ const { addValue, getValue, updateValue, deleteValue } = require('../Controllers
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
-const { deleteAboutus, updateAboutus, getAboutus, addAboutus } = require('../Controllers/AboutuspageController');
+
 
 
 
