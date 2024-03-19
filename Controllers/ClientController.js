@@ -27,15 +27,43 @@ const addclient = async (req, res) => {
 
 //get
 
-const getClient = async (req, res) => {
+const getClient = async (req, res, next) => {
     try {
-        const data = await clientModel.findOne({})
-        console.log(data)
-        res.status(200).json({ statusCode: 200, message: 'client  fetched successfully', data: data })
-    } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        const category = req.query.categories ? req.query.categories.toLowerCase() : null;
+        let clientData = await clientModel.findOne();
+
+        if (!clientData) {
+            return res.status(404).json({ statusCode: 404, success: false, message: 'No client found.' });
+        }
+
+        // Filter the case studies if category is provided
+        if (category) {
+            clientData.Client = clientData.Client.filter(caseStudy =>
+                caseStudy.categories.toLowerCase() === category
+            );
+            if (clientData.Client.length === 0) {
+                return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
+            }
+        }
+
+        return res.status(200).json({ statusCode: 200, success: true, client: clientData });
+    } catch (err) {
+        return res.status(500).json({ statusCode: 500, success: false, message: err.message });
     }
-}
+};
+
+
+
+
+// const getClient = async (req, res) => {
+//     try {
+//         const data = await clientModel.findOne({})
+//         console.log(data)
+//         res.status(200).json({ statusCode: 200, message: 'client  fetched successfully', data: data })
+//     } catch (error) {
+//         res.status(500).json({ statusCode: 500, success: false, message: error.message })
+//     }
+// }
 
 //update
 const updateClient = async (req, res) => {
