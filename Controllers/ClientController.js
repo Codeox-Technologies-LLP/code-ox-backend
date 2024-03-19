@@ -97,8 +97,10 @@ const deleteClient = async (req, res) => {
             return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
         }
          
-        await clientModel.findOneAndDelete({_id:id});
-
+        const response = await clientModel.findOneAndDelete({_id:id});
+        if (!response){
+            res.status(200).json({ statusCode: 200, success: true, message: "no documents were deleted" });
+         }
         res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
 
     } catch (error) {
