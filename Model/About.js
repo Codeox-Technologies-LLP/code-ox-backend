@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const aboutSectionSchema = new Schema({
-  descripation: {
+  description: {
     type: String,
     required: true,
   },

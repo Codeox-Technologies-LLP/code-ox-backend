@@ -12,27 +12,27 @@ const addProjects = async (req, res) => {
       if (!imagePath) {
          return res.status(400).json({ message: 'Image file is required' });
       }
-      console.log(req.body, req.file)
+   
       const data = {
          image: baseUrl,
          name: req.body.name,
          description: req.body.description
-      }
+      };
 
-      const newData = await erpModel.findOneAndUpdate({}, { $push: { projects: data } }, { new: true, upsert: true })
+      const newData = await erpModel.findOneAndUpdate({}, { $push: { projects: data } }, { new: true, upsert: true });
 
-      res.status(200).json({ statusCode: 200, success: true, message: 'erp projects added successfully' })
+      res.status(200).json({ statusCode: 200, success: true, message: 'erp projects added successfully' });
 
    } catch (error) {
-      res.status(500).json({ statusCode: 500, success: false, message: error.message })
+      res.status(500).json({ statusCode: 500, success: false, message: error.message });
    }
-}
+};
 
 //GET
 
 const getProjects = async (req, res) => {
    try {
-      const data = await erpModel.find({})
+      const data = await erpModel.find()
       console.log(data)
       res.status(200).json({ statusCode: 200, message: 'erp projects fetched successfully', data: data })
    } catch (error) {
