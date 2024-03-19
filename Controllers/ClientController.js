@@ -36,7 +36,6 @@ const getClient = async (req, res, next) => {
             return res.status(404).json({ statusCode: 404, success: false, message: 'No client found.' });
         }
 
-        // Filter the case studies if category is provided
         if (category) {
             clientData.Client = clientData.Client.filter(caseStudy =>
                 caseStudy.categories.toLowerCase() === category
@@ -53,17 +52,6 @@ const getClient = async (req, res, next) => {
 };
 
 
-
-
-// const getClient = async (req, res) => {
-//     try {
-//         const data = await clientModel.findOne({})
-//         console.log(data)
-//         res.status(200).json({ statusCode: 200, message: 'client  fetched successfully', data: data })
-//     } catch (error) {
-//         res.status(500).json({ statusCode: 500, success: false, message: error.message })
-//     }
-// }
 
 //update
 const updateClient = async (req, res) => {

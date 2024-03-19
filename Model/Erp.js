@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 const {Schema}=mongoose;
 
 const erpSchema=new Schema({
-projects:[{
+
     name:{
         type:String,
         required:true
@@ -15,7 +15,7 @@ projects:[{
         type:String,
         required:true
      }
-}]
+
 })
 const erpModel = mongoose.model('erp',erpSchema);
 

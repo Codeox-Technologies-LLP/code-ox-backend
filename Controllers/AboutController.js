@@ -13,13 +13,10 @@ const addAbout = async (req, res) => {
     const data = {
       image: baseUrl,
       welcomeContent: req.body.welcomeContent,
-      descripation: req.body.descripation,
+      description: req.body.description,
       buttonText: req.body.buttonText,
       link: req.body.link,
       marquee: req.body.marquee
-
-
-
     }
     const newAbout = await AboutModel.create(data);
     res.status(201).json(newAbout);
