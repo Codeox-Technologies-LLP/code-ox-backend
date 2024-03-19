@@ -30,7 +30,7 @@ const adminLogin=async(req,res)=>{
          }
         
          const token = jwt.sign({ userId: user._id, username: user.username },process.env.JWT, { expiresIn: '3d' });
-         res.status(200).json({ statusCode: 200, success: true, message: 'Login successful', data: user,token:token });
+         res.status(200).json({ statusCode: 200, success: true, message: 'Login successful', token:token });
     } catch (error) {
         res.status(500).json({statusCode:500,success:false,message:error.message}) 
     }
