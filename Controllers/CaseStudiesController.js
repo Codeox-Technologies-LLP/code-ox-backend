@@ -1,5 +1,5 @@
 const caseStudiesModel = require('../Model/caseStudies');
-
+const mongoose = require('mongoose');
 //post
 const addCaseStudies = async (req, res) => {
   try {
@@ -48,34 +48,44 @@ const getCaseStudies = async (req, res, next) => {
 
 
 //update
-const updateCaseStudies = async (req, res, next) => {
+
+
+const updateCaseStudies = async (req, res) => {
   try {
-    const newData = req.body;
-    const caseStudyId = req.params.caseStudyId;
+      const id = req.params.id;
+      if (!mongoose.isValidObjectId(id)) {
+          return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+      }
+      const { title, subtitle,  caseStudiesDescription, link, categories } = req.body;
+      const { category } = req.body;
+      const image = req.file ? req.file.path : undefined; // Check if req.file exists
+      const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+      const update = {
+          image: baseUrl,
+          category: category,
+          title,
+          subtitle,
+          caseStudiesDescription,
+          link
+      };
+    
+      const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
+          { _id: id }, 
+          update, 
+          { new: true } 
+      );
 
+      if (!updatedCaseStudies) {
+          return res.status(404).json({ statusCode: 404, message: 'Case Studies not found' });
+      }
 
-    if (req.file) {
-
-      newData.image = req.file.path;
-    }
-
-    const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
-      { 'caseStudies._id': caseStudyId },
-      { $set: { 'caseStudies.$': newData } },
-      { new: true }
-    );
-
-    if (!updatedCaseStudies) {
-      console.log("No case studies found for the provided ID.");
-      return res.status(404).json({ statusCode: 404, success: false, message: 'No case study found for the provided ID.' });
-    }
-    console.log("Case study updated successfully.");
-    return res.status(200).json({ statusCode: 200, success: true, message: 'Case study updated successfully.', updatedCaseStudy: updatedCaseStudies });
-  } catch (err) {
-    console.error("Error updating case study:", err);
-    return res.status(500).json({ statusCode: 500, success: false, message: err.message });
+      res.status(200).json({ statusCode: 200, success: true, message: 'Case studies updated successfully', updatedCaseStudies });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
   }
 };
+
 
 
 
@@ -83,24 +93,19 @@ const updateCaseStudies = async (req, res, next) => {
 //delete
 const deleteCaseStudy = async (req, res) => {
   try {
-    const caseStudyId = req.params.id; // Assuming you are passing the case study ID in the URL
+      const id = req.params.id;
+      if (!mongoose.isValidObjectId(id)) {
+          return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+      }
+       
+      await caseStudiesModel.findOneAndDelete({_id:id});
 
-    // Find and delete the case study
-    const response = await caseStudiesModel.findOneAndUpdate(
-      {},
-      { $pull: { caseStudies: { _id: caseStudyId } } },
-      { new: true }
-    );
+      res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
 
-    if (!response) {
-      return res.status(404).json({ statusCode: 404, success: false, message: "Case study not found" });
-    }
-
-    return res.status(200).json({ statusCode: 200, success: true, message: "Case study deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ statusCode: 500, success: false, message: err.message });
+  } catch (error) {
+      res.status(500).json({ statusCode: 500, success: false, message: error.message })
   }
-};
+}
 
 // Define your delete route
 

@@ -55,7 +55,7 @@ function handleMulterErrors(err, req, res, next) {
 
 router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
-router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
+router.delete('/case-studies/:id', deleteCaseStudy);
 router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
 
 router.post('/contactus', addQuery);
