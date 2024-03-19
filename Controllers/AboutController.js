@@ -12,15 +12,13 @@ const addAbout = async (req, res) => {
 
     const data = {
       image: baseUrl,
-      aboutContent: req.body.aboutContent,
+      welcomeContent: req.body.welcomeContent,
       descripation: req.body.descripation,
-      aboutButton: req.body.aboutButton,
+      buttonText: req.body.buttonText,
       link: req.body.link,
-      heading: req.body.heading ,
-      heading1: req.body.heading1 ,
-      marquee:req.body.marquee
-      
-      
+      marquee: req.body.marquee
+
+
 
     }
     const newAbout = await AboutModel.create(data);
@@ -35,7 +33,7 @@ const addAbout = async (req, res) => {
 
 const getAbout = async (req, res) => {
   try {
-    const data = await AboutModel.findOne(); 
+    const data = await AboutModel.findOne();
     console.log(data);
     res.status(200).json({ statusCode: 200, message: 'About projects fetched successfully', data: data });
   } catch (error) {
@@ -49,7 +47,7 @@ const updateAbout = async (req, res) => {
   try {
     const id = req.params.id;
     const data = {
-      'about.$[elem].descripation': req.body.descripation, 
+      'about.$[elem].descripation': req.body.descripation,
       'about.$[elem].image': req.file.path,
       'about.$[elem].aboutContent': req.body.aboutContent,
       'about.$[elem].aboutButton': req.body.aboutButton,
