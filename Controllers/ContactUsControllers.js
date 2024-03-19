@@ -83,19 +83,36 @@ const getQuery = async (req, res) => {
   }
 };
 
+
+
 const getCountry = async (req, res) => {
+
   try {
-   
-     
-        const data =  await countryModel.find({}) 
-        
-        res.status(200).json( {statusCode:200,success:true,message:'country list fetching successfull ',countryList:data} );
+             const data=await countryModel.findOne()
+       
+        res.status(200).json( {statusCode:200,success:true,message:'country list fetching successfull ',data} );
    
       
     
   } catch (error) {
-    res.status(500).json({statusCode:500,success:false,message:'country list fetching faild '});
+    res.status(500).json({statusCode:500,success:false,message:error.message});
   }
 };
+
+
+// const getCountry = async (req, res) => {
+//   try {
+   
+     
+//         const data =  await countryModel.find({}) 
+        
+//         res.status(200).json( {statusCode:200,success:true,message:'country list fetching successfull ',countryList:data} );
+   
+      
+    
+//   } catch (error) {
+//     res.status(500).json({statusCode:500,success:false,message:'country list fetching faild '});
+//   }
+// };
 
 module.exports = { addQuery, getQuery, getCountry };

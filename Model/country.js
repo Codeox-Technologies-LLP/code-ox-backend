@@ -2,10 +2,7 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose
 
 const countrySchema = new Schema({
-    country:{
-        type:Array, 
-    },
-
+ type:Object
 })
 
 const countryModel = mongoose.model('CountryList',countrySchema);
