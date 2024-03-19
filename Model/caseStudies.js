@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
 const caseStudySchema = new mongoose.Schema({
-  heading: {
-    type: String,
-    required: true,
-  },
-  subheading: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  caseStudies: [{
+  // heading: {
+  //   type: String,
+  //   required: true,
+  // },
+  // subheading: {
+  //   type: String,
+  //   required: true,
+  // },
+  // description: {
+  //   type: String,
+  //   required: true,
+  // },
+  
     title: {
       type: String,
       required: true
@@ -26,7 +26,7 @@ const caseStudySchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    buttonLink: {
+    link: {
       type: String,
       required: true,
     },
@@ -38,7 +38,7 @@ const caseStudySchema = new mongoose.Schema({
       type: String,
       required: true
     }
-  }]
+  
 });
 
 const caseStudiesModel = mongoose.model('case-studies', caseStudySchema);
