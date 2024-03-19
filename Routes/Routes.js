@@ -20,7 +20,7 @@ const { addValue, getValue, updateValue, deleteValue } = require('../Controllers
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
-const { deleteAboutus, updateAboutus, getAboutus, addAboutus } = require('../Controllers/AboutuspageController');
+
 
 
 
@@ -55,11 +55,11 @@ function handleMulterErrors(err, req, res, next) {
 
 router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
-router.delete('/case-studies/:id', deleteCaseStudy);
+router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
 router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
 
 router.post('/contactus', addQuery);
-router.get('/contactus', authenticate, authenticate, getQuery);
+router.get('/contactus', authenticate, getQuery);
 router.get('/all-countries', getCountry);
 
 router.post('/add-footer-data', authenticate, upload.single('image'), addFooterData);
@@ -80,67 +80,62 @@ router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
-router.post('/showreel', upload.single('image'), addshowreel)
+router.post('/showreel', authenticate, upload.single('image'), addshowreel)
 router.get('/showreel', getShowreelItems)
-router.put('/showreel/:id', upload.single('image'), updateShowreel);
-router.delete('/showreel/:id', deleteShowreel);
+router.put('/showreel/:id', authenticate, upload.single('image'), updateShowreel);
+router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
-router.post('/about', upload.single('image'), addAbout);
+router.post('/about', authenticate, upload.single('image'), addAbout);
 router.get('/about', getAbout);
-router.put('about/:id', upload.single('image'), updateAbout)
-router.delete('/about/:id', deleteAbout)
+router.put('about/:id', authenticate, upload.single('image'), updateAbout)
+router.delete('/about/:id', authenticate, deleteAbout)
 ///servie
-router.post('/service', upload.single('image'), addService)
+router.post('/service', authenticate, upload.single('image'), addService)
 router.get('/service', getServices)
-router.put('service/:id', upload.single('image'), updateService)
-router.delete('/service/:id', deleteService)
+router.put('service/:id', authenticate, upload.single('image'), updateService)
+router.delete('/service/:id', authenticate, deleteService)
 //testimonial
-router.post('/testimonial', upload.single('image'), addTestimonial)
+router.post('/testimonial', authenticate, upload.single('image'), addTestimonial)
 router.get('/testimonial', getTestimonial);
-router.put('/testimonial/:id', upload.single('image'), updateTestimonial);
-router.delete('/testimonial/:id', deleteTestimonial);
+router.put('/testimonial/:id', authenticate, upload.single('image'), updateTestimonial);
+router.delete('/testimonial/:id', authenticate, deleteTestimonial);
 //keywebsitecollection
-router.post('/keywebsitecollection', upload.single('image'), addkeywebsitecollection)
+router.post('/keywebsitecollection', authenticate, upload.single('image'), addkeywebsitecollection)
 router.get('/keywebsitecollection', getKeywebsitecollection);
-router.put('/keywebsitecollection/:id', upload.single('image'), updateTestimonial);
-router.delete('/keywebsitecollection/:id', deleteKeyWebsiteCollection);
+router.put('/keywebsitecollection/:id', authenticate, upload.single('image'), updateTestimonial);
+router.delete('/keywebsitecollection/:id', authenticate, deleteKeyWebsiteCollection);
 //why choose us
-router.post('/whychooseus', upload.single('image'), addWhychoose)
+router.post('/whychooseus', authenticate, upload.single('image'), addWhychoose)
 router.get('/whychooseus', getWhychoose);
-router.put('/whychooseus/:id', upload.single('image'), updateWhychoose);
-router.delete('/whychooseus/:id', deleteWhychoose);
+router.put('/whychooseus/:id', authenticate, upload.single('image'), updateWhychoose);
+router.delete('/whychooseus/:id', authenticate, deleteWhychoose);
 /// client
-router.post('/client', upload.single('image'), addclient)
+router.post('/client', authenticate, upload.single('image'), addclient)
 router.get('/client', getClient);
-router.put('/client/:id', upload.single('image'), updateClient);
-router.delete('/client/:id', deleteClient);
+router.put('/client/:id', authenticate, upload.single('image'), updateClient);
+router.delete('/client/:id', authenticate, deleteClient);
 
 //about-us-page
-//abouts
-router.post('/aboutus', addAboutus)
-router.get('/aboutus', getAboutus)
-router.put('/aboutus/:id', updateAboutus);
-router.delete('/aboutus/:id', deleteAboutus)
 /// our value
-router.post('/value', upload.single('gif'), addValue)
+router.post('/value', authenticate, upload.single('gif'), addValue)
 router.get('/value', getValue);
-router.put('/value/:id', upload.single('gif'), updateValue);
-router.delete('/value/:id', deleteValue);
+router.put('/value/:id', authenticate, upload.single('gif'), updateValue);
+router.delete('/value/:id', authenticate, deleteValue);
 //founder
-router.post('/founder', upload.single('image'), addFounder)
+router.post('/founder', authenticate, upload.single('image'), addFounder)
 router.get('/founder', getFounder);
-router.put('/founder/:id', upload.single('image'), updateFounder);
-router.delete('/founder/:id', deleteFounder);
+router.put('/founder/:id', authenticate, upload.single('image'), updateFounder);
+router.delete('/founder/:id', authenticate, deleteFounder);
 // team 
-router.post('/team', upload.single('image'), addTeam)
+router.post('/team', authenticate, upload.single('image'), addTeam)
 router.get('/team', getTeam);
-router.put('/team/:id', upload.single('image'), updateTeam);
-router.delete('/team/:id', deleteTeam);
+router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
+router.delete('/team/:id', authenticate, deleteTeam);
 //project counter
-router.post('/project',  addProjects)
+router.post('/project', authenticate, addProjects)
 router.get('/team', getTeam);
-router.put('/team/:id', upload.single('image'), updateTeam);
-router.delete('/team/:id', deleteTeam);
+router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
+router.delete('/team/:id', authenticate, deleteTeam);
 router.use(handleMulterErrors)
 //marquee
 
