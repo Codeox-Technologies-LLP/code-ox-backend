@@ -39,7 +39,7 @@ const addCaseStudies = async (req, res) => {
 const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
-    let caseStudiesData = await caseStudiesModel.findOne();
+    let caseStudiesData = await caseStudiesModel.find(); // Use find() instead of findOne()
 
     // Filter the data
     if (category) {
@@ -62,6 +62,7 @@ const getCaseStudies = async (req, res, next) => {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
 //update
 const updateCaseStudies = async (req, res, next) => {
   try {
