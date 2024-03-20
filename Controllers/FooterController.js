@@ -10,7 +10,7 @@ try {
   }
    const data={
     name:req.body.name,
-    icon:req.file.path,
+    icon:baseUrl,
     link:req.body.link,
    }
       const responde = await footerModel.findOneAndUpdate({},
