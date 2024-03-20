@@ -31,10 +31,10 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/images/');
   },
-
   filename: function (req, file, cb) {
-
-    cb(null, file.originalname);
+    // Generate a unique filename
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
   }
 });
 var upload = multer({ storage: storage})
@@ -80,9 +80,9 @@ router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
-router.post('/showreel', authenticate, upload.single('image'), addshowreel)
+router.post('/showreel', authenticate,  upload.array('image'), addshowreel)
 router.get('/showreel', getShowreelItems)
-router.put('/showreel/:id', authenticate, upload.single('image'), updateShowreel);
+router.put('/showreel/:id', authenticate,  upload.array('image'), updateShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);

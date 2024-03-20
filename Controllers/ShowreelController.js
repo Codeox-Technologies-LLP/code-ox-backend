@@ -2,21 +2,22 @@ const showreelModel = require('../Model/showreel')
 
 const addshowreel = async (req, res) => {
     try {
-        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1, categories } = req.body;
-        const { path: imagePath } = req.file;
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
-        }
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1, categories, link } = req.body;
+        const images = req.files.map(file => {
+            // Construct image URL
+            const imageUrl = `${req.protocol}://${req.get('host')}/images/${file.filename}`;
+            return imageUrl;
+        });
+
         // Create a new showreel item
         const newShowreelItem = new showreelModel({
-            image: baseUrl,
+            image: images,
             showreelHeading,
             showreeldescripation,
             showreelheading1,
             showreeldescripation1,
             categories,
-            link: req.body.link
+            link
         });
 
         const savedShowreelItem = await newShowreelItem.save();
