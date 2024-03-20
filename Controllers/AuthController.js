@@ -11,7 +11,7 @@ const authenticate = (req,res,next)=>{
     jwt.verify(token,process.env.JWT,(err,decode)=>{
      
          if(err){
-            return res.status(403).json({ statusCode: 403, success: false, message: 'Invalid token' });
+            return res.status(403).json({ statusCode: 500, success: false, message: 'Invalid token' });
          }
          req.user=decode;
          next()
