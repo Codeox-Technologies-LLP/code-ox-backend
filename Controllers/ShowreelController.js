@@ -1,4 +1,6 @@
 const showreelModel = require('../Model/showreel')
+const mongoose = require('mongoose');
+
 
 const addshowreel = async (req, res) => {
     try {
@@ -63,48 +65,45 @@ const getShowreelItems = async (req, res, next) => {
 };
 
 
-//updte
+//update
+
 const updateShowreel = async (req, res) => {
     try {
-        const { id } = req.params;
-        console.log('Requested ID:', id);
-
-        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1, categories, link } = req.body;
-        console.log('Updated data:', req.body);
-
-        const image = req.file;
-        console.log('Image:', image);
-
-        if (!image) {
-            return res.status(400).json({ message: 'Image file is required' });
+        const id = req.params.id;
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
         }
-
-        const updatedShowreelItem = await showreelModel.findOneAndUpdate(
-            { _id: id, 'showreel._id': id }, // Match both the document ID and the nested subdocument ID
-            {
-                $set: {
-                    'showreel.$[elem].image': image.path,
-                    'showreel.$[elem].showreelHeading': showreelHeading,
-                    'showreel.$[elem].showreeldescripation': showreeldescripation,
-                    'showreel.$[elem].showreelheading1': showreelheading1,
-                    'showreel.$[elem].showreeldescripation1': showreeldescripation1,
-                    'showreel.$[elem].categories': categories,
-                    'showreel.$[elem].link': link // Corrected from ' link' to 'link'
-                }
-            },
-            { new: true, arrayFilters: [{ 'elem._id': id }] } // Filter the array element by its ID
+        const { showreelHeading, showreeldescripation,  showreeldescripation1, link, showreelheading1 } = req.body;
+        const { category } = req.body;
+        const image = req.file ? req.file.path : undefined; // Check if req.file exists
+        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+        const update = {
+            image: baseUrl,
+            category: category,
+            showreelHeading,
+            showreeldescripation,
+            showreelheading1,
+            showreeldescripation1,
+            link
+        };
+      
+        const updatedShowreel = await showreelModel.findOneAndUpdate(
+            { _id: id }, 
+            update, 
+            { new: true } 
         );
-
-        if (!updatedShowreelItem) {
-            return res.status(404).json({ message: 'Showreel item not found' });
+  
+        if (!updatedShowreel) {
+            return res.status(404).json({ statusCode: 404, message: 'Showreel not found' });
         }
-
-        res.status(200).json(updatedShowreelItem);
+  
+        res.status(200).json({ statusCode: 200, success: true, message: 'showreel updated successfully', updatedShowreel });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server Error', statusCode: 500 });
+        res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
-};
+  };
+
 
 
 //detle
@@ -113,7 +112,7 @@ const deleteShowreel = async (req, res) => {
         const { id } = req.params;
 
         // Find the showreel item by its ID and delete it
-        const deletedShowreelItem = await showreelModel.findOneAndDelete({ 'showreel._id': id });
+        const deletedShowreelItem = await showreelModel.findByIdAndDelete(id);
 
         if (!deletedShowreelItem) {
             return res.status(404).json({ message: 'Showreel item not found' });
