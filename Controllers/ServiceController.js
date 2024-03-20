@@ -10,12 +10,12 @@ const addService = async (req, res) => {
             return res.status(400).json({ message: 'Image file is required' });
         }
         const serviceItem = new servicesModel({
-           
-                image: baseUrl,
-                servicesHeading,
-                servicesDescripation,
 
-            
+            image: baseUrl,
+            servicesHeading,
+            servicesDescripation,
+
+
         });
         const savedserviceItem = await serviceItem.save();
         res.status(201).json(savedserviceItem);
@@ -60,23 +60,18 @@ const updateService = async (req, res) => {
         if (!service) {
             return res.status(404).json({ message: 'Service not found' });
         }
-        await servicesModel.updateOne(
-            { _id: serviceId, 'showreel._id': req.body.showreelId },
-            {
-                $set: {
-                    ' services.$.image': image.path,
-                    ' services.$.servicesHeading': servicesHeading,
-                    ' services.$.servicesDescription': servicesDescription
-                }
-            }
-        );
-        const updatedService = await servicesModel.findById(serviceId);
+        const updatedService = await servicesModel.findByIdAndUpdate(serviceId, {
+            image: image.path,
+            servicesHeading: servicesHeading,
+            servicesDescription: servicesDescription
+        }, { new: true });
         res.status(200).json(updatedService);
     } catch (error) {
         console.error('Error while updating service:', error);
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
 
 //delete servive
 const deleteService = async (req, res) => {
