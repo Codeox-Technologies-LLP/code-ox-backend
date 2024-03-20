@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
-var upload = multer({ storage: storage, limits: { fileSize: 2 * 1024 * 1024 } })
+var upload = multer({ storage: storage})
 
 
 // Error handling middleware
