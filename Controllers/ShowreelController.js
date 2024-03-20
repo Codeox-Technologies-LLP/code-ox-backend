@@ -3,10 +3,14 @@ const showreelModel = require('../Model/showreel')
 const addshowreel = async (req, res) => {
     try {
         const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1, categories, link } = req.body;
+
+        // Check if any files were uploaded
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ message: 'At least one image file is required' });
+        }
+
         const images = req.files.map(file => {
-            // Construct image URL
-            const imageUrl = `${req.protocol}://${req.get('host')}/images/${file.filename}`;
-            return imageUrl;
+            return `${req.protocol}://${req.get('host')}/${file.path.replace(/\\/g, "/")}`;
         });
 
         // Create a new showreel item
@@ -27,6 +31,7 @@ const addshowreel = async (req, res) => {
         res.status(500).json({ message: 'Server Error', statusCode: 500 });
     }
 };
+
 
 //get 
 const getShowreelItems = async (req, res, next) => {
