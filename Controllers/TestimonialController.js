@@ -55,7 +55,7 @@ const updateTestimonial = async (req, res) => {
         }
 
         const response = await testimonialModel.findOneAndUpdate(
-            { 'testimonial._id': id }, // Targeting the specific testimonial using its _id
+            { 'testimonial._id': id }, 
             { $set: data },
             { new: true }
         );
