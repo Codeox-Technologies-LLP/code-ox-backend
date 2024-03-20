@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
-var upload = multer({ storage: storage})
+var upload = multer({ storage: storage })
 
 
 // Error handling middleware
@@ -83,7 +83,7 @@ router.delete('/home/:id', deleteHome);
 router.post('/showreel', authenticate, upload.array('images'), addshowreel);
 
 router.get('/showreel', getShowreelItems)
-router.put('/showreel/:id', authenticate,  upload.array('image'), updateShowreel);
+router.put('/showreel/:id', authenticate, upload.array('image'), updateShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);

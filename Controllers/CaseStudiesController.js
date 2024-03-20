@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 //post
 const addCaseStudies = async (req, res) => {
   try {
-    const { title, subtitle,  caseStudiesDescription, link, categories } = req.body;
+    const { title, subtitle,  caseStudiesDescription, link, category } = req.body;
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
     const newCaseStudy = new caseStudiesModel({
@@ -12,7 +12,7 @@ const addCaseStudies = async (req, res) => {
       subtitle,
       caseStudiesDescription,
       link,
-      categories
+      category
     });
     const savedCaseStudy = await newCaseStudy.save();
     res.status(201).json(savedCaseStudy);
