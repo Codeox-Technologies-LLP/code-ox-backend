@@ -80,7 +80,8 @@ router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
-router.post('/showreel', authenticate,  upload.array('image'), addshowreel)
+router.post('/showreel', authenticate, upload.array('images'), addshowreel);
+
 router.get('/showreel', getShowreelItems)
 router.put('/showreel/:id', authenticate,  upload.array('image'), updateShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);

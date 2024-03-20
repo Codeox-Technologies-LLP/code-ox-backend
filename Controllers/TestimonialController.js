@@ -5,7 +5,7 @@ const addTestimonial = async (req, res) => {
     try {
         const { path: imagePath } = req.file; // Extract the path property from req.file
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        
+
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
@@ -47,43 +47,45 @@ const getTestimonial = async (req, res) => {
 const updateTestimonial = async (req, res) => {
     try {
         const id = req.params.id;
-        const data = {
-            'testimonial.$.authorName': req.body.authorName,
-            'testimonial.$.image': req.file.path,
-            'testimonial.$.authorCompany': req.body.authorCompany,
-            'testimonial.$.testimonialsdescription': req.body.testimonialsdescription
+        const imagePath = req.file ? req.file.path : null;
+        const data = {};
+        if (imagePath) {
+            const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+            data['image'] = baseUrl;
         }
-
-        const response = await testimonialModel.findOneAndUpdate(
-            { 'testimonial._id': id }, 
+        if (req.body.authorName) data['authorName'] = req.body.authorName;
+        if (req.body.authorCompany) data['authorCompany'] = req.body.authorCompany;
+        if (req.body.testimonialsdescription) data['testimonialsdescription'] = req.body.testimonialsdescription;
+        const response = await testimonialModel.findByIdAndUpdate(
+            id,
             { $set: data },
             { new: true }
         );
-
+        if (!response) {
+            return res.status(404).json({ statusCode: 404, message: 'Testimonial not found' });
+        }
         res.status(200).json({ statusCode: 200, message: 'Testimonial updated successfully', data: response });
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message });
+
+        res.status(500).json({ statusCode: 500, message: error.message });
     }
-}
+};
+
+
 //delte
 const deleteTestimonial = async (req, res) => {
     try {
         const id = req.params.id;
-        const response = await testimonialModel.findOneAndUpdate(
-            {},
-            { $pull: { testimonial: { _id: id } } },
-            { new: true }
-        );
-
+        const response = await testimonialModel.findOneAndDelete({ _id: id });
         if (!response) {
             return res.status(404).json({ statusCode: 404, success: false, message: 'Testimonial not found' });
         }
-
         res.status(200).json({ statusCode: 200, success: true, message: 'Testimonial deleted successfully', data: response });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
-}
+};
+
 
 
 module.exports = { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial }
