@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const showreel = new Schema({
 
-    image: {
+    image: [{
         type: String,
         required: true,
-    },
+    }],
     showreelHeading: {
         type: String,
         required: true,
