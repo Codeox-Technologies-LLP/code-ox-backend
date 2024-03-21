@@ -1,9 +1,15 @@
 const caseStudiesModel = require('../Model/caseStudies');
 const mongoose = require('mongoose');
+const bgValidator = require('../middlewares/bg'); 
 //post
 const addCaseStudies = async (req, res) => {
   try {
     const { title, subtitle,  caseStudiesDescription, link, category,bg } = req.body;
+   // Validate bg color format
+   if (!bgValidator.isValidColorFormat(bg)) {
+    return res.status(400).json({ message: 'Invalid color format for bg field' });
+  }
+
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
     const newCaseStudy = new caseStudiesModel({

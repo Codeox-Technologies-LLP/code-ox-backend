@@ -94,7 +94,7 @@ router.delete('/about/:id', authenticate, deleteAbout)
 ///servie
 router.post('/service', authenticate, upload.single('image'), addService)
 router.get('/service', getServices)
-router.put('service/:id', authenticate, upload.single('image'), updateService)
+router.put('/service/:id', authenticate, upload.single('image'), updateService)
 router.delete('/service/:id', authenticate, deleteService)
 //testimonial
 router.post('/testimonial', authenticate, upload.single('image'), addTestimonial)

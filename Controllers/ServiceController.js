@@ -76,17 +76,18 @@ const updateService = async (req, res) => {
 //delete servive
 const deleteService = async (req, res) => {
     try {
-        const { serviceId } = req.params;
-        if (!serviceId) {
-            return res.status(400).json({ message: 'Service ID is required' });
-        }
-        const deletedService = await servicesModel.findByIdAndDelete(serviceId);
+        const { id } = req.params;
+
+        // Find the showreel item by its ID and delete it
+        const deletedService = await servicesModel.findByIdAndDelete(id);
+
         if (!deletedService) {
-            return res.status(404).json({ message: 'Service not found' });
+            return res.status(404).json({ message: 'Service item not found' });
         }
-        res.status(200).json({ message: 'Service deleted successfully', deletedService });
+
+        res.status(200).json({ message: 'Service item deleted successfully', deletedItem: deletedService });
     } catch (error) {
-        console.error('Error while deleting service:', error);
+        console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
 };
