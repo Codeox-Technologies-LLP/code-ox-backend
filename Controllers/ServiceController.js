@@ -62,7 +62,7 @@ const updateService = async (req, res) => {
         const update = {
             ...(baseUrl && { image: baseUrl }), 
             servicesHeading,
-            servicesDescription,
+            servicesDescription
         };
         const updatedService = await servicesModel.findByIdAndUpdate(id, update, { new: true });
         if (!updatedService) {

@@ -8,7 +8,6 @@ const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require(
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
 const { authenticate } = require('../Controllers/AuthController')
 const { addProjects, getProjects, updateProjects, deleteProjects } = require('../Controllers/ErpController')
-
 const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
@@ -20,10 +19,6 @@ const { addValue, getValue, updateValue, deleteValue } = require('../Controllers
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
-
-
-
-
 
 const router = express.Router();
 
@@ -38,8 +33,6 @@ const storage = multer.diskStorage({
   }
 });
 var upload = multer({ storage: storage })
-
-
 // Error handling middleware
 function handleMulterErrors(err, req, res, next) {
   if (err instanceof multer.MulterError) {
@@ -50,38 +43,34 @@ function handleMulterErrors(err, req, res, next) {
   next(err);
 }
 
-
-
-
+//caseStudies
 router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
 router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
-
+//contactus
 router.post('/contactus', addQuery);
 router.get('/contactus', authenticate, getQuery);
 router.get('/all-countries', getCountry);
-
+//footer data
 router.post('/add-footer-data', authenticate, upload.single('image'), addFooterData);
 router.get('/get-footer-data', getFooterData);
 router.put('/update-footerdata/:id', authenticate, upload.single('image'), updateFooteData);
 router.delete('/delete-footer/:id', authenticate, deleteFooter)
-
+//erp-project
 router.post('/erp-projects', authenticate, upload.single('image'), addProjects);
 router.get('/erp-projects', getProjects);
 router.put('/erp-projects/:id', authenticate, upload.single('image'), updateProjects);
 router.delete('/erp-projects/:id', authenticate, deleteProjects);
-
+//adminLogin
 router.post('/create-admin', addAdmin);
 router.post('/admin-login', adminLogin);
-
 ///home
 router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
 router.post('/showreel', authenticate, upload.array('images'), addshowreel);
-
 router.get('/showreel', getShowreelItems)
 router.put('/showreel/:id', authenticate, upload.array('image'), updateShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
@@ -89,7 +78,6 @@ router.delete('/showreel/:id', authenticate, deleteShowreel);
 router.post('/about', authenticate, upload.single('image'), addAbout);
 router.get('/about', getAbout);
 router.put('/about/:id', authenticate, upload.single('image'), updateAbout);
-
 router.delete('/about/:id', authenticate, deleteAbout)
 ///servie
 router.post('/service', authenticate, upload.single('image'), addService)
@@ -116,7 +104,6 @@ router.post('/client', authenticate, upload.single('image'), addclient)
 router.get('/client', getClient);
 router.put('/client/:id', authenticate, upload.single('image'), updateClient);
 router.delete('/client/:id', authenticate, deleteClient);
-
 //about-us-page
 /// our value
 router.post('/value', authenticate, upload.single('gif'), addValue)
@@ -139,7 +126,7 @@ router.get('/team', getTeam);
 router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
 router.delete('/team/:id', authenticate, deleteTeam);
 router.use(handleMulterErrors)
-//marquee
+
 
 
 

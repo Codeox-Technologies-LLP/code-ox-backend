@@ -34,7 +34,6 @@ const addshowreel = async (req, res) => {
     }
 };
 
-
 //get 
 const getShowreelItems = async (req, res, next) => {
     try {
@@ -64,9 +63,7 @@ const getShowreelItems = async (req, res, next) => {
     }
 };
 
-
 //update
-
 const updateShowreel = async (req, res) => {
     try {
         const id = req.params.id;
@@ -103,9 +100,7 @@ const updateShowreel = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
   };
-
-
-
+  
 //detle
 const deleteShowreel = async (req, res) => {
     try {
