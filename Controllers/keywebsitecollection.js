@@ -1,36 +1,39 @@
 const keywebsitecollectionModel = require('../Model/Keywebsitecollection')
-
+const mongoose = require('mongoose');
 // keywebsitecollection
 
 //post
 const addkeywebsitecollection = async (req, res) => {
     try {
-        const { path: imagePath } = req.file;
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+        const { KeyWebsiteCollectionsHeading, KeyWebsiteCollectionsDescription,  } = req.body;
 
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
+        // Check if any files were uploaded
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ message: 'At least one image file is required' });
         }
 
-        const data = {
-            image: baseUrl,
-        };
+        const images = req.files.map(file => {
+            return `${req.protocol}://${req.get('host')}/${file.path.replace(/\\/g, "/")}`;
+        });
 
-        const response = await keywebsitecollectionModel.findOneAndUpdate({}, {
-            $set: {
-                KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription,
-                KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading
-            },
-            $push: { keywebsitecollection: data }
-        }, { new: true, upsert: true });
+        // Create a new showreel item
+        const newKeywebsiteItem = new keywebsitecollectionModel({
+            image: images,
+            KeyWebsiteCollectionsHeading,
+            KeyWebsiteCollectionsDescription
+        });
 
-        console.log(response);
-
-        return res.status(201).json({ statusCode: 201, success: true, message: "keywebsitecollection added successfully" });
-    } catch (err) {
-        res.status(500).json({ statusCode: 500, success: false, message: err.message });
+        const savedKeywebItem = await newKeywebsiteItem.save();
+        res.status(201).json(savedKeywebItem);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error', statusCode: 500 });
     }
 };
+
+
+
+
 
 
 
@@ -39,7 +42,7 @@ const addkeywebsitecollection = async (req, res) => {
 const getKeywebsitecollection = async (req, res) => {
     try {
         const data = await keywebsitecollectionModel.findOne({})
-        console.log(data)
+      
         res.status(200).json({ statusCode: 200, message: 'keywebsitecollection projects fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

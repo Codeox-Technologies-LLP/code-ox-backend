@@ -7,8 +7,7 @@ const addValue = async (req, res) => {
         if (!imagePath) {
            return res.status(400).json({ message: 'Image file is required' });
         }
-        console.log(req.body, req.file)
-        console.log(req.body, req.file)
+        
         const data = {
             name: req.body.name,
             gif: baseUrl,
@@ -29,7 +28,7 @@ const addValue = async (req, res) => {
 const getValue = async (req, res) => {
     try {
         const data = await valueModel.findOne({})
-        console.log(data)
+       
         res.status(200).json({ statusCode: 200, message: 'value fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

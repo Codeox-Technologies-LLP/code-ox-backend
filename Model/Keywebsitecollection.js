@@ -11,13 +11,10 @@ const keywebsitecollectionSchema = new Schema({
         type: String,
         required: true,
     },
-    keywebsitecollection: [{
-
-        image: {
-            type: String,
-            required: true,
-        },
-    }]
+    image: [{
+        type: String,
+        required: true,
+    }],
 })
 const keywebsitecollectionModel = mongoose.model('keywebsitecollection', keywebsitecollectionSchema);
 

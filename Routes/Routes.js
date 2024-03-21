@@ -88,7 +88,8 @@ router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
 router.get('/about', getAbout);
-router.put('about/:id', authenticate, upload.single('image'), updateAbout)
+router.put('/about/:id', authenticate, upload.single('image'), updateAbout);
+
 router.delete('/about/:id', authenticate, deleteAbout)
 ///servie
 router.post('/service', authenticate, upload.single('image'), addService)
@@ -101,9 +102,12 @@ router.get('/testimonial', getTestimonial);
 router.put('/testimonial/:id', authenticate, upload.single('image'), updateTestimonial);
 router.delete('/testimonial/:id', authenticate, deleteTestimonial);
 //keywebsitecollection
-router.post('/keywebsitecollection', authenticate, upload.single('image'), addkeywebsitecollection)
+router.post('/keywebsitecollection', authenticate, upload.array('image'), addkeywebsitecollection); // Make sure 'image' matches the name attribute
+
+
+
 router.get('/keywebsitecollection', getKeywebsitecollection);
-router.put('/keywebsitecollection/:id', authenticate, upload.single('image'), updateTestimonial);
+router.put('/keywebsitecollection/:id', authenticate, upload.array('image'), updateTestimonial);
 router.delete('/keywebsitecollection/:id', authenticate, deleteKeyWebsiteCollection);
 //why choose us
 router.post('/whychooseus', authenticate, upload.single('image'), addWhychoose)

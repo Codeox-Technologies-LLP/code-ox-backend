@@ -22,7 +22,7 @@ const addProject = async (req, res) => {
 const getProject = async (req, res) => {
     try {
         const data = await valueModel.find({})
-        console.log(data)
+       
         res.status(200).json({ statusCode: 200, message: 'value fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

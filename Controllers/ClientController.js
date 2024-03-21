@@ -9,7 +9,7 @@ const addclient = async (req, res) => {
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
-        console.log(req.body.category, req.file)
+      
        
         const data = {
             image: baseUrl,
