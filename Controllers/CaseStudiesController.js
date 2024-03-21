@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 //post
 const addCaseStudies = async (req, res) => {
   try {
-    const { title, subtitle,  caseStudiesDescription, link, category } = req.body;
+    const { title, subtitle,  caseStudiesDescription, link, category,bg } = req.body;
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
     const newCaseStudy = new caseStudiesModel({
@@ -12,7 +12,8 @@ const addCaseStudies = async (req, res) => {
       subtitle,
       caseStudiesDescription,
       link,
-      category
+      category,
+      bg
     });
     const savedCaseStudy = await newCaseStudy.save();
     res.status(201).json(savedCaseStudy);
@@ -32,7 +33,7 @@ const getCaseStudies = async (req, res, next) => {
     // Filter the data if category is provided
     if (category) {
       caseStudiesData = caseStudiesData.filter(caseStudy =>
-        caseStudy.categories.toLowerCase() === category
+        caseStudy.category.toLowerCase() === category
       );
     }
 
@@ -56,7 +57,7 @@ const updateCaseStudies = async (req, res) => {
       if (!mongoose.isValidObjectId(id)) {
           return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
       }
-      const { title, subtitle,  caseStudiesDescription, link, categories } = req.body;
+      const { title, subtitle,  caseStudiesDescription, link, categories,bg } = req.body;
       const { category } = req.body;
       const image = req.file ? req.file.path : undefined; // Check if req.file exists
       const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
@@ -66,7 +67,8 @@ const updateCaseStudies = async (req, res) => {
           title,
           subtitle,
           caseStudiesDescription,
-          link
+          link,
+          bg
       };
     
       const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
