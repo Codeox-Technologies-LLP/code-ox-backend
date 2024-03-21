@@ -8,7 +8,7 @@ const addTeam = async (req, res) => {
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
-        console.log(req.body, req.file)
+     
         const data = {
             image: baseUrl,
         }
@@ -25,7 +25,7 @@ const addTeam = async (req, res) => {
 const getTeam = async (req, res) => {
     try {
         const data = await teamModel.findOne({})
-        console.log(data)
+     
         res.status(200).json({ statusCode: 200, message: 'team fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

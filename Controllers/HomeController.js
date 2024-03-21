@@ -28,7 +28,7 @@ const addHome = async (req, res) => {
 const getHome = async (req, res) => {
     try {
         const data = await homeModel.findOne()
-        console.log(data)
+        
         res.status(200).json({ statusCode: 200, message: 'home  fetched successfully',  data:data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

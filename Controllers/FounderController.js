@@ -8,18 +8,14 @@ const addFounder = async (req, res) => {
         if (!imagePath) {
            return res.status(400).json({ message: 'Image file is required' });
         }
-        console.log(req.body, req.file)
         const data = {
             image: baseUrl,
             name: req.body.name,
             position: req.body.position,
             role: req.body.role
         }
-
         const newData = await founderModel.findOneAndUpdate({}, { $push: { founder: data } }, { new: true, upsert: true })
-
         res.status(200).json({ statusCode: 200, success: true, message: 'founder  added successfully' })
-
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
@@ -28,8 +24,7 @@ const addFounder = async (req, res) => {
 //get
 const getFounder = async (req, res) => {
     try {
-        const data = await founderModel.findOne({})
-        console.log(data)
+        const data = await founderModel.findOne({})     
         res.status(200).json({ statusCode: 200, message: 'founder fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

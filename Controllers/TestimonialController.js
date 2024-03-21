@@ -37,7 +37,7 @@ const addTestimonial = async (req, res) => {
 const getTestimonial = async (req, res) => {
     try {
         const data = await testimonialModel.find()
-        console.log(data)
+    
         res.status(200).json({ statusCode: 200, message: 'testimonial fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })

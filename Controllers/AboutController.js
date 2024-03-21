@@ -1,4 +1,5 @@
 const AboutModel = require('../Model/About');
+const mongoose = require('mongoose');
 
 //POST 
 
@@ -31,7 +32,7 @@ const addAbout = async (req, res) => {
 const getAbout = async (req, res) => {
   try {
     const data = await AboutModel.findOne();
-    console.log(data);
+  
     res.status(200).json({ statusCode: 200, message: 'About projects fetched successfully', data: data });
   } catch (error) {
     res.status(500).json({ statusCode: 500, success: false, message: error.message });
@@ -40,26 +41,59 @@ const getAbout = async (req, res) => {
 
 
 //UPDATE
+
 const updateAbout = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = {
-      'about.$[elem].descripation': req.body.descripation,
-      'about.$[elem].image': req.file.path,
-      'about.$[elem].aboutContent': req.body.aboutContent,
-      'about.$[elem].aboutButton': req.body.aboutButton,
-      'about.$[elem].aboutButtonLink': req.body.aboutButtonLink,
-      'about.$[elem].heading': req.body.heading,
-      'about.$[elem].heading1': req.body.heading1,
+
+    // Check if the provided ID is valid
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
     }
 
-    const response = await AboutModel.findOneAndUpdate({}, { $set: data }, { arrayFilters: [{ 'elem._id': id }], new: true })
+    // Extract necessary fields from the request body
+    const { welcomeContent, description, buttonText, link, marquee } = req.body;
 
-    res.status(200).json({ statusCode: 200, message: 'about section updated successfully' })
+    // Determine the image path and construct the full URL
+    const image = req.file ? req.file.path : undefined;
+    const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+
+    // Construct the update object
+    const update = {
+      image: baseUrl,
+      welcomeContent,
+      description,
+      buttonText,
+      link,
+      marquee
+    };
+
+    // Update the document in the database
+    const updatedAbout = await AboutModel.findOneAndUpdate(
+      { _id: id }, 
+      update, 
+      { new: true } 
+    );
+
+    // If no document is found for the provided ID, return a 404 response
+    if (!updatedAbout) {
+      return res.status(404).json({ statusCode: 404, message: 'About not found' });
+    }
+
+    // Return a success response with the updated document
+    res.status(200).json({ statusCode: 200, success: true, message: 'About updated successfully', updatedAbout });
   } catch (error) {
-    res.status(500).json({ statusCode: 500, success: false, message: error.message })
+    // Log the error to the console for debugging
+    console.error(error);
+    // Return a 500 response with an error message
+    res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error', error: error.message });
   }
-}
+};
+
+
+
+
+
 
 
 //DELETE
@@ -79,4 +113,3 @@ const deleteAbout = async (req, res) => {
 
 module.exports = { addAbout, getAbout, updateAbout, deleteAbout }
 
-//   /about/:id'

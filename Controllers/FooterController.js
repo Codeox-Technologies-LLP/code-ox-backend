@@ -31,7 +31,7 @@ try {
 const getFooterData=async(req,res)=>{
 try {
     const response =await footerModel.findOne({})
-    console.log(response);
+    
     res.status(200).json({statusCode:200,success:true,message:'footer data fetching successful',data:response})
 } catch (error) {
     res.status(500).json({statusCode:500,success:false,message:error.message})  
@@ -66,7 +66,7 @@ const deleteFooter =async(req,res)=>{
    try {
     const id = req.params.id;
     const data = await footerModel.findOneAndUpdate({}, { $pull: { socialmedia: { _id: id } } },{new:true})
-    console.log(data);
+    
     res.status(200).json({statusCode:200,success:true,message:"deleting successful"})
    } catch (error) {
     res.status(500).json({statusCode:500,success:false,message:error.message})  
