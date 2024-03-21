@@ -1,4 +1,4 @@
-// Define a function to validate color format
+// Define a function 
 function isValidColorFormat(color) {
     // Regular expression to match allowed color formats
     const allowedFormats = /^(#(?:[0-9a-fA-F]{3}){1,2}|rgb\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*\)|rgba\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d*\.?\d+)\s*\)|hsl\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*\)|hsla\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d*\.?\d+)\s*\)|hsb\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*\)|hsba\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d*\.?\d+)\s*\))$/;
