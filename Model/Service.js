@@ -13,7 +13,7 @@ const serviceSchema = new Schema({
                 type: String,
                 required: true,
             },
-            servicesDescripation: {
+            servicesDescription: {
                 type: String,
                 required: true,
             },
