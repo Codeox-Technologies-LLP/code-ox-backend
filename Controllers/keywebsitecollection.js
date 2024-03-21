@@ -53,19 +53,36 @@ const getKeywebsitecollection = async (req, res) => {
 const updateKeywebsitecollection = async (req, res) => {
     try {
         const id = req.params.id;
-        const data = {
-            'keywebsitecollection.$[elem].KeyWebsiteCollectionsHeading': req.body.KeyWebsiteCollectionsHeading,
-            'keywebsitecollection.$[elem].image': req.file.path,
-            'keywebsitecollection.$[elem].KeyWebsiteCollectionsDescription': req.body.KeyWebsiteCollectionsDescription
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
         }
-
-        const response = await erpModel.findOneAndUpdate({}, { $set: data }, { arrayFilters: [{ 'elem._id': id }], new: true })
-
-        res.status(200).json({ statusCode: 200, message: 'keywebsitecollection fetched successfully' })
+        const { KeyWebsiteCollectionsHeading, KeyWebsiteCollectionsDescription,  } = req.body;
+     
+        const image = req.file ? req.file.path : undefined; // Check if req.file exists
+        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+        const update = {
+            image: baseUrl,
+            KeyWebsiteCollectionsHeading,
+            KeyWebsiteCollectionsDescription
+        
+        };
+      
+        const updatedKeyweb = await keywebsitecollectionModel.findOneAndUpdate(
+            { _id: id }, 
+            update, 
+            { new: true } 
+        );
+  
+        if (!updatedKeyweb) {
+            return res.status(404).json({ statusCode: 404, message: 'key website not found' });
+        }
+  
+        res.status(200).json({ statusCode: 200, success: true, message: 'kekywebsite updated successfully', updateKeywebsitecollection });
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        console.error(error);
+        res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
-}
+  };
 
 //delete
 const deleteKeyWebsiteCollection = async (req, res) => {
