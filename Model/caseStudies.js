@@ -1,18 +1,7 @@
 const mongoose = require('mongoose');
+const bg = require('../middlewares/bg')
 
 const caseStudySchema = new mongoose.Schema({
-  // heading: {
-  //   type: String,
-  //   required: true,
-  // },
-  // subheading: {
-  //   type: String,
-  //   required: true,
-  // },
-  // description: {
-  //   type: String,
-  //   required: true,
-  // },
 
   title: {
     type: String,
