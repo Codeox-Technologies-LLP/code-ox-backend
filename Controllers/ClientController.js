@@ -32,24 +32,33 @@ const addclient = async (req, res) => {
 const getClient = async (req, res, next) => {
     try {
         const category = req.query.category ? req.query.category.toLowerCase() : null;
-        let Data = await clientModel.find({});
 
-        if (!Data) {
-            return res.status(404).json({ statusCode: 404, success: false, message: 'No client found.' });
-        }
+  
+        if (category === 'all') {
+            const allClients = await clientModel.find({});
 
-        if (category) {
-            let Data = await clientModel.find({category:category});
-
-            if (Data.length === 0) {
-                return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
+       
+            if (allClients.length === 0) {
+                return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found.' });
             }
-            return res.status(200).json({ statusCode: 200, success: true, client: Data })
+
+         
+            return res.status(200).json({ statusCode: 200, success: true, clients: allClients });
+        }
+        
+       
+        const clientsByCategory = await clientModel.find({ category: category });
+
+   
+        if (clientsByCategory.length === 0) {
+            return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found for the provided category.' });
         }
 
-        return res.status(200).json({ statusCode: 200, success: true, client: Data });
+
+        return res.status(200).json({ statusCode: 200, success: true, clients: clientsByCategory });
     } catch (err) {
-        return res.status(500).json({ statusCode: 500, success: false, message: err.message });
+     
+        return res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
 };
 
