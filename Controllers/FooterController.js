@@ -49,26 +49,35 @@ try {
 
 
 //UPDATE FOOTER DATA
-const updateFooteData =async(req,res)=>{
+const updateFooteData = async (req, res) => {
   try {
-    const id= req.params.id;
-      
-    const data={
-        email:req.body.email,
-        address:req.body.address,
-        phone:req.body.phone,
-        'socialmedia.$[elem].name': req.body.name,
-        'socialmedia.$[elem].icon': req.file.path, 
-        'socialmedia.$[elem].link': req.body.link   
-       }
-       const response = await  footerModel.findOneAndUpdate({},{$set:data},{arrayFilters:[{'elem._id':id}], new: true }
-       
-       )
-       res.status(200).json({statusCode:200,success:true,message:"updating successful"})
+    const id = req.params.id;
+    
+    const data = {
+      email: req.body.email,
+      address: req.body.address,
+      phone: req.body.phone,
+      'socialmedia.$[elem].name': req.body.name,
+      'socialmedia.$[elem].link': req.body.link   
+    };
+
+    // Check if a file was uploaded before accessing its properties
+    if (req.file) {
+      data['socialmedia.$[elem].icon'] = req.file.path;
+    }
+
+    const response = await footerModel.findOneAndUpdate(
+      {},
+      { $set: data },
+      { arrayFilters: [{ 'elem._id': id }], new: true }
+    );
+
+    res.status(200).json({ statusCode: 200, success: true, message: "Updating successful" });
   } catch (error) {
-    res.status(500).json({statusCode:500,success:false,message:error.message})  
+    res.status(500).json({ statusCode: 500, success: false, message: error.message });
   }
-}
+};
+
 
 //DELETE FOOTER DATA
 const deleteFooter =async(req,res)=>{
