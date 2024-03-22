@@ -61,22 +61,24 @@ const updateFooteData = async (req, res) => {
       'socialmedia.$[elem].link': req.body.link   
     };
 
-    // Check if a file was uploaded before accessing its properties
+    
     if (req.file) {
-      data['socialmedia.$[elem].icon'] = req.file.path;
+      // Construct the complete file URL with protocol, host, and file path
+      const filePath = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, "/")}`;
+      data['socialmedia.$[elem].icon'] = filePath;
     }
-
     const response = await footerModel.findOneAndUpdate(
       {},
       { $set: data },
       { arrayFilters: [{ 'elem._id': id }], new: true }
     );
 
-    res.status(200).json({ statusCode: 200, success: true, message: "Updating successful" });
+    res.status(200).json({ statusCode: 200, success: true, message: "Updated successfull" });
   } catch (error) {
     res.status(500).json({ statusCode: 500, success: false, message: error.message });
   }
 };
+
 
 
 //DELETE FOOTER DATA
