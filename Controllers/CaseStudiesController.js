@@ -23,14 +23,18 @@ const addCaseStudies = async (req, res) => {
       bg
     });
 
-   
-    res.status(201).json({ message: 'Case study added successfully', caseStudy: savedCaseStudy });
+    // Save the new case study
+    await newCaseStudy.save();
+
+    // Send success response with custom message
+    res.status(201).json({ message: 'Case study added successfully' });
   } catch (error) {
     console.error(error);
-    
+    // Send error response
     res.status(500).json({ message: 'Server Error', statusCode: 500 });
   }
 };
+
 
 
 
