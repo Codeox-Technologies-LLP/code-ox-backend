@@ -32,22 +32,26 @@ const addclient = async (req, res) => {
 const getClient = async (req, res, next) => {
     try {
         const category = req.query.category ? req.query.category.toLowerCase() : null;
-        if (category === 'all') {
-            const allClients = await clientModel.find({});
-            if (allClients.length === 0) {
-                return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found.' });
-            }
-            return res.status(200).json({ statusCode: 200, success: true, clients: allClients });
+        let clients;
+        
+        // If category is provided and not 'all', filter clients by category
+        if (category && category !== 'all') {
+            clients = await clientModel.find({ category: category });
+        } else {
+            // Otherwise, fetch all clients
+            clients = await clientModel.find({});
         }
-        const clientsByCategory = await clientModel.find({ category: category });
-        if (clientsByCategory.length === 0) {
-            return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found for the provided category.' });
+
+        // Check if any clients were found
+        if (clients.length === 0) {
+            return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found.' });
         }
-        return res.status(200).json({ statusCode: 200, success: true, clients: clientsByCategory });
+        
+        return res.status(200).json({ statusCode: 200, success: true, clients: clients });
     } catch (err) {
         return res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
-};
+}; 
 
 //update
 const updateClient = async (req, res) => {
