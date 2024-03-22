@@ -73,7 +73,7 @@ const updateFooteData = async (req, res) => {
       { arrayFilters: [{ 'elem._id': id }], new: true }
     );
 
-    res.status(200).json({ statusCode: 200, success: true, message: "Updated successful" });
+    res.status(200).json({ statusCode: 200, success: true, message: "Updated successfull" });
   } catch (error) {
     res.status(500).json({ statusCode: 500, success: false, message: error.message });
   }
