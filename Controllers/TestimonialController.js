@@ -62,12 +62,12 @@ const updateTestimonial = async (req, res) => {
             { new: true }
         );
         if (!response) {
-            return res.status(404).json({ statusCode: 404, message: 'Testimonial not found' });
+            return res.status(404).json({ statusCode: 404, success: false, message: 'Testimonial not found' });
         }
-        res.status(200).json({ statusCode: 200, message: 'Testimonial updated successfully', updateTestimonial });
+        res.status(200).json({ statusCode: 200, success:true, message: 'Testimonial updated successfully', updateTestimonial });
     } catch (error) {
 
-        res.status(500).json({ statusCode: 500, message: error.message });
+        res.status(500).json({ statusCode: 500, success:false, message: error.message });
     }
 };
 
