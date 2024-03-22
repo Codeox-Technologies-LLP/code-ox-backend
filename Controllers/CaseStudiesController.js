@@ -84,7 +84,7 @@ const updateCaseStudies = async (req, res) => {
     );
 
     if (!updatedCaseStudies) {
-      return res.status(404).json({ statusCode: 404, message: 'Case Studies not found' });
+      return res.status(404).json({ statusCode: 404, success:false, message: 'Case Studies not found' });
     }
 
     res.status(200).json({ statusCode: 200, success: true, message: 'Case studies updated successfully', updatedCaseStudies });
@@ -98,7 +98,7 @@ const deleteCaseStudy = async (req, res) => {
   try {
     const id = req.params.id;
     if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+      return res.status(400).json({ statusCode: 400, message: 'Invalid Id' ,success:false});
     }
 
     await caseStudiesModel.findOneAndDelete({ _id: id });

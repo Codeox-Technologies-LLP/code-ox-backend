@@ -1,31 +1,40 @@
 const footerModel = require('../Model/Footer');
 
 //ADD FOOTER DATA
-const addFooterData=async(req,res)=>{
-try {
-  const { path: imagePath } = req.file; // Extract the path property from req.file
-  const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-  if (!imagePath) {
-      return res.status(400).json({ message: 'Image file is required' });
+const addFooterData = async (req, res) => {
+  try {
+    
+      const imagePath = req.file ? req.file.path : null;
+      
+      if (!imagePath) {
+          return res.status(400).json({ message: 'Image file is required' });
+      }
+      const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+    
+      const data = {
+          name: req.body.name,
+          icon: baseUrl,
+          link: req.body.link,
+      };
+      const response = await footerModel.findOneAndUpdate(
+          {},
+          {
+              $set: {
+                  address: req.body.address,
+                  phone: req.body.phone,
+                  email: req.body.email
+              },
+              $push: { socialmedia: data }
+          },
+          { new: true, upsert: true }
+      );
+
+      res.status(200).json({ statusCode: 200, success: true, message: "Footer data submitted successfully" });
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ statusCode: 500, success: false, message: error.message });
   }
-   const data={
-    name:req.body.name,
-    icon:baseUrl,
-    link:req.body.link,
-   }
-      const responde = await footerModel.findOneAndUpdate({},
-        {$set:{
-        address:req.body.address,
-        phone:req.body.phone,
-        email:req.body.email
-      },$push:{socialmedia:data}},{ new: true, upsert: true })
-
-   res.status(200).json({statusCode:200,success:true,message:"footer data submitted successfully"})
-
-} catch (error) {
-    res.status(500).json({statusCode:500,success:false,message:error.message})
-}   
-}
+};
 
 //GET FOOTER DATA
 const getFooterData=async(req,res)=>{
