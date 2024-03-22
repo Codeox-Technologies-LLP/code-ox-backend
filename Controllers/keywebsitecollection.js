@@ -31,6 +31,33 @@ const addkeywebsitecollection = async (req, res) => {
     }
 };
 
+const addImageToKeyWebsiteCollection = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const imageUrl = req.body.imageUrl;
+
+        // Find the keywebsitecollection document by its ID
+        const keyweb = await keywebsitecollectionModel.findById(id);
+
+        if (!keyweb) {
+            return res.status(404).json({ statusCode: 404, message: 'Key website collection project not found' });
+        }
+
+        // Push the new image URL to the image array
+        if (imageUrl) {
+            keyweb.image.push(imageUrl);
+        }
+
+        // Save the updated keywebsitecollection
+        const updatedKeyweb = await keyweb.save();
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Image added successfully', data: updatedKeyweb });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+    }
+};
+
 
 
 
@@ -56,43 +83,64 @@ const updateKeywebsitecollection = async (req, res) => {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
         }
-        const { KeyWebsiteCollectionsHeading, KeyWebsiteCollectionsDescription, } = req.body;
+        const { KeyWebsiteCollectionsHeading, KeyWebsiteCollectionsDescription } = req.body;
 
         const image = req.file ? req.file.path : undefined; // Check if req.file exists
-        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
-        const update = {
-            image: baseUrl,
-            KeyWebsiteCollectionsHeading,
-            KeyWebsiteCollectionsDescription
+        const imageUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
 
-        };
+        const keyweb = await keywebsitecollectionModel.findById(id);
 
-        const updatedKeyweb = await keywebsitecollectionModel.findByIdAndUpdate(
-            { _id: id },
-            update,
-            { new: true }
-        );
-
-        if (!updatedKeyweb) {
-            return res.status(404).json({ statusCode: 404, message: 'key website not found' });
+        if (!keyweb) {
+            return res.status(404).json({ statusCode: 404, message: 'Key website not found' });
         }
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'kekywebsite updated successfully', updateKeywebsitecollection });
+        // Define an array of data fields to update
+        const dataFields = [
+            { field: 'KeyWebsiteCollectionsHeading', value: KeyWebsiteCollectionsHeading },
+            { field: 'KeyWebsiteCollectionsDescription', value: KeyWebsiteCollectionsDescription }
+            // Add more fields as needed
+        ];
+
+        // Determine the index of the first non-null image URL in the image array
+        let firstImageUrlIndex = keyweb.image.findIndex(url => url !== null);
+
+        // If no non-null image URL is found, default to the first index
+        if (firstImageUrlIndex === -1) {
+            firstImageUrlIndex = 0;
+        }
+
+        // Update the image URL at the determined index if imageUrl exists
+        if (imageUrl) {
+            keyweb.image[firstImageUrlIndex] = imageUrl;
+        }
+
+        // Update the data fields dynamically
+        dataFields.forEach(({ field, value }) => {
+            if (value) {
+                keyweb[field] = value;
+            }
+        });
+
+        // Save the updated keywebsitecollection
+        const updatedKeyweb = await keyweb.save();
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Key website updated successfully', data: updatedKeyweb });
     } catch (error) {
         console.error(error);
         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
 };
 
+
 //delete
 const deleteKeyWebsiteCollection = async (req, res) => {
     try {
         const id = req.params.id;
+        const index = req.params.index;
 
-
-        const response = await keywebsitecollectionModel.findOneAndUpdate(
-            {},
-            { $pull: { keywebsitecollection: { _id: id } } },
+        const response = await keywebsitecollectionModel.findByIdAndUpdate(
+            id,
+            { $unset: { [`image.${index}`]: 1 } },
             { new: true }
         );
 
@@ -100,11 +148,15 @@ const deleteKeyWebsiteCollection = async (req, res) => {
             return res.status(404).json({ statusCode: 404, success: false, message: 'Key website collection project not found' });
         }
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'Key website collection project deleted successfully', data: response });
+        // Filter out the null value after deletion
+        response.image = response.image.filter((image) => image !== null);
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Key website collection project image deleted successfully', data: response });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
-}
+};
 
 
-module.exports = { addkeywebsitecollection, getKeywebsitecollection, updateKeywebsitecollection, deleteKeyWebsiteCollection }
+
+module.exports = { addkeywebsitecollection, getKeywebsitecollection, updateKeywebsitecollection, deleteKeyWebsiteCollection , }
