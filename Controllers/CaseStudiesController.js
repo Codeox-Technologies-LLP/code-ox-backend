@@ -4,11 +4,12 @@ const bgValidator = require('../middlewares/bg');
 //post
 const addCaseStudies = async (req, res) => {
   try {
-    const { title, subtitle,  caseStudiesDescription, link, category,bg } = req.body;
-   // Validate bg color format
-   if (!bgValidator.isValidColorFormat(bg)) {
-    return res.status(400).json({ message: 'Invalid color format for bg field' });
-  }
+    const { title, subtitle, caseStudiesDescription, link, category, bg } = req.body;
+
+    // Validate bg color format
+    if (!bgValidator.isValidColorFormat(bg)) {
+      return res.status(400).json({ message: 'Invalid color format for bg field' });
+    }
 
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
@@ -21,13 +22,16 @@ const addCaseStudies = async (req, res) => {
       category,
       bg
     });
-    const savedCaseStudy = await newCaseStudy.save();
-    res.status(201).json(savedCaseStudy);
+
+   
+    res.status(201).json({ message: 'Case study added successfully', caseStudy: savedCaseStudy });
   } catch (error) {
     console.error(error);
+    
     res.status(500).json({ message: 'Server Error', statusCode: 500 });
   }
 };
+
 
 
 //get

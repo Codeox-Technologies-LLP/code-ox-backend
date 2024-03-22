@@ -12,7 +12,7 @@ const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = requir
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
 const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } = require('../Controllers/TestimonialController');
-const { addkeywebsitecollection, getKeywebsitecollection, deleteKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
+const { addkeywebsitecollection, getKeywebsitecollection, deleteKeyWebsiteCollection, updateKeywebsitecollection } = require('../Controllers/keywebsitecollection');
 const { addWhychoose, getWhychoose, updateWhychoose, deleteWhychoose } = require('../Controllers/WhyController');
 const { addclient, getClient, updateClient, deleteClient } = require('../Controllers/ClientController');
 const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
@@ -72,7 +72,8 @@ router.delete('/home/:id', deleteHome);
 //showreel
 router.post('/showreel', authenticate, upload.array('images'), addshowreel);
 router.get('/showreel', getShowreelItems)
-router.put('/showreel/:id', authenticate, upload.array('image'), updateShowreel);
+router.put('/showreel/:id/add-image', authenticate, upload.single('image'), updateShowreel);
+
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
@@ -92,8 +93,8 @@ router.delete('/testimonial/:id', authenticate, deleteTestimonial);
 //keywebsitecollection
 router.post('/keywebsitecollection', authenticate, upload.array('image'), addkeywebsitecollection); 
 router.get('/keywebsitecollection', getKeywebsitecollection);
-router.put('/keywebsitecollection/:id', authenticate, upload.array('image'), updateTestimonial);
-router.delete('/keywebsitecollection/:id', authenticate, deleteKeyWebsiteCollection);
+router.put('/keywebsitecollection/:id', authenticate, upload.array('image'), updateKeywebsitecollection);
+router.delete('/keywebsitecollection/:id/image/:index',authenticate, deleteKeyWebsiteCollection);
 //why choose us
 router.post('/whychooseus', authenticate, upload.single('image'), addWhychoose)
 router.get('/whychooseus', getWhychoose);

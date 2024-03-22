@@ -67,39 +67,29 @@ const getShowreelItems = async (req, res, next) => {
 const updateShowreel = async (req, res) => {
     try {
         const id = req.params.id;
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+        const imageUrl = req.body.imageUrl;
+
+        const showreelItem = await showreelModel.findById(id);
+
+        if (!showreelItem) {
+            return res.status(404).json({ statusCode: 404, message: 'Showreel item not found' });
         }
-        const { showreelHeading, showreeldescripation,  showreeldescripation1, link, showreelheading1 } = req.body;
-        const { category } = req.body;
-        const image = req.file ? req.file.path : undefined; // Check if req.file exists
-        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
-        const update = {
-            image: baseUrl,
-            category: category,
-            showreelHeading,
-            showreeldescripation,
-            showreelheading1,
-            showreeldescripation1,
-            link
-        };
-      
-        const updatedShowreel = await showreelModel.findOneAndUpdate(
-            { _id: id }, 
-            update, 
-            { new: true } 
-        );
-  
-        if (!updatedShowreel) {
-            return res.status(404).json({ statusCode: 404, message: 'Showreel not found' });
+
+        // Push the new image URL to the image array
+        if (imageUrl) {
+            showreelItem.image.push(imageUrl);
         }
-  
-        res.status(200).json({ statusCode: 200, success: true, message: 'showreel updated successfully', updatedShowreel });
+
+        // Save the updated showreelItem
+        const updatedShowreelItem = await showreelItem.save();
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Image added successfully to showreel item', data: updatedShowreelItem });
     } catch (error) {
         console.error(error);
         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
-  };
+};
+
   
 //detle
 const deleteShowreel = async (req, res) => {
