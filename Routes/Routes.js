@@ -91,7 +91,8 @@ router.get('/testimonial', getTestimonial);
 router.put('/testimonial/:id', authenticate, upload.single('image'), updateTestimonial);
 router.delete('/testimonial/:id', authenticate, deleteTestimonial);
 //keywebsitecollection
-router.post('/keywebsitecollection', authenticate, upload.array('image'), addkeywebsitecollection); 
+router.post('/keywebsitecollection', authenticate, upload.array('image'), addkeywebsitecollection);
+
 router.get('/keywebsitecollection', getKeywebsitecollection);
 router.put('/keywebsitecollection/:id', authenticate, upload.array('image'), updateKeywebsitecollection);
 router.delete('/keywebsitecollection/:id/image/:index',authenticate, deleteKeyWebsiteCollection);
