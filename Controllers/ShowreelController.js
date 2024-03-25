@@ -27,22 +27,22 @@ const addshowreel = async (req, res) => {
         });
 
         const savedShowreelItem = await newShowreelItem.findOneAndUpdate();
-        res.status(201).json( savedShowreelItem);
+        res.status(201).json({statusCode: 200, success: true, message:'Showreel Post Sucessfully' , savedShowreelItem});
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server Error', statusCode: 500 });
+        res.status(500).json({ message: 'Server Error', statusCode: 500 , message:'internal Server' });
     }
 };
 
 //get 
 const getShowreelItems = async (req, res, next) => {
     try {
-        const category = req.query.categories ? req.query.categories.toLowerCase() : null;
+        const category = req.query.category ? req.query.category.toLowerCase() : null;
         let showreelData = await showreelModel.find();
 
         // Filter the data
         if (category) {
-            showreelData = showreelData.filter(item => item.categories.toLowerCase() === category.toLowerCase()
+            showreelData = showreelData.filter(item => item.category.toLowerCase() === category.toLowerCase()
             );
         }
 
@@ -54,7 +54,7 @@ const getShowreelItems = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            statusCode: 200, success: true, showreelItems: showreelData
+            statusCode: 200, success: true, message:'showreel Fectched Sucessfully',  showreelItems: showreelData
         });
     } catch (err) {
         return res.status(500).json({
@@ -106,17 +106,17 @@ const deleteShowreel = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Find the showreel item by its ID and delete it
+    
         const deletedShowreelItem = await showreelModel.findByIdAndDelete(id);
 
         if (!deletedShowreelItem) {
-            return res.status(404).json({ message: 'Showreel item not found' });
+            return res.status(404).json({statusCode:404, success:false, message: 'Showreel item not found' });
         }
 
-        res.status(200).json({ message: 'Showreel item deleted successfully', deletedItem: deletedShowreelItem });
+        res.status(200).json({statusCode:200, success:true, message: 'Showreel item deleted successfully', deletedItem: deletedShowreelItem });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({statusCode:500, success:false, message: 'Server Error' });
     }
 };
 
