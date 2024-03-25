@@ -95,7 +95,7 @@ router.post('/keywebsitecollection', authenticate, upload.array('image'), addkey
 // router.post('/keywebsitecollection/:id', authenticate, upload.array('image'), updateKeywebsitecollection);
 
 router.get('/keywebsitecollection', getKeywebsitecollection);
-router.put('/keywebsitecollection/:id/', authenticate, updateKeywebsitecollection);
+
 router.put('/keywebsitecollection/:id/image/:index', authenticate, upload.single('image'), updateKeywebsitecollection);
 router.delete('/keywebsitecollection/:id/image/:index',authenticate, deleteKeyWebsiteCollection);
 //why choose us
