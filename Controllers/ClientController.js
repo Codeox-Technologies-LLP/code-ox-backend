@@ -62,13 +62,22 @@ const updateClient = async (req, res) => {
         }
 
         const { category } = req.body;
-        const image = req.file?.path;
-        const baseUrl = `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}`;
+
+        if (!category) {
+            return res.status(400).json({ statusCode: 400, message: 'Category is required' });
+        }
+
+        if (req.file && req.file.path) {
+            image = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, "/")}`;
+        }
+
         const update = {
-            image: baseUrl,
-            category: category
+            category: category,
+            image: image
         };
 
+ 
+        console.log("Update Object:", update);
 
         const updatedClient = await clientModel.findOneAndUpdate(
             { _id: id },
@@ -76,6 +85,8 @@ const updateClient = async (req, res) => {
             { new: true }
         );
 
+        // Logging to check if client was updated
+        console.log("Updated Client:", updatedClient);
 
         if (!updatedClient) {
             return res.status(404).json({ statusCode: 404, message: 'Client not found' });
@@ -87,6 +98,7 @@ const updateClient = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
 };
+
 ///delete
 const deleteClient = async (req, res) => {
     try {
