@@ -24,8 +24,7 @@ const addkeywebsitecollection = async (req, res) => {
 
         // Add new images to the existing array
         keyWebsiteCollection.image.push(...images);
-        keyWebsiteCollection.KeyWebsiteCollectionsHeading = KeyWebsiteCollectionsHeading;
-        keyWebsiteCollection.KeyWebsiteCollectionsDescription = KeyWebsiteCollectionsDescription;
+     
 
         // Save the updated document
         const savedKeywebItem = await keyWebsiteCollection.save();
@@ -108,23 +107,32 @@ const updateKeywebsitecollection = async (req, res) => {
 const deleteKeyWebsiteCollection = async (req, res) => {
     try {
         const id = req.params.id;
-
+        const index = parseInt(req.params.index); 
 
         const response = await keywebsitecollectionModel.findOneAndUpdate(
-            {},
-            { $pull: { keywebsitecollection: { _id: id } } },
-            { new: true }
+            { _id: id }, 
+            // { 
+            //     $unset: { [`image.${index}`]: 1 } 
+            // }
         );
 
         if (!response) {
             return res.status(404).json({ statusCode: 404, success: false, message: 'Key website collection project not found' });
         }
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'Key website collection project deleted successfully', data: response });
+   
+        await keywebsitecollectionModel.findOneAndUpdate(
+            { _id: id }
+     
+        );
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Key website collection project image deleted successfully', data: response });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 }
+
+
 
 
 module.exports = { addkeywebsitecollection, getKeywebsitecollection, updateKeywebsitecollection, deleteKeyWebsiteCollection }
