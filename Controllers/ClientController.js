@@ -33,7 +33,7 @@ const getClient = async (req, res, next) => {
     try {
         const category = req.query.category ? req.query.category.toLowerCase() : null;
         let clients;
-        
+
         // If category is provided and not 'all', filter clients by category
         if (category && category !== 'all') {
             clients = await clientModel.find({ category: category });
@@ -46,12 +46,12 @@ const getClient = async (req, res, next) => {
         if (clients.length === 0) {
             return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found.' });
         }
-        
+
         return res.status(200).json({ statusCode: 200, success: true, clients: clients });
     } catch (err) {
         return res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
-}; 
+};
 
 //update
 const updateClient = async (req, res) => {
@@ -62,24 +62,12 @@ const updateClient = async (req, res) => {
         }
 
         const { category } = req.body;
-
-        if (!category) {
-            return res.status(400).json({ statusCode: 400, message: 'Category is required' });
-        }
-
-        
-
-        if (req.file && req.file.path) {
-            image = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, "/")}`;
-        }
-
+        const image = req.file ? req.file.path : undefined; // Check if req.file exists
+        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
         const update = {
+            image: baseUrl,
             category: category,
-            image: image
         };
-
-        // Logging to check the update object
-        console.log("Update Object:", update);
 
         const updatedClient = await clientModel.findOneAndUpdate(
             { _id: id },
@@ -87,20 +75,16 @@ const updateClient = async (req, res) => {
             { new: true }
         );
 
-        // Logging to check if client was updated
-        console.log("Updated Client:", updatedClient);
-
-        if (!updatedClient) {
+        if (!updatedClient) { // Corrected from updatedShowreel
             return res.status(404).json({ statusCode: 404, message: 'Client not found' });
         }
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'Client updated successfully', updatedClient });
+        res.status(200).json({ statusCode: 200, success: true, message: 'client updated successfully', updatedClient });
     } catch (error) {
         console.error(error);
         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
 };
-
 
 ///delete
 const deleteClient = async (req, res) => {
