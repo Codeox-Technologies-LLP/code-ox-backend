@@ -11,7 +11,7 @@ const addFounder = async (req, res) => {
         const data = {
             image: baseUrl,
             name: req.body.name,
-            position: req.body.position,
+       
             role: req.body.role
         }
         const newData = await founderModel.findOneAndUpdate({}, { $push: { founder: data } }, { new: true, upsert: true })
@@ -35,15 +35,16 @@ const getFounder = async (req, res) => {
 const updateFounder = async (req, res) => {
     try {
         const id = req.params.id;
+        const baseUrl = `${req.protocol}://${req.get('host')}/`; 
+
         const data = {
-            'founder.$[elem].image': req.file.path,
+            'founder.$[elem].image': baseUrl + req.file.path.replace(/\\/g, "/"), 
             'founder.$[elem].name': req.body.name,
-            'founder.$[elem].position': req.body.position,
             'founder.$[elem].role': req.body.role
         }
 
         const response = await founderModel.findOneAndUpdate(
-            { 'founder._id': id }, // Filter condition to match the founder with the given ID
+            { 'founder._id': id }, 
             { $set: data }, 
             { arrayFilters: [{ 'elem._id': id }], new: true }
         );
@@ -53,6 +54,7 @@ const updateFounder = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 }
+
 
 ///delete
 const deleteFounder = async (req, res) => {

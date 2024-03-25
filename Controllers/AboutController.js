@@ -45,20 +45,11 @@ const getAbout = async (req, res) => {
 const updateAbout = async (req, res) => {
   try {
     const id = req.params.id;
-
-    // Check if the provided ID is valid
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
-    }
-
-    // Extract necessary fields from the request body
     const { welcomeContent, description, buttonText, link, marquee } = req.body;
 
-    // Determine the image path and construct the full URL
+ 
     const image = req.file ? req.file.path : undefined;
     const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
-
-    // Construct the update object
     const update = {
       image: baseUrl,
       welcomeContent,
@@ -70,7 +61,7 @@ const updateAbout = async (req, res) => {
 
     // Update the document in the database
     const updatedAbout = await AboutModel.findOneAndUpdate(
-      { _id: id }, 
+      {  }, 
       update, 
       { new: true } 
     );
