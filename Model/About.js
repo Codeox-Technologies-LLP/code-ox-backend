@@ -26,7 +26,7 @@ const aboutSectionSchema = new Schema({
 
   marquee: {
     type: String,
-    required: true,
+    required: false,
   }
 });
 
