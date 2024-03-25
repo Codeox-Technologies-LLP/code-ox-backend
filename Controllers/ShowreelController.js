@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const addshowreel = async (req, res) => {
     try {
-        const { showreelHeading, showreeldescripation, showreelheading1, showreeldescripation1, categories, link } = req.body;
+        const { showreelHeading, showreeldescription, showreelHeading1, showreeldescription1, category, link } = req.body;
 
         // Check if any files were uploaded
         if (!req.files || req.files.length === 0) {
@@ -19,10 +19,10 @@ const addshowreel = async (req, res) => {
         const newShowreelItem = new showreelModel({
             image: images,
             showreelHeading,
-            showreeldescripation,
-            showreelheading1,
-            showreeldescripation1,
-            categories,
+            showreeldescription,
+            showreelHeading1,
+            showreeldescription1,
+            category,
             link
         });
 
@@ -70,7 +70,7 @@ const updateShowreel = async (req, res) => {
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
         }
-        const { showreelHeading, showreeldescripation,  showreeldescripation1, link, showreelheading1 } = req.body;
+        const { showreelHeading, showreeldescription,  showreeldescription1, link, showreelHeading1 } = req.body;
         const { category } = req.body;
         const image = req.file ? req.file.path : undefined; // Check if req.file exists
         const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
@@ -78,9 +78,9 @@ const updateShowreel = async (req, res) => {
             image: baseUrl,
             category: category,
             showreelHeading,
-            showreeldescripation,
-            showreelheading1,
-            showreeldescripation1,
+            showreeldescription,
+            showreelHeading1,
+            showreeldescription1,
             link
         };
       

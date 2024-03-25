@@ -10,19 +10,19 @@ const showreel = new Schema({
         type: String,
         required: true,
     },
-    showreeldescripation: {
+    showreeldescription: {
         type: String,
         required: true,
     },
-    showreelheading1: {
+    showreelHeading1: {
         type: String,
         required: true,
     },
-    showreeldescripation1: {
+    showreeldescription1: {
         type: String,
         required: true
     },
-    categories: {
+    category: {
         type: String,
         required: true
     },

@@ -11,6 +11,9 @@ const addTeam = async (req, res) => {
      
         const data = {
             image: baseUrl,
+            name: req.body.name,
+            position: req.body.position,
+            role: req.body.role
         }
         const newData = await teamModel.findOneAndUpdate({}, { $push: { team: data } }, { new: true, upsert: true })
 
@@ -37,6 +40,14 @@ const updateTeam = async (req, res) => {
         const id = req.params.id;
         const data = {
             'team.$[elem].image': req.file.path,
+            'team.$[elem].name': req.file.name,
+            'team.$[elem].position': req.file.position,
+            'team.$[elem].role': req.file.role,
+
+
+
+            
+
             // Add other fields you want to update here
         };
 
