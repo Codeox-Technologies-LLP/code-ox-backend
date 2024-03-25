@@ -27,7 +27,7 @@ const addshowreel = async (req, res) => {
         });
 
         const savedShowreelItem = await newShowreelItem.save();
-        res.status(201).json(savedShowreelItem);
+        res.status(201).json( savedShowreelItem);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error', statusCode: 500 });
