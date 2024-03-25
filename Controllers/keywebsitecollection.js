@@ -1,102 +1,198 @@
-const keywebsitecollectionModel = require('../Model/Keywebsitecollection');
-const mongoose = require('mongoose');
+const { default: mongoose } = require("mongoose");
+const webModel = require("../model/Keywebsitecollection");
 
-// Create (POST) operation
-const addKeyWebsiteCollection = async (req, res) => {
+module.exports = {
+    addKeyWebsiteCollection: async (req, res) => {
     try {
-        const { KeyWebsiteCollectionsHeading, KeyWebsiteCollectionsDescription } = req.body;
+      const baseUrl =
+        req.protocol + "://" + req.hostname + ":" + req.socket.localPort + "/";
+      const image = req.files["image"][0].path.replace(/\\/g, "/");
 
-        // Check if any files were uploaded
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ message: 'At least one image file is required' });
-        }
+     
+      const data = {
+        heroImage: baseUrl + image,
+        KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading,
+        KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription,
 
-        const images = req.files.map(file => {
-            return `${req.protocol}://${req.get('host')}/${file.path.replace(/\\/g, "/")}`;
+      };
+      const newData = webModel(data);
+      const response = await newData.save();
+
+      res
+        .status(201)
+        .json({
+          statusCode: 201,
+          success: true,
+          message: "Key website created successfully",
         });
-
-        const newKeywebsiteItem = new keywebsitecollectionModel({
-            image: images,
-            KeyWebsiteCollectionsHeading,
-            KeyWebsiteCollectionsDescription
+    } catch (error) {
+      res
+        .status(500)
+        .json({
+          statusCode: 500,
+          success: false,
+          message: "keywebsite creation failed",
         });
-
-        const savedKeywebItem = await newKeywebsiteItem.save();
-        res.status(201).json(savedKeywebItem);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server Error', statusCode: 500 });
     }
-};
-
-// get
-const getKeyWebsiteCollection = async (req, res) => {
+  },
+  getKeyWebsiteCollection: async (req, res) => {
     try {
-        const data = await keywebsitecollectionModel.findOne();
-        res.status(200).json({ statusCode: 200, message: 'Key website collection fetched successfully', data: data });
+      const id = req.query.id;
+      if (id ) {
+        if (id && mongoose.Types.ObjectId.isValid(id)) {
+          const data = await webModel.findOne({ _id: id });
+          if (data === null) {
+            res
+              .status(404)
+              .json({
+                statusCode: 404,
+                success: false,
+                message: "no keywebsite found",
+              });
+          } else {
+            res
+              .status(200)
+              .json({
+                statusCode: 200,
+                success: true,
+                message: "keywebsite fetching successfull",
+                data,
+              });
+          }
+        } else {
+            res
+            .status(400)
+            .json({
+              statusCode: 400,
+              success: false,
+              message: "Invalid ID provided",
+            });
+        }
+      } else {
+        const data = await webModel.find({});
+        res
+          .status(200)
+          .json({
+            statusCode: 200,
+            success: true,
+            message: "keywebsite fetching successfull",
+            data,
+          });
+      }
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message });
+      res
+        .status(500)
+        .json({
+          statusCode: 500,
+          success: false,
+          message: "keywebsite fetching failed",
+        });
     }
-};
-// updatr
-const updateKeyWebsiteCollection = async (req, res) => {
+  },
+  updateKeyWebsiteCollection: async (req, res) => {
     try {
-        const id = req.params.id;
+      const id = req.params.id;
+      const baseUrl =
+        req.protocol + "://" + req.hostname + ":" + req.socket.localPort + "/";
+      const image = req.files?.["heroImage"]?.[0]?.path.replace(/\\/g, "/");
+    
+    
+     
 
-        // Check if the provided ID is valid
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
-        }
-
-        const { KeyWebsiteCollectionsHeading, KeyWebsiteCollectionsDescription } = req.body;
-
-        // Check if the required fields are present in the request body
-        if (!KeyWebsiteCollectionsHeading || !KeyWebsiteCollectionsDescription) {
-            return res.status(400).json({ statusCode: 400, message: 'KeyWebsiteCollectionsHeading and KeyWebsiteCollectionsDescription are required' });
-        }
-
-        // Check if the file is being uploaded correctly
-        const image = req.file ? req.file.path : undefined;
-        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+      const payload = {
         
-        // Construct the update object
-        const update = {
-            image: baseUrl,
-            KeyWebsiteCollectionsHeading,
-            KeyWebsiteCollectionsDescription
-        };
+        KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription,
+        KeyWebsiteCollectionsHeading: req.body. KeyWebsiteCollectionsHeading
+     
+      };
 
-        // Find and update the document based on ID
-        const updatedKeyweb = await keywebsitecollectionModel.findByIdAndUpdate(id, update, { new: true });
-
-        // Check if the document was updated successfully
-        if (!updatedKeyweb) {
-            return res.status(404).json({ statusCode: 404, message: 'Key website not found' });
-        }
-
-        // Send the updated document as response
-        res.status(200).json({ statusCode: 200, success: true, message: 'Key website updated successfully', data: updatedKeyweb });
-    } catch (error) {
-        console.error('Error in updateKeyWebsiteCollection:', error); // Log the error for debugging
-        res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+      if (image) { 
+        payload.image = baseUrl + image
     }
-};
 
-
-
-// Delete 
-const deleteKeyWebsiteCollection = async (req, res) => {
+      if (id && mongoose.Types.ObjectId.isValid(id)) {
+        const data = await webModel.findByIdAndUpdate(id, payload, {
+          new: true,
+        });
+        if (data === null) {
+          res
+            .status(404)
+            .json({
+              statusCode: 400,
+              success: false,
+              message: "no keywebsite found",
+            });
+        } else {
+          res
+            .status(200)
+            .json({
+              statusCode: 200,
+              success: true,
+              message: "keywebsite updating successfull",
+              data,
+            });
+        }
+      } else {
+        res
+          .status(400)
+          .json({
+            statusCode: 400,
+            success: false,
+            message: "Invalid ID provided",
+          });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .json({
+          statusCode: 500,
+          success: false,
+          message: "keywebsite updating failed",msg:error.message,
+        });
+    }
+  },
+  deleteKeyWebsiteCollection: async (req, res) => {
     try {
-        const response = await keywebsitecollectionModel.findOneAndDelete();
-        
-        if (!response) {
-            return res.status(404).json({ statusCode: 404, success: false, message: 'Key website collection not found' });
-        }
-
-        res.status(200).json({ statusCode: 200, success: true, message: 'Key website collection deleted successfully', data: response });
+      const id = req.params.id;
+      
+      if (id && mongoose.Types.ObjectId.isValid(id)) {
+        const data = await webModel.findByIdAndDelete(id);
+       if(!data){
+        res
+        .status(404)
+        .json({
+          statusCode: 404,
+          success: true,
+          message: "no programs  found",
+          
+        });
+       }else{
+        res
+        .status(200)
+        .json({
+          statusCode: 200,
+          success: true,
+          message: "programs deleting successfull",
+          
+        });
+       }
+      } else {
+        res
+          .status(400)
+          .json({
+            statusCode: 400,
+            success: false,
+            message: "Invalid ID provided",
+          });
+      }
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message });
+        res
+        .status(500)
+        .json({
+          statusCode: 500,
+          success: false,
+          message: "programs deleting failed",
+        });
     }
+  },
 };
-
-module.exports = { addKeyWebsiteCollection, getKeyWebsiteCollection, updateKeyWebsiteCollection, deleteKeyWebsiteCollection };

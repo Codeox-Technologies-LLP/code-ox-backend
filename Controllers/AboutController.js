@@ -54,10 +54,14 @@ const updateAbout = async (req, res) => {
       description,
       buttonText,
       link,
-      marquee
+     
     };
     if(imagePath){
       update.image=baseUrl
+    }
+
+    if(marquee){
+      update.marquee=req.body
     }
     const updatedAbout = await AboutModel.findOneAndUpdate(
       {  }, 

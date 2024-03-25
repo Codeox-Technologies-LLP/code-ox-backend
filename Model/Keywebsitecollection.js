@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const keywebsitecollectionSchema = new Schema({
-    image: [{
+    heroimage: [{
         type: String,
         required: true,
     }],
