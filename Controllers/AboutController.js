@@ -46,37 +46,30 @@ const updateAbout = async (req, res) => {
   try {
     const id = req.params.id;
     const { welcomeContent, description, buttonText, link, marquee } = req.body;
-
- 
-    const image = req.file ? req.file.path : undefined;
-    const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+    const imagePath  = req.file?.path;
+    const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath?.replace(/\\/g, "/")}`;
     const update = {
-      image: baseUrl,
+     
       welcomeContent,
       description,
       buttonText,
       link,
       marquee
     };
-
-    // Update the document in the database
+    if(imagePath){
+      update.image=baseUrl
+    }
     const updatedAbout = await AboutModel.findOneAndUpdate(
       {  }, 
       update, 
       { new: true } 
     );
-
-    // If no document is found for the provided ID, return a 404 response
     if (!updatedAbout) {
       return res.status(404).json({ statusCode: 404, message: 'About not found' });
     }
-
-    // Return a success response with the updated document
     res.status(200).json({ statusCode: 200, success: true, message: 'About updated successfully', updatedAbout });
   } catch (error) {
-    // Log the error to the console for debugging
-    console.error(error);
-    // Return a 500 response with an error message
+
     res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error', error: error.message });
   }
 };

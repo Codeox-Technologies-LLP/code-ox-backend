@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const TeamMemberSchema = new Schema({
+const teamSchema = new Schema({
+
     image: {
         type: String,
         required: true
@@ -18,9 +19,6 @@ const TeamMemberSchema = new Schema({
 
 });
 
-const TeamSchema = new Schema({
-    team: [TeamMemberSchema] // Use the TeamMemberSchema as the array element schema
-});
 
-const teamModel = mongoose.model('Team', TeamSchema);
+const teamModel = mongoose.model('team', teamSchema);
 module.exports = teamModel;
