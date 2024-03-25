@@ -26,7 +26,7 @@ const addshowreel = async (req, res) => {
             link
         });
 
-        const savedShowreelItem = await newShowreelItem.save();
+        const savedShowreelItem = await newShowreelItem.find();
         res.status(201).json( savedShowreelItem);
     } catch (error) {
         console.error(error);
