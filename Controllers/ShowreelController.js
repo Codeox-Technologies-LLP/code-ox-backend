@@ -6,7 +6,6 @@ const addshowreel = async (req, res) => {
     try {
         const { showreelHeading, showreeldescription, showreelHeading1, showreeldescription1, category, link } = req.body;
 
-        // Check if any files were uploaded
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({ message: 'At least one image file is required' });
         }
@@ -26,13 +25,14 @@ const addshowreel = async (req, res) => {
             link
         });
 
-        const savedShowreelItem = await newShowreelItem.findOneAndUpdate();
-        res.status(201).json({statusCode: 200, success: true, message:'Showreel Post Sucessfully' , savedShowreelItem});
+        const savedShowreelItem = await newShowreelItem.save(); 
+        res.status(201).json({statusCode: 201, success: true, message:'Showreel Post Successfully' , savedShowreelItem});
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server Error', statusCode: 500 , message:'internal Server' });
+        res.status(500).json({ message: 'Internal Server Error', statusCode: 500 , error: error.message });
     }
 };
+
 
 //get 
 const getShowreelItems = async (req, res, next) => {
