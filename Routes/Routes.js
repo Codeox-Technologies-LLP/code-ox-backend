@@ -73,12 +73,11 @@ router.delete('/home/:id', deleteHome);
 router.post('/showreel', authenticate, upload.array('images'), addshowreel);
 router.get('/showreel', getShowreelItems)
 router.put('/showreel/:id/add-image', authenticate, upload.single('image'), updateShowreel);
-
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
 router.get('/about', getAbout);
-router.put('/about/:id', authenticate, upload.single('image'), updateAbout);
+router.put('/about', authenticate, upload.single('image'), updateAbout);
 router.delete('/about/:id', authenticate, deleteAbout)
 ///servie
 router.post('/service', authenticate, upload.single('image'), addService)
