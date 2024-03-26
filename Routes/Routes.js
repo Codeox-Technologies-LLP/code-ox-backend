@@ -8,7 +8,7 @@ const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require(
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
 const { authenticate } = require('../Controllers/AuthController')
 const { addProjects, getProjects, updateProjects, deleteProjects } = require('../Controllers/ErpController')
-const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
+const { addshowreel, getShowreel, updatedShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
 const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } = require('../Controllers/TestimonialController');
@@ -71,8 +71,8 @@ router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
 router.post('/showreel', authenticate, upload.array('images'), addshowreel);
-router.get('/showreel', getShowreelItems)
-router.put('/showreel/:id/add-image', authenticate, upload.single('image'), updateShowreel);
+router.get('/showreel', getShowreel)
+router.put('/showreel/:id', upload.single('images'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
@@ -94,7 +94,7 @@ router.post('/keywebsitecollection', authenticate, upload.single('image'), addKe
 router.get('/keywebsitecollection', getKeyWebsiteCollection);
 
 router.put('/keywebsitecollection/:id', authenticate, upload.single('image'), updateKeyWebsiteCollection);
-router.delete('/keywebsitecollection/:id',authenticate, deleteKeyWebsiteCollection);
+router.delete('/keywebsitecollection/:id', authenticate, deleteKeyWebsiteCollection);
 //why choose us
 router.post('/whychooseus', authenticate, upload.single('image'), addWhychoose)
 router.get('/whychooseus', getWhychoose);
