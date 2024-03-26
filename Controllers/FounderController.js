@@ -3,9 +3,9 @@ const founderModel = require('../Model/Founder')
 //post 
 const addFounder = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; 
+        const { path: imagePath } = req.file;
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        
+
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
         }
@@ -22,11 +22,12 @@ const addFounder = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 };
+
 //get
 const getFounder = async (req, res) => {
     try {
-        const data = await founderModel.find()     
-        res.status(200).json({ statusCode: 200, message: 'founder fetched successfully', data: data })
+        const data = await founderModel.find()
+        res.status(200).json({ statusCode: 200, sucess: true, message: 'founder fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
@@ -35,26 +36,26 @@ const getFounder = async (req, res) => {
 const updateFounder = async (req, res) => {
     try {
         const id = req.params.id;
-        const baseUrl = `${req.protocol}://${req.get('host')}/`; 
+        const baseUrl = `${req.protocol}://${req.get('host')}/`;
 
-        // Check if req.file exists before accessing its properties
+
         const imagePath = req.file ? req.file.path.replace(/\\/g, "/") : '';
 
         const data = {
-            image: req.file ? baseUrl + imagePath : undefined, 
+            image: req.file ? baseUrl + imagePath : undefined,
             name: req.body.name,
             role: req.body.role
         };
 
-        // Use findByIdAndUpdate to update the founder by its ID
+
         const response = await founderModel.findByIdAndUpdate(id, data, { new: true });
 
-        // Check if no document was found and updated
+
         if (!response) {
-            return res.status(404).json({ statusCode: 404, success: true, message: "No founder found with the provided ID" });
+            return res.status(404).json({ statusCode: 404, success: false, message: "No founder found with the provided ID" });
         }
 
-        res.status(200).json({ statusCode: 200, message: 'Founder updated successfully', data: response });
+        res.status(200).json({ statusCode: 200, message: 'Founder updated successfully', success: true, data: response });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
@@ -63,7 +64,7 @@ const updateFounder = async (req, res) => {
 const deleteFounder = async (req, res) => {
     try {
         const id = req.params.id;
-        const response = await founderModel.findOneAndUpdate({}, { $pull:  { _id: id } } , { new: true });
+        const response = await founderModel.findOneAndUpdate({}, { $pull: { _id: id } }, { new: true });
 
         res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
 

@@ -31,7 +31,7 @@ const addTeam = async (req, res) => {
 const getTeam = async (req, res) => {
     try {
         const data = await teamModel.find({})     
-        res.status(200).json({ statusCode: 200, message: 'Team fetched successfully', data: data })
+        res.status(200).json({ statusCode: 200, success:true, message: 'Team fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
@@ -59,7 +59,7 @@ const updateTeam = async (req, res) => {
             return res.status(404).json({ statusCode: 404, success: true, message: "No team found with the provided ID" });
         }
 
-        res.status(200).json({ statusCode: 200, message: 'team updated successfully', data: response });
+        res.status(200).json({ statusCode: 200, success:true, message: 'team updated successfully', data: response });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
