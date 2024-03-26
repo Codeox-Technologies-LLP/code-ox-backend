@@ -8,11 +8,11 @@ const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require(
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
 const { authenticate } = require('../Controllers/AuthController')
 const { addProjects, getProjects, updateProjects, deleteProjects } = require('../Controllers/ErpController')
-const { addshowreel, getShowreelItems, updateShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
+const { addshowreel, getShowreel, updatedShowreel, deleteShowreel } = require('../Controllers/ShowreelController');
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
 const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } = require('../Controllers/TestimonialController');
-const { addkeywebsitecollection, getKeywebsitecollection, deleteKeyWebsiteCollection, updateKeywebsitecollection, addKeyWebsiteCollection, updateKeyWebsiteCollection, getKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
+const {  deleteKeyWebsiteCollection,  addKeyWebsiteCollection, updateKeyWebsiteCollection, getKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
 const { addWhychoose, getWhychoose, updateWhychoose, deleteWhychoose } = require('../Controllers/WhyController');
 const { addclient, getClient, updateClient, deleteClient } = require('../Controllers/ClientController');
 const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
@@ -71,8 +71,8 @@ router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
 router.post('/showreel', authenticate, upload.array('images'), addshowreel);
-router.get('/showreel', getShowreelItems)
-router.put('/showreel/:id/add-image', authenticate, upload.single('image'), updateShowreel);
+router.get('/showreel', getShowreel)
+router.put('/showreel/:id', upload.array('images'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
@@ -90,13 +90,11 @@ router.get('/testimonial', getTestimonial);
 router.put('/testimonial/:id', authenticate, upload.single('image'), updateTestimonial);
 router.delete('/testimonial/:id', authenticate, deleteTestimonial);
 //keywebsitecollection
-router.post('/keywebsitecollection', authenticate, upload.array('image'), addKeyWebsiteCollection);
-// router.post('/keywebsitecollection/:id', authenticate, upload.array('image'), updateKeywebsitecollection);
-
+router.post('/keywebsitecollection', authenticate, upload.single('image'), addKeyWebsiteCollection);
 router.get('/keywebsitecollection', getKeyWebsiteCollection);
 
-router.put('/keywebsitecollection/:id/image/:index', authenticate, upload.array('image'), updateKeyWebsiteCollection);
-router.delete('/keywebsitecollection/:id/image/:index',authenticate, deleteKeyWebsiteCollection);
+router.put('/keywebsitecollection/:id', authenticate, upload.single('image'), updateKeyWebsiteCollection);
+router.delete('/keywebsitecollection/:id', authenticate, deleteKeyWebsiteCollection);
 //why choose us
 router.post('/whychooseus', authenticate, upload.single('image'), addWhychoose)
 router.get('/whychooseus', getWhychoose);
@@ -123,12 +121,8 @@ router.post('/team', authenticate, upload.single('image'), addTeam)
 router.get('/team', getTeam);
 router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
 router.delete('/team/:id', authenticate, deleteTeam);
-//project counter
-router.post('/project', authenticate, addProjects)
-router.get('/team', getTeam);
-router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
-router.delete('/team/:id', authenticate, deleteTeam);
-router.use(handleMulterErrors)
+
+
 
 
 

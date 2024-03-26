@@ -2,15 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const keywebsitecollectionSchema = new Schema({
-    heroimage: [{
-        type: String,
-        required: true,
-    }],
-    KeyWebsiteCollectionsHeading: {
-        type: String,
-        required: true,
-    },
-    KeyWebsiteCollectionsDescription: {
+    image: {
         type: String,
         required: true,
     },

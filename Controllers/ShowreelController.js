@@ -1,35 +1,43 @@
 const showreelModel = require('../Model/showreel')
 const mongoose = require('mongoose');
 
-
 const addshowreel = async (req, res) => {
     try {
-        const { showreelHeading, showreeldescription, showreelHeading1, showreeldescription1, category, link } = req.body;
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ message: 'At least one image file is required' });
-        }
-        const images = req.files.map(file => {
-            return `${req.protocol}://${req.get('host')}/${file.path.replace(/\\/g, "/")}`;
-        });
-        const newShowreelItem = new showreelModel({
+
+        const baseUrl = `${req.protocol}://${req.hostname}:${req.socket.localPort}/`;
+        const images = req.files.map(file => baseUrl + file.path.replace(/\\/g, "/"));
+        const newData = new showreelModel({
             image: images,
-            showreelHeading,
-            showreeldescription,
-            showreelHeading1,
-            showreeldescription1,
-            category,
-            link
+            showreelHeading: req.body.showreelHeading,
+            showreeldescription: req.body.showreeldescription,
+            showreelHeading1: req.body.showreelHeading1,
+            showreeldescription1: req.body.showreeldescription1,
+            category: req.body.category,
+            link: req.body.link
         });
-        const savedShowreelItem = await newShowreelItem.save();
-        res.status(201).json({ statusCode: 201, success: true, message: 'Showreel Post Successfully', savedShowreelItem });
+        const response = await newData.save();
+        res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: "Showreel created successfully",
+            data: response
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error', statusCode: 500, error: error.message });
+        console.error("Error occurred:", error);
+        let errorMessage = "Unknown error occurred";
+        if (error instanceof mongoose.Error.ValidationError) {
+            errorMessage = "Validation error occurred";
+        }
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: errorMessage
+        });
     }
 };
 
 //get 
-const getShowreelItems = async (req, res, next) => {
+const getShowreel = async (req, res, next) => {
     try {
         const category = req.query.category ? req.query.category.toLowerCase() : null;
         let showreelData = await showreelModel.find();
@@ -53,44 +61,66 @@ const getShowreelItems = async (req, res, next) => {
 };
 
 //update
-const updateShowreel = async (req, res) => {
+
+const updatedShowreel = async (req, res) => {
     try {
         const id = req.params.id;
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
-        }
-        const { showreelHeading, showreeldescription, showreeldescription1, link, showreelHeading1 } = req.body;
-        const { category } = req.body;
-        const image = req.file ? req.file.path : undefined; // Check if req.file exists
-        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
-        const update = {
-            image: baseUrl,
-            category: category,
-            showreelHeading,
-            showreeldescription,
-            showreelHeading1,
-            showreeldescription1,
-            link
+        const baseUrl = `${req.protocol}://${req.hostname}:${req.socket.localPort}/`;
+        const images = req.files?.map(file => baseUrl + file.path.replace(/\\/g, "/"));
+
+        const payload = {
+            showreelHeading: req.body.showreelHeading,
+            showreeldescription: req.body.showreeldescription,
+            showreelHeading1: req.body.showreelHeading1,
+            showreeldescription1: req.body.showreeldescription1,
+            category: req.body.category,
+            link: req.body.link
         };
 
-        const updatedShowreel = await showreelModel.findOneAndUpdate(
-            { _id: id },
-            update,
-            { new: true }
-        );
-
-        if (!updatedShowreel) {
-            return res.status(404).json({ statusCode: 404, message: 'Showreel not found' });
+        if (images) {
+            payload.image = images;
         }
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'showreel updated successfully', updatedShowreel });
+        if (id && mongoose.Types.ObjectId.isValid(id)) {
+            const data = await showreelModel.findByIdAndUpdate(id, payload, {
+                new: true,
+            });
+
+            if (data) {
+                res.status(200).json({
+                    statusCode: 200,
+                    success: true,
+                    message: "Showreel updated successfully",
+                    data,
+                });
+            } else {
+                res.status(404).json({
+                    statusCode: 404,
+                    success: false,
+                    message: "No showreel found with the provided ID",
+                });
+            }
+        } else {
+            res.status(400).json({
+                statusCode: 400,
+                success: false,
+                message: "Invalid ID provided",
+            });
+        }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+        console.error("Error occurred:", error.message);
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Showreel update failed",
+            error: error.message,
+        });
     }
 };
 
-//detle
+
+
+// //detle
 const deleteShowreel = async (req, res) => {
     try {
         const { id } = req.params;
@@ -109,9 +139,4 @@ const deleteShowreel = async (req, res) => {
     }
 };
 
-
-
-
-
-
-module.exports = { addshowreel, getShowreelItems, updateShowreel, deleteShowreel }
+module.exports = { addshowreel, getShowreel, updatedShowreel, deleteShowreel }
