@@ -1,198 +1,101 @@
-const { default: mongoose } = require("mongoose");
-const webModel = require("../model/Keywebsitecollection");
+const webModel = require('../Model/Keywebsitecollection')
+const mongoose = require('mongoose');
 
-module.exports = {
-    addKeyWebsiteCollection: async (req, res) => {
+// post
+const addKeyWebsiteCollection = async (req, res) => {
     try {
-      const baseUrl =
-        req.protocol + "://" + req.hostname + ":" + req.socket.localPort + "/";
-      const image = req.files["image"][0].path.replace(/\\/g, "/");
-
-     
-      const data = {
-        heroImage: baseUrl + image,
-        KeyWebsiteCollectionsHeading: req.body.KeyWebsiteCollectionsHeading,
-        KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription,
-
-      };
-      const newData = webModel(data);
-      const response = await newData.save();
-
-      res
-        .status(201)
-        .json({
-          statusCode: 201,
-          success: true,
-          message: "Key website created successfully",
-        });
-    } catch (error) {
-      res
-        .status(500)
-        .json({
-          statusCode: 500,
-          success: false,
-          message: "keywebsite creation failed",
-        });
-    }
-  },
-  getKeyWebsiteCollection: async (req, res) => {
-    try {
-      const id = req.query.id;
-      if (id ) {
-        if (id && mongoose.Types.ObjectId.isValid(id)) {
-          const data = await webModel.findOne({ _id: id });
-          if (data === null) {
-            res
-              .status(404)
-              .json({
-                statusCode: 404,
-                success: false,
-                message: "no keywebsite found",
-              });
-          } else {
-            res
-              .status(200)
-              .json({
-                statusCode: 200,
-                success: true,
-                message: "keywebsite fetching successfull",
-                data,
-              });
-          }
-        } else {
-            res
-            .status(400)
-            .json({
-              statusCode: 400,
-              success: false,
-              message: "Invalid ID provided",
-            });
+  
+        if (!req.file) {
+            return res.status(400).json({ message: 'Image file is required' });
         }
-      } else {
-        const data = await webModel.find({});
-        res
-          .status(200)
-          .json({
-            statusCode: 200,
-            success: true,
-            message: "keywebsite fetching successfull",
-            data,
-          });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({
-          statusCode: 500,
-          success: false,
-          message: "keywebsite fetching failed",
-        });
-    }
-  },
-  updateKeyWebsiteCollection: async (req, res) => {
-    try {
-      const id = req.params.id;
-      const baseUrl =
-        req.protocol + "://" + req.hostname + ":" + req.socket.localPort + "/";
-      const image = req.files?.["heroImage"]?.[0]?.path.replace(/\\/g, "/");
-    
-    
+        const { path: imagePath } = req.file;
+
      
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
 
-      const payload = {
-        
-        KeyWebsiteCollectionsDescription: req.body.KeyWebsiteCollectionsDescription,
-        KeyWebsiteCollectionsHeading: req.body. KeyWebsiteCollectionsHeading
-     
-      };
 
-      if (image) { 
-        payload.image = baseUrl + image
-    }
+        const data = {
+            image: baseUrl
+        };
 
-      if (id && mongoose.Types.ObjectId.isValid(id)) {
-        const data = await webModel.findByIdAndUpdate(id, payload, {
-          new: true,
-        });
-        if (data === null) {
-          res
-            .status(404)
-            .json({
-              statusCode: 400,
-              success: false,
-              message: "no keywebsite found",
-            });
-        } else {
-          res
-            .status(200)
-            .json({
-              statusCode: 200,
-              success: true,
-              message: "keywebsite updating successfull",
-              data,
-            });
-        }
-      } else {
-        res
-          .status(400)
-          .json({
-            statusCode: 400,
-            success: false,
-            message: "Invalid ID provided",
-          });
-      }
+  
+        const newKeyWebsite = new webModel(data);
+
+
+        const response = await newKeyWebsite.save();
+
+
+        res.status(200).json({ statusCode: 200, success: true, message: ' keywebsite added successfully', response });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          statusCode: 500,
-          success: false,
-          message: "keywebsite updating failed",msg:error.message,
-        });
+  
+        res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
-  },
-  deleteKeyWebsiteCollection: async (req, res) => {
-    try {
-      const id = req.params.id;
-      
-      if (id && mongoose.Types.ObjectId.isValid(id)) {
-        const data = await webModel.findByIdAndDelete(id);
-       if(!data){
-        res
-        .status(404)
-        .json({
-          statusCode: 404,
-          success: true,
-          message: "no programs  found",
-          
-        });
-       }else{
-        res
-        .status(200)
-        .json({
-          statusCode: 200,
-          success: true,
-          message: "programs deleting successfull",
-          
-        });
-       }
-      } else {
-        res
-          .status(400)
-          .json({
-            statusCode: 400,
-            success: false,
-            message: "Invalid ID provided",
-          });
-      }
-    } catch (error) {
-        res
-        .status(500)
-        .json({
-          statusCode: 500,
-          success: false,
-          message: "programs deleting failed",
-        });
-    }
-  },
 };
+//get
+
+const getKeyWebsiteCollection = async (req, res) => {
+    try {
+ 
+       const data = await webModel.find({})
+ 
+       res.status(200).json({ statusCode: 200, message: 'keywebsite fetched successfully', data: data })
+    } catch (error) {
+       res.status(500).json({ statusCode: 500, success: false, message: error.message })
+    }
+ }
+//update
+const updateKeyWebsiteCollection = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+        }
+
+        const image = req.file ? req.file.path : undefined; // Check if req.file exists
+        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+        const update = {
+            image: baseUrl
+        };
+
+        console.log("Update:", update);
+
+        const updatedKeywebsite = await webModel.findOneAndUpdate(
+            { _id: id },
+            update,
+            { new: true }
+        );
+
+        console.log("Updated Keywebsite:", updatedKeywebsite);
+
+        if (!updatedKeywebsite) { 
+            return res.status(404).json({ statusCode: 404, message: 'Keywebsite not found' });
+        }
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Keywebsite updated successfully', updatedKeywebsite });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+    }
+};
+
+
+///delete
+const deleteKeyWebsiteCollection = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+        }
+        const response = await webModel.findOneAndDelete({ _id: id });
+        if (!response) {
+            res.status(200).json({ statusCode: 404, success: true, message: "no document were deleted" });
+        }
+        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
+
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+    }
+}
+
+
+module.exports = { addKeyWebsiteCollection, getKeyWebsiteCollection, updateKeyWebsiteCollection, deleteKeyWebsiteCollection }

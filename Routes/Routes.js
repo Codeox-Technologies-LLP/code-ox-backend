@@ -90,13 +90,11 @@ router.get('/testimonial', getTestimonial);
 router.put('/testimonial/:id', authenticate, upload.single('image'), updateTestimonial);
 router.delete('/testimonial/:id', authenticate, deleteTestimonial);
 //keywebsitecollection
-router.post('/keywebsitecollection', authenticate, upload.array('image'), addKeyWebsiteCollection);
-// router.post('/keywebsitecollection/:id', authenticate, upload.array('image'), updateKeywebsitecollection);
-
+router.post('/keywebsitecollection', authenticate, upload.single('image'), addKeyWebsiteCollection);
 router.get('/keywebsitecollection', getKeyWebsiteCollection);
 
-router.put('/keywebsitecollection/:id/image/:index', authenticate, upload.array('image'), updateKeyWebsiteCollection);
-router.delete('/keywebsitecollection/:id/image/:index',authenticate, deleteKeyWebsiteCollection);
+router.put('/keywebsitecollection/:id', authenticate, upload.single('image'), updateKeyWebsiteCollection);
+router.delete('/keywebsitecollection/:id',authenticate, deleteKeyWebsiteCollection);
 //why choose us
 router.post('/whychooseus', authenticate, upload.single('image'), addWhychoose)
 router.get('/whychooseus', getWhychoose);
