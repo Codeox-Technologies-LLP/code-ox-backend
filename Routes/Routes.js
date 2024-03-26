@@ -12,7 +12,7 @@ const { addshowreel, getShowreel, updatedShowreel, deleteShowreel } = require('.
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
 const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } = require('../Controllers/TestimonialController');
-const { addkeywebsitecollection, getKeywebsitecollection, deleteKeyWebsiteCollection, updateKeywebsitecollection, addKeyWebsiteCollection, updateKeyWebsiteCollection, getKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
+const {  deleteKeyWebsiteCollection,  addKeyWebsiteCollection, updateKeyWebsiteCollection, getKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
 const { addWhychoose, getWhychoose, updateWhychoose, deleteWhychoose } = require('../Controllers/WhyController');
 const { addclient, getClient, updateClient, deleteClient } = require('../Controllers/ClientController');
 const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
@@ -72,7 +72,7 @@ router.delete('/home/:id', deleteHome);
 //showreel
 router.post('/showreel', authenticate, upload.array('images'), addshowreel);
 router.get('/showreel', getShowreel)
-router.put('/showreel/:id', upload.single('images'), updatedShowreel);
+router.put('/showreel/:id', upload.array('images'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
