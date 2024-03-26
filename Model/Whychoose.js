@@ -3,27 +3,16 @@ const { Schema } = mongoose;
 
 
 const whyChooseSchema = new Schema({
-
-    WhyCodeOxDescription: {
+    image: {
         type: String,
         required: true,
     },
-    WhyCodeOxHeading: {
+    description: {
         type: String,
-        required: true
-    },
-    WhyCodeOx: [{
-        image: {
-            type: String,
-            required: true,
-        },
-        description: {
-            type: String,
-            required: true,
-        },
-    }],
+        required: true,
+    }
 })
 
-const WhychooseModel = mongoose.model('whyChooseSchema', whyChooseSchema);
+const WhychooseModel = mongoose.model('whyChoose', whyChooseSchema);
 
 module.exports = WhychooseModel
