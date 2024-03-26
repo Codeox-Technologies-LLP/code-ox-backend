@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const founderSchema = new Schema({
-    founder: [{
+    
         image: {
             type: String,
             required: true
@@ -18,7 +18,7 @@ const founderSchema = new Schema({
             required: true
         },
 
-    }]
+
 })
 
 const founderModel = mongoose.model('founder', founderSchema);
