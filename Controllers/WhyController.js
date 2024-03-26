@@ -53,6 +53,7 @@ const updateWhychoose = async (req, res) => {
         res.status(200).json({
             statusCode: 200,
             message: 'Whychoose projects updated successfully',
+            success: true,
             data: data
         });
 
