@@ -15,8 +15,6 @@ const addFounder = async (req, res) => {
             name: req.body.name,
             role: req.body.role
         };
-
-        // Use founderModel.create() to add a new founder
         const newFounder = await founderModel.create(data);
 
         res.status(200).json({ statusCode: 200, success: true, message: 'Founder added successfully', data: newFounder });
@@ -24,8 +22,6 @@ const addFounder = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 };
-
-
 //get
 const getFounder = async (req, res) => {
     try {
@@ -35,7 +31,6 @@ const getFounder = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
 }
-
 //update
 const updateFounder = async (req, res) => {
     try {
@@ -64,15 +59,11 @@ const updateFounder = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 };
-
-
-
-
 ///delete
 const deleteFounder = async (req, res) => {
     try {
         const id = req.params.id;
-        const response = await founderModel.findOneAndUpdate({}, { $pull: { founder: { _id: id } } }, { new: true });
+        const response = await founderModel.findOneAndUpdate({}, { $pull:  { _id: id } } , { new: true });
 
         res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
 
