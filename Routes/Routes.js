@@ -121,12 +121,8 @@ router.post('/team', authenticate, upload.single('image'), addTeam)
 router.get('/team', getTeam);
 router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
 router.delete('/team/:id', authenticate, deleteTeam);
-//project counter
-router.post('/project', authenticate, addProjects)
-router.get('/team', getTeam);
-router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
-router.delete('/team/:id', authenticate, deleteTeam);
-router.use(handleMulterErrors)
+
+
 
 
 
