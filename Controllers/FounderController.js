@@ -3,7 +3,7 @@ const founderModel = require('../Model/Founder')
 //post 
 const addFounder = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const { path: imagePath } = req.file; 
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
         if (!imagePath) {
            return res.status(400).json({ message: 'Image file is required' });
@@ -37,8 +37,11 @@ const updateFounder = async (req, res) => {
         const id = req.params.id;
         const baseUrl = `${req.protocol}://${req.get('host')}/`; 
 
+        // Check if req.file exists before accessing its properties
+        const imagePath = req.file ? req.file.path.replace(/\\/g, "/") : '';
+
         const data = {
-            'founder.$[elem].image': baseUrl + req.file.path.replace(/\\/g, "/"), 
+            'founder.$[elem].image': req.file ? baseUrl + imagePath : undefined, 
             'founder.$[elem].name': req.body.name,
             'founder.$[elem].role': req.body.role
         }
@@ -54,6 +57,7 @@ const updateFounder = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 }
+
 
 
 ///delete
