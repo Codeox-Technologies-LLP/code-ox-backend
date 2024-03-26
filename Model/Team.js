@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const teamSchema = new Schema({
+team:[{
+
 
     image: {
         type: String,
@@ -16,6 +18,7 @@ const teamSchema = new Schema({
         type: String,
         required: true
     },
+}]
 
 });
 
