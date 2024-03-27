@@ -5,14 +5,14 @@ const addValue = async (req, res) => {
         const { path: imagePath } = req.file; // Extract the path property from req.file
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
         if (!imagePath) {
-           return res.status(400).json({ message: 'Image file is required' });
+            return res.status(400).json({ message: 'Image file is required' });
         }
-        
+
         const data = {
             name: req.body.name,
             gif: baseUrl,
             title: req.body.title,
-            descripation: req.body.descripation,
+            description: req.body.description,
         }
 
         const newData = await valueModel.findOneAndUpdate({}, { $push: { value: data } }, { new: true, upsert: true })
@@ -28,7 +28,7 @@ const addValue = async (req, res) => {
 const getValue = async (req, res) => {
     try {
         const data = await valueModel.findOne({})
-       
+
         res.status(200).json({ statusCode: 200, message: 'value fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
@@ -43,17 +43,26 @@ const updateValue = async (req, res) => {
             'value.$[elem].name': req.body.name,
             'value.$[elem].gif': req.file.path,
             'value.$[elem].title': req.body.title,
-            'value.$[elem].descripation': req.body.descripation,
+            'value.$[elem].description': req.body.description,
+        };
 
+        if (req.file && req.file.path) {
+            const imagePath = req.file.path.replace(/\\/g, "/");
+            const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath}`;
+            data['value.$[elem].gif'] = baseUrl;
         }
+        const response = await valueModel.findOneAndUpdate(
+            {},
+            { $set: data },
+            { arrayFilters: [{ 'elem._id': id }], new: true }
+        );
 
-        const response = await valueModel.findOneAndUpdate({}, { $set: data }, { arrayFilters: [{ 'elem._id': id }], new: true })
-
-        res.status(200).json({ statusCode: 200, message: 'value projects fetched successfully' })
+        res.status(200).json({ statusCode: 200, message: 'Value project updated successfully', response});
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
-}
+};
+
 
 //delete
 const deleteValue = async (req, res) => {
