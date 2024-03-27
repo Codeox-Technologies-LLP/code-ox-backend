@@ -34,11 +34,10 @@ const updateValue = async (req, res) => {
     try {
         const id = req.params.id;
         const data = {
-           name: req.body.name,
-           title: req.body.title,
-            description: req.body.description,
+            'value.$[elem].name': req.body.name,
+            'value.$[elem].title': req.body.title,
+            'value.$[elem].description': req.body.description,
         };
-    
         if (req.file && req.file.path) {
             const imagePath = req.file.path.replace(/\\/g, "/");
             const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath}`;
@@ -54,6 +53,7 @@ const updateValue = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 };
+
 //delete
 const deleteValue = async (req, res) => {
     try {
@@ -66,4 +66,6 @@ const deleteValue = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
 }
+
+
 module.exports = { addValue, getValue, updateValue, deleteValue }
