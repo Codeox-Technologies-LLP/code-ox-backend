@@ -56,7 +56,7 @@ const updateTeam = async (req, res) => {
 
        
         if (!response) {
-            return res.status(404).json({ statusCode: 404, success: true, message: "No team found with the provided ID" });
+            return res.status(404).json({ statusCode: 404, success: false, message: "No team found with the provided ID" });
         }
 
         res.status(200).json({ statusCode: 200, success:true, message: 'team updated successfully', data: response });

@@ -57,7 +57,7 @@ const updateValue = async (req, res) => {
             { arrayFilters: [{ 'elem._id': id }], new: true }
         );
 
-        res.status(200).json({ statusCode: 200, message: 'Value project updated successfully', response});
+        res.status(200).json({ statusCode: 200, success:true, message: 'Value project updated successfully', updateValue});
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }

@@ -55,7 +55,7 @@ const updateFounder = async (req, res) => {
             return res.status(404).json({ statusCode: 404, success: false, message: "No founder found with the provided ID" });
         }
 
-        res.status(200).json({ statusCode: 200, message: 'Founder updated successfully', success: true, data: response });
+        res.status(200).json({ statusCode: 200, sucess:true, message: 'Founder updated successfully', success: true, data: response });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
@@ -64,12 +64,13 @@ const updateFounder = async (req, res) => {
 const deleteFounder = async (req, res) => {
     try {
         const id = req.params.id;
-        const response = await founderModel.findOneAndUpdate({}, { $pull: { _id: id } }, { new: true });
-
-        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
-
+        const response = await founderModel.findOneAndDelete({ _id: id });
+        if (!response) {
+            return res.status(404).json({ statusCode: 404, success: false, message: 'founder not found' });
+        }
+        res.status(200).json({ statusCode: 200, success: true, message: 'founder deleted successfully', data: response });
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
-}
+};
 module.exports = { addFounder, getFounder, updateFounder, deleteFounder }
