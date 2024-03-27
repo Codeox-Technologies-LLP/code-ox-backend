@@ -70,9 +70,9 @@ const updateTeam = async (req, res) => {
 const deleteTeam = async (req, res) => {
     try {
         const id = req.params.id;
-        const response = await teamModel.findOneAndUpdate({}, { $pull: { team: { _id: id } } }, { new: true });
+        const response = await teamModel.findOneAndDelete({}, { $pull: { team: { _id: id } } }, { new: true });
 
-        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
+        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful", data: response });
 
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
