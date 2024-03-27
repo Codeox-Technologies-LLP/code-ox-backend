@@ -31,7 +31,7 @@ const caseStudySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  textColor: {
+  titleTextColor: {
     type: String,
     required: true
   }
