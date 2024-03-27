@@ -20,6 +20,7 @@ const addWhychoose = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: err.message });
     }
 };
+
 /// get
 const getWhychoose = async (req, res) => {
     try {
@@ -60,6 +61,7 @@ const updateWhychoose = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 };
+
 //delete
 const deleteWhychoose = async (req, res) => {
     try {

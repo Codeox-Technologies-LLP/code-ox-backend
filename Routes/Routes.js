@@ -74,6 +74,9 @@ router.post('/showreel', authenticate, upload.array('images'), addshowreel);
 router.get('/showreel', getShowreel)
 router.put('/showreel/:id', upload.array('images'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
+
+///showreel images
+
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
 router.get('/about', getAbout);

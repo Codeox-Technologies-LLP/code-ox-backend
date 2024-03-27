@@ -4,12 +4,17 @@ const bgValidator = require('../middlewares/bg');
 //post
 const addCaseStudies = async (req, res) => {
   try {
-    const { title, subtitle, caseStudiesDescription, link, category, bg } = req.body;
+    const { title, subtitle, caseStudiesDescription, link, category, bg,textColor } = req.body;
 
     // Validate bg color format
     if (!bgValidator.isValidColorFormat(bg)) {
       return res.status(400).json({ message: 'Invalid color format for bg field ', success: false });
     }
+    //textcolor
+    if (!bgValidator.isValidColorFormat(textColor)) {
+      return res.status(400).json({ message: 'Invalid color format for bg field ', success: false });
+    }
+
 
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
@@ -20,7 +25,8 @@ const addCaseStudies = async (req, res) => {
       caseStudiesDescription,
       link,
       category,
-      bg
+      bg,
+      textColor
     });
     await newCaseStudy.save();
     res.status(200).json({ statusCode: 200, message: 'Case study added successfully', success: true });
@@ -56,7 +62,7 @@ const updateCaseStudies = async (req, res) => {
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
     }
-    const { title, subtitle, caseStudiesDescription, link, categories, bg } = req.body;
+    const { title, subtitle, caseStudiesDescription, link, categories, bg,textColor } = req.body;
     const { category } = req.body;
     const image = req.file ? req.file.path : undefined; // Check if req.file exists
     const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
@@ -67,7 +73,9 @@ const updateCaseStudies = async (req, res) => {
       subtitle,
       caseStudiesDescription,
       link,
-      bg
+      bg,
+      textColor
+      
     };
 
     const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(

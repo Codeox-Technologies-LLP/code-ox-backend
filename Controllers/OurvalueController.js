@@ -34,11 +34,11 @@ const updateValue = async (req, res) => {
     try {
         const id = req.params.id;
         const data = {
-            'value.$[elem].name': req.body.name,
-            'value.$[elem].gif': req.file.path,
-            'value.$[elem].title': req.body.title,
-            'value.$[elem].description': req.body.description,
+           name: req.body.name,
+           title: req.body.title,
+            description: req.body.description,
         };
+    
         if (req.file && req.file.path) {
             const imagePath = req.file.path.replace(/\\/g, "/");
             const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath}`;
