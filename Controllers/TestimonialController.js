@@ -38,7 +38,7 @@ const updateTestimonial = async (req, res) => {
     try {
         const id = req.params.id;
         const imagePath = req.file ? req.file.path : null;
-        const data = {};
+        let data = {};
         if (imagePath) {
             const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
             data['image'] = baseUrl;
