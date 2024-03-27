@@ -16,7 +16,7 @@ const valueSchema = new Schema({
             type:String,
             required:true
         },
-        descripation:{
+        description:{
             type:String,
             required:true
         }
