@@ -22,15 +22,10 @@ const addCaseStudies = async (req, res) => {
       category,
       bg
     });
-
-    // Save the new case study
     await newCaseStudy.save();
-
-    // Send success response with custom message
     res.status(200).json({ statusCode: 200, message: 'Case study added successfully', success: true });
   } catch (error) {
     console.error(error);
-    // Send error response
     res.status(500).json({ message: 'Server Error', statusCode: 500, success: false });
   }
 };
@@ -39,8 +34,6 @@ const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
     let caseStudiesData = await caseStudiesModel.find();
-
-    // Filter the data if category is provided
     if (category) {
       caseStudiesData = caseStudiesData.filter(caseStudy =>
         caseStudy.category.toLowerCase() === category
@@ -100,11 +93,8 @@ const deleteCaseStudy = async (req, res) => {
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ statusCode: 400, message: 'Invalid Id' ,success:false});
     }
-
     await caseStudiesModel.findOneAndDelete({ _id: id });
-
     res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
-
   } catch (error) {
     res.status(500).json({ statusCode: 500, success: false, message: error.message })
   }

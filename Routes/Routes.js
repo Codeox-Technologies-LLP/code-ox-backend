@@ -12,7 +12,7 @@ const { addshowreel, getShowreel, updatedShowreel, deleteShowreel } = require('.
 const { addAbout, getAbout, deleteAbout, updateAbout } = require('../Controllers/AboutController');
 const { addService, getServices, updateService, deleteService } = require('../Controllers/ServiceController');
 const { addTestimonial, getTestimonial, updateTestimonial, deleteTestimonial } = require('../Controllers/TestimonialController');
-const {  deleteKeyWebsiteCollection,  addKeyWebsiteCollection, updateKeyWebsiteCollection, getKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
+const { deleteKeyWebsiteCollection, addKeyWebsiteCollection, updateKeyWebsiteCollection, getKeyWebsiteCollection } = require('../Controllers/keywebsitecollection');
 const { addWhychoose, getWhychoose, updateWhychoose, deleteWhychoose } = require('../Controllers/WhyController');
 const { addclient, getClient, updateClient, deleteClient } = require('../Controllers/ClientController');
 const { addValue, getValue, updateValue, deleteValue } = require('../Controllers/OurvalueController');
@@ -92,7 +92,6 @@ router.delete('/testimonial/:id', authenticate, deleteTestimonial);
 //keywebsitecollection
 router.post('/keywebsitecollection', authenticate, upload.single('image'), addKeyWebsiteCollection);
 router.get('/keywebsitecollection', getKeyWebsiteCollection);
-
 router.put('/keywebsitecollection/:id', authenticate, upload.single('image'), updateKeyWebsiteCollection);
 router.delete('/keywebsitecollection/:id', authenticate, deleteKeyWebsiteCollection);
 //why choose us
@@ -121,10 +120,5 @@ router.post('/team', authenticate, upload.single('image'), addTeam)
 router.get('/team', getTeam);
 router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
 router.delete('/team/:id', authenticate, deleteTeam);
-
-
-
-
-
 
 module.exports = router
