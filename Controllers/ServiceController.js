@@ -1,6 +1,9 @@
+
+const {addImage} =require('../middlewares/image')
 const servicesModel = require('../Model/Service')
 const mongoose = require('mongoose');
-const {addImage} =require('../middlewares/image')
+
+
 //add service
 
 const addService = async (req, res) => {

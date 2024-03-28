@@ -1,17 +1,17 @@
 const testimonialModel = require('../Model/Testimonial')
+const {addImage ,updateImage}= require ('../middlewares/image')
 
 //post
 const addTestimonial = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; 
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
+    
+        const imageData = addImage(req);
+        if (!imageData) {
+          return res.status(400).json({ message: 'Error adding image' });
         }
 
         const data = {
-            image: baseUrl,
+            image: imageData,
             authorName: req.body.authorName,
             authorCompany: req.body.authorCompany,
             testimonialsdescription: req.body.testimonialsdescription
