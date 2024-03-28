@@ -19,6 +19,7 @@ const { addValue, getValue, updateValue, deleteValue } = require('../Controllers
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
+const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
 
 const router = express.Router();
 
@@ -115,5 +116,12 @@ router.post('/team', authenticate, upload.single('image'), addTeam)
 router.get('/team', getTeam);
 router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
 router.delete('/team/:id', authenticate, deleteTeam);
+
+//seo
+router.post('/seo', authenticate, addSeo);
+router.get('/seo', authenticate, getSeo);
+router.put('/seo/:id', authenticate, updateSeo);
+router.delete('/seo/:id', authenticate, deleteSeo);
+
 
 module.exports = router
