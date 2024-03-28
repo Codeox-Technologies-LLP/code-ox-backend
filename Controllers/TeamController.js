@@ -52,15 +52,19 @@ const updateTeam = async (req, res) => {
 /// delete
 const deleteTeam = async (req, res) => {
     try {
-        const id = req.params.id;
-        const response = await teamModel.findOneAndDelete({}, { $pull: { team: { _id: id } } }, { new: true });
-
-        res.status(200).json({ statusCode: 200, success: true, message: "deleting successful", data: response });
-
+      const id = req.params.id;
+      if (!mongoose.isValidObjectId(id)) {
+        return res.status(400).json({ statusCode: 400, message: 'Invalid Id' ,success:false});
+      }
+  
+      await teamModel.findOneAndDelete({ _id: id });
+  
+      res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
+  
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+      res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
-}
+  }
 
 
 
