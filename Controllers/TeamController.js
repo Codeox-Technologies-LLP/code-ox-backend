@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const teamModel = require('../Model/Team')
 
@@ -9,22 +8,9 @@ const addTeam = async (req, res) => {
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
         if (!imagePath) {
             return res.status(400).json({ message: 'Image file is required' });
-
-const teamModel = require('../Model/Team')
-
-
-const { addImage, updateImage } = require('../middlewares/image');
-//post
-const addTeam = async (req, res) => {
-    try {
-  
-        const imageData = addImage(req);
-        if (!imageData) {
-          return res.status(400).json({ message: 'Error adding image' });
-
         }
         const data = {
-            image: imageData,
+            image: baseUrl,
             name: req.body.name,
             role: req.body.role
         };
@@ -47,16 +33,10 @@ const getTeam = async (req, res) => {
 const updateTeam = async (req, res) => {
     try {
         const id = req.params.id;
-
         const baseUrl = `${req.protocol}://${req.get('host')}/`;
         const imagePath = req.file ? req.file.path.replace(/\\/g, "/") : '';
         const data = {
             image: req.file ? baseUrl + imagePath : undefined,
-
-        const image = updateImage(req)
-        const data = {
-            image: image, 
-
             name: req.body.name,
             role: req.body.role
         };
