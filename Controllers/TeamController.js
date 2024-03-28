@@ -56,9 +56,7 @@ const deleteTeam = async (req, res) => {
       if (!mongoose.isValidObjectId(id)) {
         return res.status(400).json({ statusCode: 400, message: 'Invalid Id' ,success:false});
       }
-  
       await teamModel.findOneAndDelete({ _id: id });
-  
       res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
   
     } catch (error) {
