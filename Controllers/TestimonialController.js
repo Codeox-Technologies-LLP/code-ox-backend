@@ -3,7 +3,7 @@ const testimonialModel = require('../Model/Testimonial')
 //post
 const addTestimonial = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; // Extract the path property from req.file
+        const { path: imagePath } = req.file; 
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
 
         if (!imagePath) {
@@ -16,24 +16,14 @@ const addTestimonial = async (req, res) => {
             authorCompany: req.body.authorCompany,
             testimonialsdescription: req.body.testimonialsdescription
         };
-
-        // Create a new testimonial instance
         const newTestimonial = new testimonialModel(data);
-
-        // Save the new testimonial to the database
         await newTestimonial.save();
-
-        // Respond with success message
         res.status(200).json({ statusCode: 200, success: true, message: 'Testimonial added successfully' });
-
     } catch (error) {
-        // Respond with error message
         res.status(500).json({ statusCode: 500, success: false, message: 'Server Error' });
     }
 };
-
-
-//gegt
+//get
 const getTestimonial = async (req, res) => {
     try {
         const data = await testimonialModel.find()
@@ -66,12 +56,9 @@ const updateTestimonial = async (req, res) => {
         }
         res.status(200).json({ statusCode: 200, success:true, message: 'Testimonial updated successfully', updateTestimonial });
     } catch (error) {
-
         res.status(500).json({ statusCode: 500, success:false, message: error.message });
     }
 };
-
-
 //delte
 const deleteTestimonial = async (req, res) => {
     try {

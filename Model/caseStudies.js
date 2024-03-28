@@ -30,6 +30,10 @@ const caseStudySchema = new mongoose.Schema({
   bg: {
     type: String,
     required: true
+  },
+  titleTextColor: {
+    type: String,
+    required: true
   }
 
 });
