@@ -2,7 +2,6 @@ const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
 const {  upload } = require('../middlewares/multer');
-const path = require('path')
 
 
 const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require('../Controllers/FooterController');

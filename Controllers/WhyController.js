@@ -1,5 +1,5 @@
 const WhychooseModel = require('../Model/Whychoose')
-const { addImage} = require('../middlewares/image');
+const { addImage, updateImage } = require('../middlewares/image');
 ///post 
 const addWhychoose = async (req, res) => {
     try {
@@ -33,15 +33,14 @@ const getWhychoose = async (req, res) => {
 const updateWhychoose = async (req, res) => {
     try {
         const id = req.params.id;
-        const imagePath = req.file ? req.file.path : null;
+        const imagePath = updateImage(req);
         let data = {};
         data = {
             ...data,
             description: req.body.description,
         }
         if (imagePath) {
-            const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-            data['image'] = baseUrl;
+            data['image'] = imagePath;
         }
         const filter = { _id: id };
         await WhychooseModel.findOneAndUpdate(
