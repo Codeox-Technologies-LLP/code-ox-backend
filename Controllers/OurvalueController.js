@@ -1,15 +1,15 @@
 const valueModel = require('../Model/Ourvalue')
+const { addImage, updateImage } = require('../middlewares/image');
 //post
 const addValue = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; // Extract the path property from req.file
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
-        }
+        const imageData = addImage(req);
+    if (!imageData) {
+      return res.status(400).json({ message: 'Error adding image' });
+    }
         const data = {
             name: req.body.name,
-            gif: baseUrl,
+            gif: imageData,
             title: req.body.title,
             description: req.body.description,
         }

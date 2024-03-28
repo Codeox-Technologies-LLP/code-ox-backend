@@ -1,25 +1,28 @@
+const { addImage, updateImage } = require('../middlewares/image');
+
+
 const clientModel = require('../Model/Client')
 const mongoose = require('mongoose');
 
 // post
 const addclient = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; // Extract the path property from req.file
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
+        const imageData = addImage(req); 
+        if (!imageData) {
+            return res.status(400).json({ message: 'Error adding image' });
         }
         const data = {
-            image: baseUrl,
+            image: imageData,
             category: req.body.category,
-        }
-        const newData = clientModel(data)
-        const response = await newData.save()
-        res.status(200).json({ statusCode: 200, success: true, message: ' Client projects added successfully', response })
+        };
+        const newData = clientModel(data);
+        const response = await newData.save();
+        res.status(200).json({ statusCode: 200, success: true, message: 'Client projects added successfully', response });
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
-}
+};
+
 //get
 const getClient = async (req, res, next) => {
     try {
@@ -47,10 +50,9 @@ const updateClient = async (req, res) => {
             return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
         }
         const { category } = req.body;
-        const image = req.file ? req.file.path : undefined; // Check if req.file exists
-        const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+        const image = updateImage(req)
         const update = {
-            image: baseUrl,
+            image: image,
             category: category,
         };
         const updatedClient = await clientModel.findOneAndUpdate(
@@ -58,7 +60,7 @@ const updateClient = async (req, res) => {
             update,
             { new: true }
         );
-        if (!updatedClient) { 
+        if (!updatedClient) {
             return res.status(404).json({ statusCode: 404, message: 'Client not found' });
         }
         res.status(200).json({ statusCode: 200, success: true, message: 'client updated successfully', updatedClient });

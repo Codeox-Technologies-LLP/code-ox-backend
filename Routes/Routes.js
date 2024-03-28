@@ -1,8 +1,8 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
-const path = require('path')
-const multer = require('multer');
+const {  upload } = require('../middlewares/multer');
+
 
 const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require('../Controllers/FooterController');
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
@@ -19,29 +19,16 @@ const { addValue, getValue, updateValue, deleteValue } = require('../Controllers
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
+const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/images/');
-  },
 
-  filename: function (req, file, cb) {
 
-    cb(null, file.originalname);
-  }
-});
-var upload = multer({ storage: storage })
-// Error handling middleware
-function handleMulterErrors(err, req, res, next) {
-  if (err instanceof multer.MulterError) {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ message: 'File size exceeds the limit (2MB)' });
-    }
-  }
-  next(err);
-}
+
+
+
+
 
 //caseStudies
 router.get('/case-studies', getCaseStudies);
@@ -70,9 +57,9 @@ router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
-router.post('/showreel', authenticate, upload.array('images'), addshowreel);
+router.post('/showreel', upload.array('image'), addshowreel);
 router.get('/showreel', getShowreel)
-router.put('/showreel/:id', upload.array('images'), updatedShowreel);
+router.put('/showreel/:id', upload.single('image'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 
 ///showreel images
@@ -123,5 +110,12 @@ router.post('/team', authenticate, upload.single('image'), addTeam)
 router.get('/team', getTeam);
 router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
 router.delete('/team/:id', authenticate, deleteTeam);
+
+//seo
+router.post('/seo', authenticate, addSeo);
+router.get('/seo', authenticate, getSeo);
+router.put('/seo/:id', authenticate, updateSeo);
+router.delete('/seo/:id', authenticate, deleteSeo);
+
 
 module.exports = router

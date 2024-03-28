@@ -1,15 +1,15 @@
 const founderModel = require('../Model/Founder')
+const { addImage, updateImage } = require('../middlewares/image');
 
 //post 
 const addFounder = async (req, res) => {
     try {
-        const { path: imagePath } = req.file;
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
+        const imageData = addImage(req);
+        if (!imageData) {
+          return res.status(400).json({ message: 'Error adding image' });
         }
         const data = {
-            image: baseUrl,
+            image: imageData,
             name: req.body.name,
             role: req.body.role
         };
@@ -32,10 +32,9 @@ const getFounder = async (req, res) => {
 const updateFounder = async (req, res) => {
     try {
         const id = req.params.id;
-        const baseUrl = `${req.protocol}://${req.get('host')}/`;
-        const imagePath = req.file ? req.file.path.replace(/\\/g, "/") : '';
+        const image = updateImage(req)
         const data = {
-            image: req.file ? baseUrl + imagePath : undefined,
+            image: image,
             name: req.body.name,
             role: req.body.role
         };
