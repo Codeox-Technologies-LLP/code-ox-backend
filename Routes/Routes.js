@@ -34,14 +34,6 @@ const storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage })
 // Error handling middleware
-function handleMulterErrors(err, req, res, next) {
-  if (err instanceof multer.MulterError) {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ message: 'File size exceeds the limit (2MB)' });
-    }
-  }
-  next(err);
-}
 
 //caseStudies
 router.get('/case-studies', getCaseStudies);
@@ -70,9 +62,9 @@ router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
-router.post('/showreel', authenticate, upload.array('images'), addshowreel);
+router.post('/showreel', upload.array('image'), addshowreel);
 router.get('/showreel', getShowreel)
-router.put('/showreel/:id', upload.array('images'), updatedShowreel);
+router.put('/showreel/:id', upload.single('image'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
