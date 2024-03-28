@@ -5,14 +5,13 @@ const mongoose = require('mongoose');
 
 const addAbout = async (req, res) => {
   try {
-    const { path: imagePath } = req.file; // Extract the path property from req.file
-    const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-    if (!imagePath) {
-      return res.status(400).json({ message: 'Image file is required' });
+    const imageData = addImage(req);
+    if (!imageData) {
+      return res.status(400).json({ message: 'Error adding image' });
     }
 
     const data = {
-      image: baseUrl,
+      image: imageData,
       welcomeContent: req.body.welcomeContent,
       description: req.body.description,
       buttonText: req.body.buttonText,

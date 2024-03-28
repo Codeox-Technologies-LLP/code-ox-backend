@@ -1,6 +1,7 @@
 const caseStudiesModel = require('../Model/caseStudies');
 const mongoose = require('mongoose');
 const bgValidator = require('../middlewares/bg');
+const { addImage, updateImage } = require('../middlewares/image');
 //post
 const addCaseStudies = async (req, res) => {
   try {
@@ -16,10 +17,12 @@ const addCaseStudies = async (req, res) => {
     }
 
 
-    const { path: imagePath } = req.file;
-    const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+    const imageData = addImage(req);
+    if (!imageData) {
+      return res.status(400).json({ message: 'Error adding image' });
+    }
     const newCaseStudy = new caseStudiesModel({
-      image: baseUrl,
+      image: imageData,
       title,
       subtitle,
       caseStudiesDescription,
@@ -64,10 +67,9 @@ const updateCaseStudies = async (req, res) => {
     }
     const { title, subtitle, caseStudiesDescription, link, categories, bg,titleTextColor } = req.body;
     const { category } = req.body;
-    const image = req.file ? req.file.path : undefined; // Check if req.file exists
-    const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+    const image = updateImage(req)
     const update = {
-      image: baseUrl,
+      image: image,
       category: category,
       title,
       subtitle,

@@ -1,15 +1,14 @@
 const WhychooseModel = require('../Model/Whychoose')
-
+const { addImage} = require('../middlewares/image');
 ///post 
 const addWhychoose = async (req, res) => {
     try {
-        const { path: imagePath } = req.file;
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
+        const imageData = addImage(req);
+        if (!imageData) {
+            return res.status(400).json({ message: 'Error adding image' });
         }
         const data = {
-            image: baseUrl,
+            image: imageData,
             description: req.body.description
         };
         const newWhyChooseUs = new WhychooseModel(data);
