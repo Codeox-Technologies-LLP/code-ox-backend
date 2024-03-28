@@ -1,8 +1,9 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
+const {  upload } = require('../middlewares/multer');
 const path = require('path')
-const multer = require('multer');
+
 
 const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require('../Controllers/FooterController');
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
@@ -22,18 +23,12 @@ const { addHome, getHome, deleteHome } = require('../Controllers/HomeController'
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/images/');
-  },
 
-  filename: function (req, file, cb) {
 
-    cb(null, file.originalname);
-  }
-});
-var upload = multer({ storage: storage })
-// Error handling middleware
+
+
+
+
 
 //caseStudies
 router.get('/case-studies', getCaseStudies);
