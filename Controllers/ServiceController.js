@@ -1,18 +1,18 @@
 const servicesModel = require('../Model/Service')
 const mongoose = require('mongoose');
+const {addImage} =require('../middlewares/image')
 //add service
 
 const addService = async (req, res) => {
     try {
         const { servicesHeading, servicesDescription } = req.body;
-        const { path: imagePath } = req.file; // Extract the path property from req.file
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required', success: false, statusCode: 400 });
-        }
+        const imageData = addImage(req);
+    if (!imageData) {
+      return res.status(400).json({ message: 'Error adding image' });
+    }
         const serviceItem = new servicesModel({
 
-            image: baseUrl,
+            image: imageData,
             servicesHeading,
             servicesDescription,
 
