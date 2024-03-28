@@ -25,6 +25,11 @@ const router = express.Router();
 
 
 
+
+
+
+
+
 //caseStudies
 router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
@@ -52,9 +57,9 @@ router.put('/home', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
-router.post('/showreel', authenticate, upload.array('images'), addshowreel);
+router.post('/showreel', upload.array('image'), addshowreel);
 router.get('/showreel', getShowreel)
-router.put('/showreel/:id', upload.array('images'), updatedShowreel);
+router.put('/showreel/:id', upload.single('image'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 
 ///showreel images
