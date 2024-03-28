@@ -1,6 +1,6 @@
 
 /// add Image
-function addImage(req) {
+function addImage(req ,next) {
     try {
         const { path: imagePath } = req.file;
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
