@@ -30,7 +30,7 @@ const addAbout = async (req, res) => {
 const getAbout = async (req, res) => {
   try {
     const data = await AboutModel.findOne();
-  
+
     res.status(200).json({ statusCode: 200, message: 'About projects fetched successfully', data: data });
   } catch (error) {
     res.status(500).json({ statusCode: 500, success: false, message: error.message });
@@ -44,34 +44,29 @@ const updateAbout = async (req, res) => {
   try {
     const id = req.params.id;
     const { welcomeContent, description, buttonText, link, marquee } = req.body;
-    const imagePath  = req.file?.path;
-    const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath?.replace(/\\/g, "/")}`;
-    const update = {
-     
-      welcomeContent,
-      description,
-      buttonText,
-      link,
-     
-    };
-    if(imagePath){
-      update.image=baseUrl
-    }
+    const imagePath = req.file?.path;
+    let update = {};
 
-    if(marquee){
-      update.marquee=req.body
+    // Only update fields that are provided in the request
+    if (welcomeContent) update.welcomeContent = welcomeContent;
+    if (description) update.description = description;
+    if (buttonText) update.buttonText = buttonText;
+    if (link) update.link = link;
+    if (imagePath) {
+      const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+      update.image = baseUrl;
     }
-    const updatedAbout = await AboutModel.findOneAndUpdate(
-      {  }, 
-      update, 
-      { new: true } 
-    );
+    if (marquee) update.marquee = marquee;
+
+    // Update the About document
+    const updatedAbout = await AboutModel.findByIdAndUpdate(id, update, { new: true });
+
     if (!updatedAbout) {
       return res.status(404).json({ statusCode: 404, message: 'About not found' });
     }
+
     res.status(200).json({ statusCode: 200, success: true, message: 'About updated successfully', updatedAbout });
   } catch (error) {
-
     res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error', error: error.message });
   }
 };
