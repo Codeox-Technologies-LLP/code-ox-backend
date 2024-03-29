@@ -42,12 +42,16 @@ const addCaseStudies = async (req, res) => {
 const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
-    let caseStudiesData = await caseStudiesModel.find();
+    
+    // Fetch only necessary fields to reduce data transfer
+    let selectFields = 'title description category'; // Customize fields as needed
+    
+    let query = {};
     if (category) {
-      caseStudiesData = caseStudiesData.filter(caseStudy =>
-        caseStudy.category.toLowerCase() === category
-      );
+      query.category = category;
     }
+
+    let caseStudiesData = await caseStudiesModel.find(query).select(selectFields).lean();
 
     if (caseStudiesData.length === 0) {
       return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
@@ -58,6 +62,7 @@ const getCaseStudies = async (req, res, next) => {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
 //update
 const updateCaseStudies = async (req, res) => {
   try {
