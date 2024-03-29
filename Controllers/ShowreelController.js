@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const addshowreel = async (req, res) => {
     try {
 
-        const baseUrl = `${req.protocol}://${req.hostname}:${req.socket.localPort}/`;
+        const baseUrl = `${req.protocol}://${req.hostname}/`;
         const images = req.files.map(file => baseUrl + file.path.replace(/\\/g, "/"));
         const newData = new showreelModel({
             image: images,
@@ -69,7 +69,7 @@ const updatedShowreel = async (req, res) => {
             return res.status(400).json({ statusCode: 400, success: false, message: "Invalid ID provided" });
 
         const { indexToRemove, indexToUpdate, ...update } = req.body;
-        const imageUrl = req.file ? `${req.protocol}://${req.hostname}:${req.socket.localPort}/${req.file.path.replace(/\\/g, "/")}` : null;
+        const imageUrl = req.file ? `${req.protocol}://${req.hostname}/${req.file.path.replace(/\\/g, "/")}` : null;
 
         const showreel = await showreelModel.findById(id);
         if (!showreel)
