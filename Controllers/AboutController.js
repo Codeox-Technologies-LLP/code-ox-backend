@@ -1,5 +1,4 @@
 const AboutModel = require('../Model/About');
-const mongoose = require('mongoose');
 
 //POST 
 
