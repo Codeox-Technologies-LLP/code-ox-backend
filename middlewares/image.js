@@ -18,7 +18,6 @@ const updateImage = (req) => {
         if (!req.file) {
             return null; // Return null if req.file is not provided
         }
-
         const { path: imagePath } = req.file;
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
         return baseUrl;
