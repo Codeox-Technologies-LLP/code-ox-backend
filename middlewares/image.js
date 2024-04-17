@@ -1,6 +1,7 @@
-
+const fs = require('fs');
+const path = require('path');
 /// add Image
-function addImage(req ,next) {
+const addImage = (req, next) => {
     try {
         const { path: imagePath } = req.file;
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
@@ -11,12 +12,11 @@ function addImage(req ,next) {
     }
 }
 //  update an image
-function updateImage(req) {
+const updateImage = (req) => {
     try {
         if (!req.file) {
             return null; // Return null if req.file is not provided
         }
-
         const { path: imagePath } = req.file;
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
         return baseUrl;
@@ -26,10 +26,20 @@ function updateImage(req) {
     }
 }
 
+const deleteImage = (response, req) => {
+    if (!response?.image) return;
+    const fileName = path.basename(response.image);
+    const filePath = path.join(__dirname, 'public/images', fileName);
+    const modifiedFilePath = filePath.replace(/\\middlewares/g, '');
+    try {
+        fs.unlinkSync(modifiedFilePath);
+        console.log('File deleted successfully');
+    } catch (err) {
+        console.error('Error deleting file:', err);
+    }
+}
 
 
-module.exports = {
-    addImage,
-    updateImage,
 
-};
+
+module.exports = { addImage, updateImage, deleteImage };

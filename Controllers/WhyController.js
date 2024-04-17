@@ -1,5 +1,5 @@
 const WhychooseModel = require('../Model/Whychoose')
-const { addImage, updateImage } = require('../middlewares/image');
+const { addImage, updateImage, deleteImage } = require('../middlewares/image');
 ///post 
 const addWhychoose = async (req, res) => {
     try {
@@ -65,6 +65,7 @@ const deleteWhychoose = async (req, res) => {
     try {
         const id = req.params.id;
         const response = await WhychooseModel.findOneAndDelete({ _id: id });
+        deleteImage(response, req);
         if (!response) {
             return res.status(404).json({ statusCode: 404, success: false, message: 'Whychoose not found' });
         }
