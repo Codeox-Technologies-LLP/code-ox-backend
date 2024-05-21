@@ -34,7 +34,7 @@ const router = express.Router();
 router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
-router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
+router.post('/case-studies', upload.single('image'), addCaseStudies);
 //contactus
 router.post('/contactus', addQuery);
 router.get('/contactus', authenticate, getQuery);
