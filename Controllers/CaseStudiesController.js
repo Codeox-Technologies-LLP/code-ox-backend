@@ -9,8 +9,10 @@ const addCaseStudies = async (req, res) => {
 
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+
+      
     const newCaseStudy = new caseStudiesModel({
-      image: imageData,
+      image: baseUrl,
       title,
       subtitle,
       caseStudiesDescription,
