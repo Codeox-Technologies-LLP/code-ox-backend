@@ -101,7 +101,7 @@ const updatedShowreel = async (req, res) => {
 
 
 
-// //detle
+////delete
 const deleteShowreel = async (req, res) => {
     try {
         const { id } = req.params;

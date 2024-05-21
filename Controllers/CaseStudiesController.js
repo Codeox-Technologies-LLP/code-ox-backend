@@ -6,16 +6,6 @@ const addCaseStudies = async (req, res) => {
   try {
     const { title, subtitle, caseStudiesDescription, link, category, bg,titleTextColor } = req.body;
 
-    // Validate bg color format
-    if (!bgValidator.isValidColorFormat(bg)) {
-      return res.status(400).json({ message: 'Invalid color format for bg field ', success: false });
-    }
-    //titleTextcolor
-    if (!bgValidator.isValidColorFormat(titleTextColor)) {
-      return res.status(400).json({ message: 'Invalid color format for bg field ', success: false });
-    }
-
-
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
     const newCaseStudy = new caseStudiesModel({
