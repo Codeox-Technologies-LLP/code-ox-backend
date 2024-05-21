@@ -1,6 +1,7 @@
 const caseStudiesModel = require('../Model/caseStudies');
 const mongoose = require('mongoose');
 const bgValidator = require('../middlewares/bg');
+const { addImage, updateImage } = require('../middlewares/image');
 //post
 const addCaseStudies = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ const addCaseStudies = async (req, res) => {
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
     const newCaseStudy = new caseStudiesModel({
-      image: baseUrl,
+      image: imageData,
       title,
       subtitle,
       caseStudiesDescription,
@@ -29,12 +30,16 @@ const addCaseStudies = async (req, res) => {
 const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
-    let caseStudiesData = await caseStudiesModel.find();
+    
+    // Fetch only necessary fields to reduce data transfer
+    let selectFields = 'title description category'; // Customize fields as needed
+    
+    let query = {};
     if (category) {
-      caseStudiesData = caseStudiesData.filter(caseStudy =>
-        caseStudy.category.toLowerCase() === category
-      );
+      query.category = category;
     }
+
+    let caseStudiesData = await caseStudiesModel.find(query).select(selectFields).lean();
 
     if (caseStudiesData.length === 0) {
       return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
@@ -45,6 +50,7 @@ const getCaseStudies = async (req, res, next) => {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
 //update
 const updateCaseStudies = async (req, res) => {
   try {
@@ -54,10 +60,9 @@ const updateCaseStudies = async (req, res) => {
     }
     const { title, subtitle, caseStudiesDescription, link, categories, bg,titleTextColor } = req.body;
     const { category } = req.body;
-    const image = req.file ? req.file.path : undefined; // Check if req.file exists
-    const baseUrl = image ? `${req.protocol}://${req.get('host')}/${image.replace(/\\/g, "/")}` : undefined;
+    const image = updateImage(req)
     const update = {
-      image: baseUrl,
+      image: image,
       category: category,
       title,
       subtitle,

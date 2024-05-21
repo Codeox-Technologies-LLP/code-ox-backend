@@ -1,8 +1,8 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
-const path = require('path')
-const multer = require('multer');
+const {  upload } = require('../middlewares/multer');
+
 
 const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require('../Controllers/FooterController');
 const { addAdmin, adminLogin } = require('../Controllers/AdminController');
@@ -19,21 +19,16 @@ const { addValue, getValue, updateValue, deleteValue } = require('../Controllers
 const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Controllers/FounderController');
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
+const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/images/');
-  },
 
-  filename: function (req, file, cb) {
 
-    cb(null, file.originalname);
-  }
-});
-var upload = multer({ storage: storage })
-// Error handling middleware
+
+
+
+
 
 //caseStudies
 router.get('/case-studies', getCaseStudies);
@@ -115,5 +110,12 @@ router.post('/team', authenticate, upload.single('image'), addTeam)
 router.get('/team', getTeam);
 router.put('/team/:id', authenticate, upload.single('image'), updateTeam);
 router.delete('/team/:id', authenticate, deleteTeam);
+
+//seo
+router.post('/seo', authenticate, addSeo);
+router.get('/seo', authenticate, getSeo);
+router.put('/seo/:id', authenticate, updateSeo);
+router.delete('/seo/:id', authenticate, deleteSeo);
+
 
 module.exports = router

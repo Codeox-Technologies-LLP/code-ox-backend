@@ -1,15 +1,14 @@
 const WhychooseModel = require('../Model/Whychoose')
-
+const { addImage, updateImage, deleteImage } = require('../middlewares/image');
 ///post 
 const addWhychoose = async (req, res) => {
     try {
-        const { path: imagePath } = req.file;
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-            return res.status(400).json({ message: 'Image file is required' });
+        const imageData = addImage(req);
+        if (!imageData) {
+            return res.status(400).json({ message: 'Error adding image' });
         }
         const data = {
-            image: baseUrl,
+            image: imageData,
             description: req.body.description
         };
         const newWhyChooseUs = new WhychooseModel(data);
@@ -34,15 +33,14 @@ const getWhychoose = async (req, res) => {
 const updateWhychoose = async (req, res) => {
     try {
         const id = req.params.id;
-        const imagePath = req.file ? req.file.path : null;
+        const imagePath = updateImage(req);
         let data = {};
         data = {
             ...data,
             description: req.body.description,
         }
         if (imagePath) {
-            const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-            data['image'] = baseUrl;
+            data['image'] = imagePath;
         }
         const filter = { _id: id };
         await WhychooseModel.findOneAndUpdate(
@@ -67,6 +65,7 @@ const deleteWhychoose = async (req, res) => {
     try {
         const id = req.params.id;
         const response = await WhychooseModel.findOneAndDelete({ _id: id });
+        deleteImage(response, req);
         if (!response) {
             return res.status(404).json({ statusCode: 404, success: false, message: 'Whychoose not found' });
         }
