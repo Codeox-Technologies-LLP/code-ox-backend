@@ -41,8 +41,7 @@ const getCaseStudies = async (req, res, next) => {
       query.category = category;
     }
 
-    let caseStudiesData = await caseStudiesModel.find(query).select(selectFields).lean();
-
+    let caseStudiesData = await caseStudiesModel.find(query)
     if (caseStudiesData.length === 0) {
       return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
     }
