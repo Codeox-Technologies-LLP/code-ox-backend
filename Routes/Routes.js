@@ -1,7 +1,7 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
 const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
-const {  upload } = require('../middlewares/multer');
+const { upload } = require('../middlewares/multer');
 
 
 const { addFooterData, getFooterData, updateFooteData, deleteFooter } = require('../Controllers/FooterController');
@@ -67,7 +67,7 @@ router.delete('/showreel/:id', authenticate, deleteShowreel);
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
 router.get('/about', getAbout);
-router.put('/about', authenticate, upload.single('image'), updateAbout);
+router.put('/about/:id', authenticate, upload.single('image'), updateAbout);
 router.delete('/about/:id', authenticate, deleteAbout)
 ///servie
 router.post('/service', authenticate, upload.single('image'), addService)

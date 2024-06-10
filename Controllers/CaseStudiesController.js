@@ -5,12 +5,12 @@ const { addImage, updateImage } = require('../middlewares/image');
 //post
 const addCaseStudies = async (req, res) => {
   try {
-    const { title, subtitle, caseStudiesDescription, link, category, bg,titleTextColor } = req.body;
+    const { title, subtitle, caseStudiesDescription, link, category, bg, titleTextColor } = req.body;
 
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
 
-      
+
     const newCaseStudy = new caseStudiesModel({
       image: baseUrl,
       title,
@@ -25,17 +25,17 @@ const addCaseStudies = async (req, res) => {
     res.status(200).json({ statusCode: 200, message: 'Case study added successfully', success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error', statusCode: 500, success: false });
+    res.status(500).json({ message: error.message, statusCode: 500, success: false });
   }
 };
 //get
 const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
-    
+
     // Fetch only necessary fields to reduce data transfer
     let selectFields = 'title description category'; // Customize fields as needed
-    
+
     let query = {};
     if (category) {
       query.category = category;
@@ -59,7 +59,7 @@ const updateCaseStudies = async (req, res) => {
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
     }
-    const { title, subtitle, caseStudiesDescription, link, categories, bg,titleTextColor } = req.body;
+    const { title, subtitle, caseStudiesDescription, link, categories, bg, titleTextColor } = req.body;
     const { category } = req.body;
     const image = updateImage(req)
     const update = {
@@ -71,7 +71,7 @@ const updateCaseStudies = async (req, res) => {
       link,
       bg,
       titleTextColor
-      
+
     };
 
     const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
@@ -81,7 +81,7 @@ const updateCaseStudies = async (req, res) => {
     );
 
     if (!updatedCaseStudies) {
-      return res.status(404).json({ statusCode: 404, success:false, message: 'Case Studies not found' });
+      return res.status(404).json({ statusCode: 404, success: false, message: 'Case Studies not found' });
     }
 
     res.status(200).json({ statusCode: 200, success: true, message: 'Case studies updated successfully', updatedCaseStudies });
@@ -95,7 +95,7 @@ const deleteCaseStudy = async (req, res) => {
   try {
     const id = req.params.id;
     if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ statusCode: 400, message: 'Invalid Id' ,success:false});
+      return res.status(400).json({ statusCode: 400, message: 'Invalid Id', success: false });
     }
     await caseStudiesModel.findOneAndDelete({ _id: id });
     res.status(200).json({ statusCode: 200, success: true, message: "deleting successful" });
