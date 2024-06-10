@@ -20,6 +20,7 @@ const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Con
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
 const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
+const { addAboutcodeox, getAboutcodeox, updateAboutcodeox, deleteAboutcodeox } = require('../Controllers/AboutCodeoxController')
 
 const router = express.Router();
 
@@ -116,6 +117,13 @@ router.post('/seo', authenticate, addSeo);
 router.get('/seo', authenticate, getSeo);
 router.put('/seo/:id', authenticate, updateSeo);
 router.delete('/seo/:id', authenticate, deleteSeo);
+
+//aboutcodeox
+router.post('/aboutcodeox',  authenticate, upload.single('image'), addAboutcodeox)
+router.get('/aboutcodeox', getAboutcodeox);
+router.put('/aboutcodeox', updateAboutcodeox);
+router.delete('/aboutcodeox', deleteAboutcodeox);
+
 
 
 module.exports = router

@@ -1,3 +1,4 @@
+
 const Seo = require('../Model/Seo');
 
 const addSeo = async (req, res) => {
