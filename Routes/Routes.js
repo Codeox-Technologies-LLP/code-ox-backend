@@ -140,14 +140,14 @@ router.delete('/aboutcodeox/:id', deleteAboutcodeox);
 //odooaboutus
 router.post('/odooaboutus',  authenticate, upload.single('image'), addOdooaboutus)
 router.get('/odooaboutus', getOdooaboutus);
-router.put('/odooaboutus', updateOdooAboutus);
-router.delete('/odooaboutus', deleteOdooaboutus);
+router.put('/odooaboutus/:id', updateOdooAboutus);
+router.delete('/odooaboutus/:id', deleteOdooaboutus);
 
 //odoohero
-router.post('/odoohero', authenticate, upload.single('image'), addOdoohero)
+router.post('/odoohero', authenticate, upload.single('backgroundImage'), addOdoohero)
 router.get('/odoohero', getOdoohero);
-router.put('/odoohero', updateOdooHero);
-router.delete('/odoohero', deleteOdoohero)
+router.put('/odoohero/:id', upload.single('backgroundImage'), updateOdooHero);
+router.delete('/odoohero/:id', deleteOdoohero)
 
 //solution
 router.post('/solution', authenticate, upload.single('image'), addSolution)

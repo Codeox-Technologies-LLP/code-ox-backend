@@ -2,26 +2,19 @@ const mongoose = require ('mongoose');
 const { Schema } = mongoose;
 
 const odooHeroSchema = new Schema({
-    heading1: {
+    backgroundImage: {
         type: String,
         required: true
     },
-    heading2: {
+    title: {
         type: String,
         required: true
     },
-    buttonText:{
-        type:String,
-        required: true
-    },
-    buttonLink: {
-        type: String,
-        required: true
-    },
-    image: {
+    description: {
         type: String,
         required: true
     }
+   
 })
 
 const OdooheroModel = mongoose.model('odooHero', odooHeroSchema);
