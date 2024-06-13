@@ -20,7 +20,15 @@ const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Con
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
 const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
-const { addAboutcodeox, getAboutcodeox, updateAboutcodeox, deleteAboutcodeox } = require('../Controllers/AboutCodeoxController')
+const {
+    addAboutcodeox,
+    getAboutcodeox,
+    updateAboutcodeox,
+    deleteAboutcodeox
+} = require('../Controllers/AboutCodeoxController');
+const { addOdooaboutus, getOdooaboutus, deleteOdooaboutus, updateOdooAboutus } = require('../Controllers/OdooAboutusController');
+const { addOdoohero, getOdoohero, updateOdooHero, deleteOdoohero } = require('../Controllers/OdooHeroController');
+const { addSolution, getSolution, updateSolution, deleteSolution } = require('../Controllers/OdooSolution');
 
 const router = express.Router();
 
@@ -32,10 +40,10 @@ const router = express.Router();
 
 
 //caseStudies
-router.get('/case-studies', getCaseStudies);
-router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
-router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
-router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
+// router.get('/case-studies', getCaseStudies);
+// router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
+// router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
+// router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
 //contactus
 router.post('/contactus', addQuery);
 router.get('/contactus', authenticate, getQuery);
@@ -119,10 +127,29 @@ router.put('/seo/:id', authenticate, updateSeo);
 router.delete('/seo/:id', authenticate, deleteSeo);
 
 //aboutcodeox
-router.post('/aboutcodeox',  authenticate, upload.single('image'), addAboutcodeox)
+router.post('/aboutcodeox', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'cardImage', maxCount: 10 }]), addAboutcodeox);
 router.get('/aboutcodeox', getAboutcodeox);
-router.put('/aboutcodeox', updateAboutcodeox);
-router.delete('/aboutcodeox', deleteAboutcodeox);
+router.put('/aboutcodeox/:id', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'cardImage', maxCount: 10 }]), updateAboutcodeox);
+router.delete('/aboutcodeox/:id', deleteAboutcodeox);
+
+//odooaboutus
+router.post('/odooaboutus',  authenticate, upload.single('image'), addOdooaboutus)
+router.get('/odooaboutus', getOdooaboutus);
+router.put('/odooaboutus', updateOdooAboutus);
+router.delete('/odooaboutus', deleteOdooaboutus);
+
+//odoohero
+router.post('/odoohero', authenticate, upload.single('image'), addOdoohero)
+router.get('/odoohero', getOdoohero);
+router.put('/odoohero', updateOdooHero);
+router.delete('/odoohero', deleteOdoohero)
+
+//solution
+router.post('/solution', authenticate, upload.single('image'), addSolution)
+router.get('/solution', getSolution);
+router.put('/solution', updateSolution);
+router.delete('/solution', deleteSolution);
+
 
 
 
