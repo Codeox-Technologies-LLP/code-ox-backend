@@ -2,9 +2,7 @@ const mongoose = require ('mongoose')
 const { Schema } = mongoose;
 
 const odooCasestudySchema = new  Schema({
-    caseStudy:[
-        {
-            hedingContent: {
+            title: {
                 type: String,
                 required: true
             },
@@ -16,6 +14,8 @@ const odooCasestudySchema = new  Schema({
                 type: String,
                 required: true
             },
-        }
-    ]
-})
+        
+});
+
+const casestudyModel = mongoose.model('odooCaseStudy', odooCasestudySchema);
+module.exports = casestudyModel;

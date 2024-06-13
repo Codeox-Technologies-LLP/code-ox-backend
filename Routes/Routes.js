@@ -29,6 +29,7 @@ const {
 const { addOdooaboutus, getOdooaboutus, deleteOdooaboutus, updateOdooAboutus } = require('../Controllers/OdooAboutusController');
 const { addOdoohero, getOdoohero, updateOdooHero, deleteOdoohero } = require('../Controllers/OdooHeroController');
 const { addSolution, getSolution, updateSolution, deleteSolution } = require('../Controllers/OdooSolution');
+const { addOdooCaseStudy, getOdooCaseStudy, deleteOdooCaseStudy, updateOdooCaseStudy } = require('../Controllers/OdooCaseStudyController');
 
 const router = express.Router();
 
@@ -71,7 +72,11 @@ router.get('/showreel', getShowreel)
 router.put('/showreel/:id', upload.single('image'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 
-///showreel images
+/// Erp Casestudy
+router.post('/odooCasestudy', authenticate, upload.single('image'), addOdooCaseStudy);
+router.get('/odooCasestudy', getOdooCaseStudy)
+router.put('/odooCasestudy/:id', authenticate, upload.single('image'), updateOdooCaseStudy);
+router.delete('/odooCasestudy/:id', authenticate, deleteOdooCaseStudy)
 
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
@@ -147,8 +152,8 @@ router.delete('/odoohero', deleteOdoohero)
 //solution
 router.post('/solution', authenticate, upload.single('image'), addSolution)
 router.get('/solution', getSolution);
-router.put('/solution', updateSolution);
-router.delete('/solution', deleteSolution);
+router.put('/solution/:id',upload.single('image'), updateSolution);
+router.delete('/solution/:id', deleteSolution);
 
 
 
