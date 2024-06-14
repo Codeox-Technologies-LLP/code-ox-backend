@@ -1,6 +1,6 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
-const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy, addHeroCaseStudy, getHeroCaseStudy, getSingleHeroCaseStudy, editHeroCaseStudy } = require('../Controllers/CaseStudiesController');
+const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy, addHeroCaseStudy, getHeroCaseStudy, getSingleHeroCaseStudy, editHeroCaseStudy, deleteSingleHeroCaseStudy } = require('../Controllers/CaseStudiesController');
 const { upload } = require('../middlewares/multer');
 
 
@@ -39,7 +39,9 @@ router.post('/case-studies', authenticate, upload.single('image'), addCaseStudie
 router.post('/case-studies/hero_add',authenticate, upload.single('image'), addHeroCaseStudy);
 router.get('/case-studies/hero_get', getHeroCaseStudy);
 router.get('/case-studies/hero_get/:id', getSingleHeroCaseStudy);
-router.put('/case-studies/hero/:id', editHeroCaseStudy);
+router.put('/case-studies/hero/:id', upload.single('image'), editHeroCaseStudy);
+router.delete('/case-studies/hero/:id', deleteSingleHeroCaseStudy);
+
 
 
 
