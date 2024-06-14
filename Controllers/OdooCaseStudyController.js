@@ -15,7 +15,7 @@ const addOdooCaseStudy = async (req, res) => {
 
 
         const data = {
-            title: req.body.heading,
+            title: req.body.title,
                 description: req.body.description,
                 image: imageData
            
@@ -56,7 +56,7 @@ const updateOdooCaseStudy = async (req, res) => {
       let data = {};
   
       // Update data even if value is the same (avoids empty $set)
-      if (req.body.heading) data['heading'] = req.body.heading;
+      if (req.body.title) data['title'] = req.body.title;
       if (req.body.description) data['description'] = req.body.description;
   
       const image = req.file || (req.files && req.files['image']);
