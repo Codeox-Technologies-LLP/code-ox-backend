@@ -1,10 +1,9 @@
-const { trusted } = require('mongoose');
-const SolutionModel = require('../Model/Solution')
+const WhyChooseUsModel = require('../Model/OdooWhyChooseUs')
 const { addImage, updateImage, deleteImage } = require('../middlewares/image')
 
 //post
 
-const addSolution = async (req, res) => {
+const addwhyChooseUs = async (req, res) => {
     try{
        let imageData = addImage(req);
         if (req.file) {
@@ -22,14 +21,14 @@ const addSolution = async (req, res) => {
                 image: imageData
            
         }; 
-        const newSolution =  new SolutionModel(data);
-        const savedSolution = await newSolution.save();
+        const newWhyChooseUs =  new WhyChooseUsModel(data);
+        const savedWhyChooseUs = await newWhyChooseUs.save();
 
         return res.status(201).json({
             statusCode: 201,
             success: true,
-            message: "Solution added succesfully",
-            data: savedSolution
+            message: "whychoosesUs added succesfully",
+            data: savedWhyChooseUs
         });
     } catch (err) {
         res.status(500).json({
@@ -43,17 +42,17 @@ const addSolution = async (req, res) => {
 
 ///get
 
-const getSolution = async (req,res) => {
+const getWhyChooseUs = async (req,res) => {
     try{
-        const data = await SolutionModel.find({})
-        res.status(200).json({ statusCode: 200, message: 'solution fetched successfully', data: data })
+        const data = await WhyChooseUsModel.find({})
+        res.status(200).json({ statusCode: 200, message: 'whyChooseUs fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
 }
 
 //update
-const updateSolution = async (req, res) => {
+const updateWhyChooseUs = async (req, res) => {
     try {
       const id = req.params.id;
       let data = {};
@@ -67,17 +66,17 @@ const updateSolution = async (req, res) => {
         data['image'] = image.path;
       }
   
-      const response = await SolutionModel.findByIdAndUpdate(
+      const response = await WhyChooseUsModel.findByIdAndUpdate(
         id,
         { $set: data },
         { new: true }
       );
   
       if (!response) {
-        return res.status(404).json({ statusCode: 404, success: false, message: 'solution not found' });
+        return res.status(404).json({ statusCode: 404, success: false, message: 'WhyChooseUs not found' });
       }
   
-      res.status(200).json({ statusCode: 200, success: true, message: 'Solution updated successfully' });
+      res.status(200).json({ statusCode: 200, success: true, message: 'WhyChooseUs updated successfully' });
     } catch (error) {
       console.error(error); // Log error for debugging
       res.status(500).json({ statusCode: 500, success: false, message: error.message });
@@ -87,19 +86,19 @@ const updateSolution = async (req, res) => {
 
 //delete
 
-const deleteSolution = async (req, res) => {
+const deleteWhyChooseUs = async (req, res) => {
     try{
         const id = req.params.id;
-        const response =await SolutionModel.findOneAndDelete({ _id: id });
+        const response =await WhyChooseUsModel.findOneAndDelete({ _id: id });
         deleteImage(response, req);
         if (!response) {
-            return res.status(404).json({ statusCode: 404, success: false, message: 'Solution not found' });
+            return res.status(404).json({ statusCode: 404, success: false, message: 'WhyChooseUs not found' });
         }
-        res.status(200).json({ statusCode: 200, success: true, message: 'Solution deleted succesfully' });
+        res.status(200).json({ statusCode: 200, success: true, message: 'WhyChooseUs deleted succesfully' });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
 }
 
-module.exports = { addSolution, getSolution, updateSolution, deleteSolution }
- 
+
+module.exports = { addwhyChooseUs, getWhyChooseUs,updateWhyChooseUs,deleteWhyChooseUs }
