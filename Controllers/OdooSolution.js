@@ -6,20 +6,18 @@ const { addImage, updateImage, deleteImage } = require('../middlewares/image')
 
 const addSolution = async (req, res) => {
     try{
-       let imageData = addImage(req);
-        if (req.file) {
-           imageData = req.file.path;
-        } else if (req.files && req.files['image']) {
-            imageData =req.files['image'].map(file => file.path)
-        } else {
-            return res.status(400).json({ message: "Error adding image: No file uploaded"});
+        const imagePath = req.file ? req.file.path : null;
+      
+        if (!imagePath) {
+            return res.status(400).json({ message: 'Image file is required' });
         }
+        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
 
 
         const data = {
                 heading: req.body.heading,
                 description: req.body.description,
-                image: imageData
+                image: baseUrl
            
         }; 
         const newSolution =  new SolutionModel(data);
@@ -62,9 +60,10 @@ const updateSolution = async (req, res) => {
       if (req.body.heading) data['heading'] = req.body.heading;
       if (req.body.description) data['description'] = req.body.description;
   
-      const image = req.file || (req.files && req.files['image']);
-      if (image) {
-        data['image'] = image.path;
+      if (req.file) {
+        // Construct the complete file URL with protocol, host, and file path
+        const filePath = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, "/")}`;
+        data['image'] = filePath;
       }
   
       const response = await SolutionModel.findByIdAndUpdate(
