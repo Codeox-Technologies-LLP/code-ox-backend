@@ -1,7 +1,10 @@
 const caseStudiesModel = require('../Model/caseStudies');
+const heroCaseStudy = require('../Model/HeroCaseStudy')
 const mongoose = require('mongoose');
 const bgValidator = require('../middlewares/bg');
 const { addImage, updateImage } = require('../middlewares/image');
+const HeroCaseStudy = require('../Model/HeroCaseStudy');
+
 //post
 const addCaseStudies = async (req, res) => {
   try {
@@ -9,7 +12,6 @@ const addCaseStudies = async (req, res) => {
 
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-
 
     const newCaseStudy = new caseStudiesModel({
       image: baseUrl,
@@ -104,4 +106,88 @@ const deleteCaseStudy = async (req, res) => {
   }
 }
 
-module.exports = { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy }
+
+// post case-study hero
+const addHeroCaseStudy = async (req, res) => {
+  try {
+    const { title, subtitle } = req.body;
+
+    let image;
+    if (req.file) {
+      image = `${process.env.BACKEND_URL}/images/${req.file.originalname}`;
+    } else if (req.body.image) {
+      image = req.body.image;
+    } else {
+      image = 'default_image_url';
+    }
+
+
+    const heroCaseStudy = new HeroCaseStudy({
+      image,
+      title,
+      subtitle,
+    })
+
+    await heroCaseStudy.save();
+    res.status(200).json({ statusCode: 200, message: 'Case study added successfully', success: true });
+  } catch (error) {
+    res.status(500).json({ message: error.message, statusCode: 500, success: false });
+  }
+}
+
+
+//get case study hero
+const getHeroCaseStudy = async (req, res) => {
+  try {
+    const caseStudies = await HeroCaseStudy.find();
+    res.status(200).json(caseStudies);
+  } catch (error) {
+    res.status(500).json({ message: error.message, statusCode: 500, success: false });
+  }
+}
+
+
+//get single case study hero
+const getSingleHeroCaseStudy = async (req, res) => {
+  try {
+    const caseStudies = await HeroCaseStudy.findById(req.params.id);
+    if (caseStudies) {
+      res.status(200).json(caseStudies);
+    } else {
+      res.status(404).json({ message: 'Case study not found', statusCode: 404, success: false });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message, statusCode: 500, success: false });
+  }
+}
+
+//edit case study hero 
+const editHeroCaseStudy = async (req, res) => {
+  try {
+    let newCaseStudy = {
+      title: req.body.title,
+      subtitle: req.body.subtitle
+    };
+
+    if (req.file) {
+      const imageUrl = `${process.env.BACKEND_URL}/images/${req.file.originalname}`;
+      newCaseStudy.image = imageUrl;
+    }
+
+    const caseStudy = await HeroCaseStudy.findByIdAndUpdate(req.params.id, newCaseStudy, {
+      new: true,
+      runValidators: true
+    });
+
+    if (caseStudy) {
+      res.status(200).json({ statusCode: 200, message: 'Case study updated successfully', success: true, caseStudy });
+    } else {
+      res.status(404).json({ message: 'Case study not found', statusCode: 404, success: false });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message, statusCode: 500, success: false });
+  }
+
+}
+
+module.exports = { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy, addHeroCaseStudy, getHeroCaseStudy, getSingleHeroCaseStudy, editHeroCaseStudy }

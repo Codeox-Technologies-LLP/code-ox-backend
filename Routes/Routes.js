@@ -1,6 +1,6 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
-const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
+const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy, addHeroCaseStudy, getHeroCaseStudy, getSingleHeroCaseStudy, editHeroCaseStudy } = require('../Controllers/CaseStudiesController');
 const { upload } = require('../middlewares/multer');
 
 
@@ -36,6 +36,13 @@ router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
 router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
+router.post('/case-studies/hero_add',authenticate, upload.single('image'), addHeroCaseStudy);
+router.get('/case-studies/hero_get', getHeroCaseStudy);
+router.get('/case-studies/hero_get/:id', getSingleHeroCaseStudy);
+router.put('/case-studies/hero/:id', editHeroCaseStudy);
+
+
+
 //contactus
 router.post('/contactus', addQuery);
 router.get('/contactus', authenticate, getQuery);
