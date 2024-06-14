@@ -32,6 +32,8 @@ const { addSolution, getSolution, updateSolution, deleteSolution } = require('..
 const { addOdooCaseStudy, getOdooCaseStudy, deleteOdooCaseStudy, updateOdooCaseStudy } = require('../Controllers/OdooCaseStudyController');
 const { addCustomizationService, getCustomizationService, updateCustomizationService, deleteCustomizationService } = require('../Controllers/CustomizationServiceController');
 const { addAboutOdoo, getAboutOdoo, updateAboutOdoo, deleteAboutodoo } = require('../Controllers/AboutOdoo');
+const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqController');
+const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
 
 const router = express.Router();
 
@@ -78,7 +80,19 @@ router.delete('/showreel/:id', authenticate, deleteShowreel);
 router.post('/odooCasestudy', authenticate, upload.single('image'), addOdooCaseStudy);
 router.get('/odooCasestudy', getOdooCaseStudy)
 router.put('/odooCasestudy/:id', authenticate, upload.single('image'), updateOdooCaseStudy);
-router.delete('/odooCasestudy/:id', authenticate, deleteOdooCaseStudy)
+router.delete('/odooCasestudy/:id', authenticate, deleteOdooCaseStudy);
+
+//Faq
+router.post('/faq', authenticate, addFaq);
+router.get('/faq', getFaq);
+router.put('/faq/:id', authenticate, updateFaq);
+router.delete('/faq/:id', authenticate, deleteFaq);
+
+// whyChooseUs
+router.post('/whyChooseUs', authenticate, upload.single('image'), addwhyChooseUs);
+router.get('/whyChooseUs', getWhyChooseUs);
+router.put('/whyChooseUs/:id', authenticate, upload.single('image'), updateWhyChooseUs);
+router.delete('/whyChooseUs/:id', authenticate, deleteWhyChooseUs)
 
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
