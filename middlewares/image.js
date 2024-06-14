@@ -1,17 +1,22 @@
 const fs = require('fs');
 const path = require('path');
-/// add Image
-const addImage = (req, next) => {
+
+// Add Image function
+const addImage = (req) => {
     try {
+        if (!req.file) {
+            throw new Error('No file uploaded');
+        }
         const { path: imagePath } = req.file;
         const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
         return baseUrl;
     } catch (error) {
         console.error("Error adding image:", error);
-        return null;
+        throw new Error("Error adding image: " + error.message); // Rethrow the error with a more descriptive message
     }
 }
-//  update an image
+
+// Update Image function
 const updateImage = (req) => {
     try {
         if (!req.file) {
@@ -26,20 +31,20 @@ const updateImage = (req) => {
     }
 }
 
-const deleteImage = (response, req) => {
-    if (!response?.image) return;
-    const fileName = path.basename(response.image);
-    const filePath = path.join(__dirname, 'public/images', fileName);
-    const modifiedFilePath = filePath.replace(/\\middlewares/g, '');
+// Delete Image function
+const deleteImage = (response) => {
     try {
-        fs.unlinkSync(modifiedFilePath);
+        if (!response || !response.image) {
+            console.error('No image to delete');
+            return;
+        }
+        
+        const filePath = path.join(__dirname, '..', 'public/images', response.image);
+        fs.unlinkSync(filePath);
         console.log('File deleted successfully');
     } catch (err) {
         console.error('Error deleting file:', err);
     }
 }
-
-
-
 
 module.exports = { addImage, updateImage, deleteImage };

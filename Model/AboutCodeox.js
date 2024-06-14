@@ -4,16 +4,30 @@ const { Schema } = mongoose;
 const aboutCodeoxSchema = new Schema({
     title: {
         type: String,
-        required: true
+       
     },
     image: {
-        type: String,
-        required: true
+        type: [String],
+       
     },
     contentText: {
         type: String,
-        required: true
-    }
+       
+    },
+    cards: [
+        {
+            cardImage: {
+                type:String,
+                
+            },
+            cardDescription:{
+                type:String
+            },
+            cardHeading: {
+                type : String,
+            }
+        }
+    ]
 });
 
 const AboutcodeoxModel = mongoose.model('aboutcodeox', aboutCodeoxSchema);
