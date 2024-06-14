@@ -4,11 +4,11 @@ const { Schema }  = mongoose;
 const faqSchema = new Schema ({
             question: {
                 type: String,
-               
+                required: true
             },
             answer: {
-                type: String,
-               
+                type: String, 
+                required: true
             }
 })
 
