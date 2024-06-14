@@ -30,6 +30,8 @@ const { addOdooaboutus, getOdooaboutus, deleteOdooaboutus, updateOdooAboutus } =
 const { addOdoohero, getOdoohero, updateOdooHero, deleteOdoohero } = require('../Controllers/OdooHeroController');
 const { addSolution, getSolution, updateSolution, deleteSolution } = require('../Controllers/OdooSolution');
 const { addOdooCaseStudy, getOdooCaseStudy, deleteOdooCaseStudy, updateOdooCaseStudy } = require('../Controllers/OdooCaseStudyController');
+const { addCustomizationService, getCustomizationService, updateCustomizationService, deleteCustomizationService } = require('../Controllers/CustomizationServiceController');
+const { addAboutOdoo, getAboutOdoo, updateAboutOdoo, deleteAboutodoo } = require('../Controllers/AboutOdoo');
 const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqController');
 const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
 
@@ -169,7 +171,16 @@ router.get('/solution', getSolution);
 router.put('/solution/:id',upload.single('image'), updateSolution);
 router.delete('/solution/:id', deleteSolution);
 
+//customizationservice
+router.post('/customizationservice', authenticate, addCustomizationService)
+router.get('/customizationservice', getCustomizationService);
+router.put('/customizationservice/:id', updateCustomizationService);
+router.delete('/customizationservice/:id', deleteCustomizationService);
 
-
+//aboutodoo
+router.post('/aboutodoo', authenticate, addAboutOdoo)
+router.get('/aboutodoo', getAboutOdoo);
+router.put('/aboutodoo/:id', updateAboutOdoo);
+router.delete('/aboutodoo/:id', deleteAboutodoo);
 
 module.exports = router
