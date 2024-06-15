@@ -55,43 +55,89 @@ const getCaseStudies = async (req, res, next) => {
 };
 
 //update
+// const updateCaseStudies = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     if (!mongoose.isValidObjectId(id)) {
+//       return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+//     }
+//     const { title, subtitle, caseStudiesDescription, link, categories, bg, titleTextColor } = req.body;
+//     const { category } = req.body;
+//     const image = updateImage(req)
+//     const update = {
+//       image: image,
+//       category: category,
+//       title,
+//       subtitle,
+//       caseStudiesDescription,
+//       link,
+//       bg,
+//       titleTextColor
+
+//     };
+
+//     const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
+//       { _id: id },
+//       update,
+//       { new: true }
+//     );
+
+//     if (!updatedCaseStudies) {
+//       return res.status(404).json({ statusCode: 404, success: false, message: 'Case Studies not found' });
+//     }
+
+//     res.status(200).json({ statusCode: 200, success: true, message: 'Case studies updated successfully', updatedCaseStudies });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+//   }
+// };
+
 const updateCaseStudies = async (req, res) => {
   try {
     const id = req.params.id;
+    
+    // Check for valid ObjectId
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
     }
-    const { title, subtitle, caseStudiesDescription, link, categories, bg, titleTextColor } = req.body;
-    const { category } = req.body;
-    const image = updateImage(req)
-    const update = {
-      image: image,
-      category: category,
-      title,
-      subtitle,
-      caseStudiesDescription,
-      link,
-      bg,
-      titleTextColor
+    
+    const { title, subtitle, caseStudiesDescription, link, bg, titleTextColor, category } = req.body;
 
-    };
+    // Create update object
+    let updateData = { title, subtitle, caseStudiesDescription, link, bg, titleTextColor, category };
 
-    const updatedCaseStudies = await caseStudiesModel.findOneAndUpdate(
-      { _id: id },
-      update,
-      { new: true }
+    // Handle file upload
+    if (req.file) {
+      const image = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g,"/")}`;
+      updateData.image = image;
+    }
+
+    // Update case study
+    const updatedCaseStudies = await caseStudiesModel.findByIdAndUpdate(
+      id,
+      updateData, // Update data
+      {
+        new: true,
+        runValidators: true
+      }
     );
 
+    // Check if case study exists
     if (!updatedCaseStudies) {
       return res.status(404).json({ statusCode: 404, success: false, message: 'Case Studies not found' });
     }
 
+    // Successful update
     res.status(200).json({ statusCode: 200, success: true, message: 'Case studies updated successfully', updatedCaseStudies });
   } catch (error) {
     console.error(error);
     res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
   }
 };
+
+
+
 //delete
 const deleteCaseStudy = async (req, res) => {
   try {
