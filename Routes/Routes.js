@@ -99,10 +99,11 @@ router.put('/faq/:id', authenticate, updateFaq);
 router.delete('/faq/:id', authenticate, deleteFaq);
 
 // whyChooseUs
-router.post('/whyChooseUs', authenticate, upload.single('image'), addwhyChooseUs);
-router.get('/whyChooseUs', getWhyChooseUs);
-router.put('/whyChooseUs/:id', authenticate, upload.single('image'), updateWhyChooseUs);
-router.delete('/whyChooseUs/:id', authenticate, deleteWhyChooseUs)
+// router.post('/whyChooseUs', authenticate, upload.single('image'), addwhyChooseUs);
+// router.get('/whyChooseUs', getWhyChooseUs);
+// router.put('/whyChooseUs/:id', authenticate, upload.single('image'), updateWhyChooseUs);
+// router.delete('/whyChooseUs/:id', authenticate, deleteWhyChooseUs)
+
 
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
