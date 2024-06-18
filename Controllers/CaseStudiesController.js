@@ -9,6 +9,7 @@ const addCaseStudies = async (req, res) => {
 
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
+    
 
 
     const newCaseStudy = new caseStudiesModel({
@@ -33,8 +34,8 @@ const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
 
-    // Fetch only necessary fields to reduce data transfer
-    let selectFields = 'title description category'; // Customize fields as needed
+    
+    let selectFields = 'title description category';
 
     let query = {};
     if (category) {

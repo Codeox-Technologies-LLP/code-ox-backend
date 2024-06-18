@@ -1,35 +1,42 @@
 const homeModel = require('../Model/Home');
+const { updateImage } = require('../middlewares/image');
 
 //post
 const addHome = async (req, res) => {
     try {
-        const { path: imagePath } = req.file; // Extract the path property from req.file
-        const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
-        if (!imagePath) {
-           return res.status(400).json({ message: 'Image file is required' });
+        const id = req.params.id;
+        const imagePath = updateImage(req);
+        let data = {};
+        data = req.body
+        if (imagePath) {
+            data['image'] = imagePath;
         }
-   
-        const data = {
-            image: baseUrl,
-            heading: req.body.heading,
-            subHeading: req.body.subHeading,
-            heading1:req.body.heading1,
-            heading2:req.body.heading2
-        }
-        const newData = await homeModel.findOneAndUpdate({},data, { new: true, upsert: true })
-        res.status(200).json({ statusCode: 200, success: true, message: 'home added successfully' })
+        const filter = { _id: id };
+        await homeModel.findOneAndUpdate(
+            filter,
+            { $set: data },
+            { new: true }
+        );
+        res.status(200).json({
+            statusCode: 200,
+            message: 'Home Hero updated',
+            success: true,
+            data: data
+        });
 
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message })
+        res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
 }
+
+
 
 //get
 const getHome = async (req, res) => {
     try {
         const data = await homeModel.findOne()
-        
-        res.status(200).json({ statusCode: 200, message: 'home  fetched successfully',  data:data })
+
+        res.status(200).json({ statusCode: 200, message: 'home  fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
