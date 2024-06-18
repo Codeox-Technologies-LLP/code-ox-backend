@@ -36,6 +36,7 @@ const { addCustomizationService, getCustomizationService, updateCustomizationSer
 const { addAboutOdoo, getAboutOdoo, updateAboutOdoo, deleteAboutodoo } = require('../Controllers/AboutOdoo');
 const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqController');
 const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
+const { addBusiness, getBusiness, updateBusiness } = require('../Model/Business');
 const router = express.Router();
 
 
@@ -198,5 +199,10 @@ router.post('/aboutodoo', authenticate, addAboutOdoo)
 router.get('/aboutodoo', getAboutOdoo);
 router.put('/aboutodoo/:id', updateAboutOdoo);
 router.delete('/aboutodoo/:id', deleteAboutodoo);
+
+//business count
+router.post('/business-counts', authenticate, addBusiness);
+router.get('/business-counts',getBusiness);
+router.put('/business-counts/:id',updateBusiness);
 
 module.exports = router
