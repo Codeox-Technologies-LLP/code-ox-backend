@@ -19,6 +19,7 @@ const addValue = async (req, res) => {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
     }
 }
+
 //get
 const getValue = async (req, res) => {
     try {

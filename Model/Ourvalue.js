@@ -21,7 +21,7 @@ const valueSchema = new Schema({
             required:true
         }
     }]
-})
+},{ timestamps: true })
 
 const valueModel = mongoose.model('value', valueSchema);
 module.exports = valueModel;
