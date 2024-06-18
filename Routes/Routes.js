@@ -36,6 +36,8 @@ const { addCustomizationService, getCustomizationService, updateCustomizationSer
 const { addAboutOdoo, getAboutOdoo, updateAboutOdoo, deleteAboutodoo } = require('../Controllers/AboutOdoo');
 const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqController');
 const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
+const { addPageContent, getPageContents, updatePageContent, getPageContentByKey } = require('../Controllers/PageContentsController');
+
 const router = express.Router();
 
 
@@ -198,5 +200,11 @@ router.post('/aboutodoo', authenticate, addAboutOdoo)
 router.get('/aboutodoo', getAboutOdoo);
 router.put('/aboutodoo/:id', updateAboutOdoo);
 router.delete('/aboutodoo/:id', deleteAboutodoo);
+
+//pageContent
+router.post('/pagecontent',authenticate,addPageContent);
+router.get('/pagecontent',getPageContents);
+router.put('/pagecontent/:id',authenticate,updatePageContent)
+router.get('/pagecontents',getPageContentByKey)
 
 module.exports = router
