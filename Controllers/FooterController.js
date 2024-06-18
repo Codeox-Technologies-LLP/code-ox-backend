@@ -51,33 +51,43 @@ try {
 //UPDATE FOOTER DATA
 const updateFooteData = async (req, res) => {
   try {
-    const id = req.params.id;
-    
+    const id = req.params.id; 
+
     const data = {
       email: req.body.email,
       address: req.body.address,
       phone: req.body.phone,
-      'socialmedia.$[elem].name': req.body.name,
-      'socialmedia.$[elem].link': req.body.link   
     };
 
-    
-    if (req.file) {
-      // Construct the complete file URL with protocol, host, and file path
-      const filePath = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, "/")}`;
-      data['socialmedia.$[elem].icon'] = filePath;
+    const hasSocialMediaUpdate = req.body.name || req.body.link || (req.file);
+
+    if (hasSocialMediaUpdate) {
+      data['socialmedia.$[elem].name'] = req.body.name;
+      data['socialmedia.$[elem].link'] = req.body.link;
+      if (req.file) {
+        const filePath = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, "/")}`;
+        data['socialmedia.$[elem].icon'] = filePath;
+      } else if (req.body.icon) {
+        data['socialmedia.$[elem].icon'] = req.body.icon; 
+      }
     }
+
     const response = await footerModel.findOneAndUpdate(
-      {},
+      {}, // Update all documents (consider filtering if needed)
       { $set: data },
-      { arrayFilters: [{ 'elem._id': id }], new: true }
+      hasSocialMediaUpdate ? { arrayFilters: [{ 'elem._id': id }], new: true } : { new: true } 
     );
 
-    res.status(200).json({ statusCode: 200, success: true, message: "Updated successfull" });
+    if (!response) {
+      return res.status(404).json({ statusCode: 404, success: false, message: "Document not found" });
+    }
+
+    res.status(200).json({ statusCode: 200, success: true, message: "Updated successfully", data: response });
   } catch (error) {
     res.status(500).json({ statusCode: 500, success: false, message: error.message });
   }
 };
+
 
 
 
