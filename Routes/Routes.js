@@ -1,6 +1,6 @@
 const express = require('express');
 const { addQuery, getQuery, getCountry } = require('../Controllers/ContactUsControllers')
-const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy } = require('../Controllers/CaseStudiesController');
+const { addCaseStudies, getCaseStudies, updateCaseStudies, deleteCaseStudy, addHeroCaseStudy, getHeroCaseStudy, getSingleHeroCaseStudy, editHeroCaseStudy, deleteSingleHeroCaseStudy } = require('../Controllers/CaseStudiesController');
 const { upload } = require('../middlewares/multer');
 
 
@@ -22,7 +22,20 @@ const { addHome, getHome, deleteHome } = require('../Controllers/HomeController'
 const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
 const { addAboutcodeox, getAboutcodeox, updateAboutcodeox, deleteAboutcodeox } = require('../Controllers/AboutCodeoxController');
 const { updateAboutHero, getAboutHero } = require('../Controllers/AboutHero');
-
+const {
+    addAboutcodeox,
+    getAboutcodeox,
+    updateAboutcodeox,
+    deleteAboutcodeox
+} = require('../Controllers/AboutCodeoxController');
+const { addOdooaboutus, getOdooaboutus, deleteOdooaboutus, updateOdooAboutus } = require('../Controllers/OdooAboutusController');
+const { addOdoohero, getOdoohero, updateOdooHero, deleteOdoohero } = require('../Controllers/OdooHeroController');
+const { addSolution, getSolution, updateSolution, deleteSolution } = require('../Controllers/OdooSolution');
+const { addOdooCaseStudy, getOdooCaseStudy, deleteOdooCaseStudy, updateOdooCaseStudy } = require('../Controllers/OdooCaseStudyController');
+const { addCustomizationService, getCustomizationService, updateCustomizationService, deleteCustomizationService } = require('../Controllers/CustomizationServiceController');
+const { addAboutOdoo, getAboutOdoo, updateAboutOdoo, deleteAboutodoo } = require('../Controllers/AboutOdoo');
+const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqController');
+const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
 const router = express.Router();
 
 
@@ -37,6 +50,13 @@ router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
 router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
+router.post('/case-studies/hero_add',authenticate, upload.single('image'), addHeroCaseStudy);
+router.get('/case-studies/hero_get', getHeroCaseStudy);
+router.get('/case-studies/hero_get/:id', getSingleHeroCaseStudy);
+router.put('/case-studies/hero/:id', upload.single('image'), editHeroCaseStudy);
+router.delete('/case-studies/hero/:id', deleteSingleHeroCaseStudy);
+
+
 //contactus
 router.post('/contactus', addQuery);
 router.get('/contactus', authenticate, getQuery);
@@ -64,7 +84,23 @@ router.get('/showreel', getShowreel)
 router.put('/showreel/:id', upload.single('image'), updatedShowreel);
 router.delete('/showreel/:id', authenticate, deleteShowreel);
 
-///showreel images
+/// Erp Casestudy
+router.post('/odooCasestudy', authenticate, upload.single('image'), addOdooCaseStudy);
+router.get('/odooCasestudy', getOdooCaseStudy)
+router.put('/odooCasestudy/:id', authenticate, upload.single('image'), updateOdooCaseStudy);
+router.delete('/odooCasestudy/:id', authenticate, deleteOdooCaseStudy);
+
+//Faq
+router.post('/faq', authenticate, addFaq);
+router.get('/faq', getFaq);
+router.put('/faq/:id', authenticate, updateFaq);
+router.delete('/faq/:id', authenticate, deleteFaq);
+
+// whyChooseUs
+router.post('/whyChooseUs', authenticate, upload.single('image'), addwhyChooseUs);
+router.get('/whyChooseUs', getWhyChooseUs);
+router.put('/whyChooseUs/:id', authenticate, upload.single('image'), updateWhyChooseUs);
+router.delete('/whyChooseUs/:id', authenticate, deleteWhyChooseUs)
 
 //about
 router.post('/about', authenticate, upload.single('image'), addAbout);
@@ -120,7 +156,7 @@ router.put('/seo/:id', authenticate, updateSeo);
 router.delete('/seo/:id', authenticate, deleteSeo);
 
 //aboutcodeox
-router.post('/aboutcodeox',  authenticate, upload.single('image'), addAboutcodeox)
+router.post('/aboutcodeox', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'cardImage', maxCount: 10 }]), addAboutcodeox);
 router.get('/aboutcodeox', getAboutcodeox);
 router.put('/aboutcodeox', updateAboutcodeox);
 router.delete('/aboutcodeox', deleteAboutcodeox);
@@ -130,5 +166,37 @@ router.put('/about-hero/:id', upload.single('image'), updateAboutHero)
 router.get('/about-hero', getAboutHero)
 
 
+router.put('/aboutcodeox/:id', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'cardImage', maxCount: 10 }]), updateAboutcodeox);
+router.delete('/aboutcodeox/:id', deleteAboutcodeox);
+
+//odooaboutus
+router.post('/odooaboutus',  authenticate, upload.single('image'), addOdooaboutus)
+router.get('/odooaboutus', getOdooaboutus);
+router.put('/odooaboutus/:id', updateOdooAboutus);
+router.delete('/odooaboutus/:id', deleteOdooaboutus);
+
+//odoohero
+router.post('/odoohero', authenticate, upload.single('backgroundImage'), addOdoohero)
+router.get('/odoohero', getOdoohero);
+router.put('/odoohero/:id', upload.single('backgroundImage'), updateOdooHero);
+router.delete('/odoohero/:id', deleteOdoohero)
+
+//solution
+router.post('/solution', authenticate, upload.single('image'), addSolution)
+router.get('/solution', getSolution);
+router.put('/solution/:id',upload.single('image'), updateSolution);
+router.delete('/solution/:id', deleteSolution);
+
+//customizationservice
+router.post('/customizationservice', authenticate, addCustomizationService)
+router.get('/customizationservice', getCustomizationService);
+router.put('/customizationservice/:id', updateCustomizationService);
+router.delete('/customizationservice/:id', deleteCustomizationService);
+
+//aboutodoo
+router.post('/aboutodoo', authenticate, addAboutOdoo)
+router.get('/aboutodoo', getAboutOdoo);
+router.put('/aboutodoo/:id', updateAboutOdoo);
+router.delete('/aboutodoo/:id', deleteAboutodoo);
 
 module.exports = router
