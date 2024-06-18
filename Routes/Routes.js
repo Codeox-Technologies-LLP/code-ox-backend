@@ -20,6 +20,8 @@ const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Con
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
 const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
+// const { addAboutcodeox, getAboutcodeox, updateAboutcodeox, deleteAboutcodeox } = require('../Controllers/AboutCodeoxController');
+const { updateAboutHero, getAboutHero } = require('../Controllers/AboutHero');
 const {
     addAboutcodeox,
     getAboutcodeox,
@@ -75,7 +77,7 @@ router.delete('/erp-projects/:id', authenticate, deleteProjects);
 router.post('/create-admin', addAdmin);
 router.post('/admin-login', adminLogin);
 ///home
-router.put('/home', upload.single('image'), addHome)
+router.put('/home/:id', upload.single('image'), addHome)
 router.get('/home', getHome)
 router.delete('/home/:id', deleteHome);
 //showreel
@@ -158,6 +160,14 @@ router.delete('/seo/:id', authenticate, deleteSeo);
 //aboutcodeox
 router.post('/aboutcodeox', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'cardImage', maxCount: 10 }]), addAboutcodeox);
 router.get('/aboutcodeox', getAboutcodeox);
+router.put('/aboutcodeox', updateAboutcodeox);
+router.delete('/aboutcodeox', deleteAboutcodeox);
+
+//aboutus Hero
+router.put('/about-hero/:id', upload.single('image'), updateAboutHero)
+router.get('/about-hero', getAboutHero)
+
+
 router.put('/aboutcodeox/:id', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'cardImage', maxCount: 10 }]), updateAboutcodeox);
 router.delete('/aboutcodeox/:id', deleteAboutcodeox);
 

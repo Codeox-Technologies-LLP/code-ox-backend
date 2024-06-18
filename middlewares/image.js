@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+
 // Add Image function
-const addImage = (req) => {
+const addImage = (req, next) => {
     try {
         if (!req.file) {
             throw new Error('No file uploaded');
