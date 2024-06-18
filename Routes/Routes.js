@@ -20,7 +20,7 @@ const { addFounder, getFounder, updateFounder, deleteFounder } = require('../Con
 const { addTeam, getTeam, updateTeam, deleteTeam } = require('../Controllers/TeamController');
 const { addHome, getHome, deleteHome } = require('../Controllers/HomeController');
 const { addSeo, getSeo, updateSeo, deleteSeo } = require('../Controllers/SeoController');
-const { addAboutcodeox, getAboutcodeox, updateAboutcodeox, deleteAboutcodeox } = require('../Controllers/AboutCodeoxController');
+// const { addAboutcodeox, getAboutcodeox, updateAboutcodeox, deleteAboutcodeox } = require('../Controllers/AboutCodeoxController');
 const { updateAboutHero, getAboutHero } = require('../Controllers/AboutHero');
 const {
     addAboutcodeox,
