@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+/// add Image
+const addImage = (req, next) => {
 // Add Image function
 const addImage = (req) => {
     try {
