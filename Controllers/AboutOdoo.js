@@ -1,4 +1,5 @@
 const AboutodooModel = require('../Model/AboutOdoo')
+const mongoose = require('mongoose');
 
 
 //POST
@@ -150,25 +151,46 @@ const updateAboutOdoo = async (req, res) => {
 };
   
   
-  
 
 //DELETE
 
 const deleteAboutodoo = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const response = await AboutodooModel.findByIdAndDelete(id);
+  try {
+    const id = req.params.id;
+    const elemid = req.query.elemid;
+   
+    // Adjust for Mongoose version
+   
+    const data = await AboutodooModel.findOne({_id:id})
+   
+    let lists = data?.list 
+    const index = lists?.findIndex(item => item._id.toString() === elemid);
+        
+    console.log("mongoose ID:",index );
+    if (index !== -1) {
+      lists?.splice(index, 1);
+       const response = await AboutodooModel.findByIdAndUpdate(
+        id,
+        {   list:lists}
+      );
+      
+      
+  } else {
+      console.log(`Object with id ${elemid} not found.`);
+  }
+   
 
-        if (!response) {
-            return res.status(404).json({ statusCode: 404, success: false, message: 'AboutOdoo not found' });
-        }
+    // if (!response) {
+    //   return res.status(404).json({ statusCode: 404, success: false, message: 'AboutOdoo not found' });
+    // }
 
-        res.status(200).json({ statusCode: 200, success: true, message: 'AboutOdoo deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: error.message });
-    }
-
+    res.status(200).json({ statusCode: 200, success: true, message: 'AboutOdoo list item deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, success: false, message: error.message });
+  }
 };
+
+
 
 module.exports = { addAboutOdoo, getAboutOdoo, updateAboutOdoo, deleteAboutodoo }
 
