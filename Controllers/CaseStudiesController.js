@@ -8,7 +8,7 @@ const HeroCaseStudy = require('../Model/HeroCaseStudy');
 //post
 const addCaseStudies = async (req, res) => {
   try {
-    const { title, subtitle, caseStudiesDescription, link, category, bg, titleTextColor } = req.body;
+    const { title, subtitle, caseStudiesDescription, link, category, bg, titleTextColor, country } = req.body;
 
     const { path: imagePath } = req.file;
     const baseUrl = `${req.protocol}://${req.get('host')}/${imagePath.replace(/\\/g, "/")}`;
@@ -22,7 +22,8 @@ const addCaseStudies = async (req, res) => {
       link,
       category,
       bg,
-      titleTextColor
+      titleTextColor,
+      country
     });
     await newCaseStudy.save();
     res.status(200).json({ statusCode: 200, message: 'Case study added successfully', success: true });
@@ -31,10 +32,13 @@ const addCaseStudies = async (req, res) => {
     res.status(500).json({ message: error.message, statusCode: 500, success: false });
   }
 };
+
 //get
 const getCaseStudies = async (req, res, next) => {
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
+    const country = req.query.country ? req.query.country.toLowerCase() : null;
+
 
     
     let selectFields = 'title description category';
@@ -44,7 +48,15 @@ const getCaseStudies = async (req, res, next) => {
       query.category = category;
     }
 
-    let caseStudiesData = await caseStudiesModel.find(query)
+    if (country) {
+      query.country = { $regex: new RegExp(`^${country}$`, 'i') }; // Case-insensitive exact match
+    }
+
+    console.log('Query:', query); // Debugging line
+
+    let caseStudiesData = await caseStudiesModel.find(query,'title description category country');
+    console.log('Case Studies Data:', caseStudiesData); // Debugging line
+
     if (caseStudiesData.length === 0) {
       return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
     }
@@ -54,6 +66,8 @@ const getCaseStudies = async (req, res, next) => {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
+
 
 //update
 // const updateCaseStudies = async (req, res) => {
@@ -103,10 +117,10 @@ const updateCaseStudies = async (req, res) => {
       return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
     }
     
-    const { title, subtitle, caseStudiesDescription, link, bg, titleTextColor, category } = req.body;
+    const { title, subtitle, caseStudiesDescription, link, bg, titleTextColor, category, country } = req.body;
 
     // Create update object
-    let updateData = { title, subtitle, caseStudiesDescription, link, bg, titleTextColor, category };
+    let updateData = { title, subtitle, caseStudiesDescription, link, bg, titleTextColor, category, country };
 
     // Handle file upload
     if (req.file) {
