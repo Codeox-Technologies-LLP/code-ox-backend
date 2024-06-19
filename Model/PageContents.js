@@ -12,6 +12,9 @@ const pageContentsSchema = new Schema({
     key : {
         type:String,
         required:true,
+    },
+    heading1:{
+        type:String,
     }
     
 },{

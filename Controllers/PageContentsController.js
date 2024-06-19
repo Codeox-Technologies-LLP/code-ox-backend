@@ -48,6 +48,7 @@ const updatePageContent = async (req,res) => {
         res.status(500).json({ statusCode:500,success:false,message:error.message});
     }
 }
+
 const getPageContentByKey = async (req, res) => {
     try {
         const { key } = req.query; 
