@@ -26,7 +26,7 @@ const addCaseStudies = async (req, res) => {
       country
     });
     await newCaseStudy.save();
-    res.status(200).json({ statusCode: 200, message: 'Case study added successfully', success: true });
+    res.status(200).json({ statusCode: 200, message: 'Case study added successfully', success: true , newCaseStudy});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message, statusCode: 500, success: false });
@@ -35,6 +35,7 @@ const addCaseStudies = async (req, res) => {
 
 //get
 const getCaseStudies = async (req, res, next) => {
+
   try {
     const category = req.query.category ? req.query.category.toLowerCase() : null;
     const country = req.query.country ? req.query.country.toLowerCase() : null;
@@ -49,23 +50,25 @@ const getCaseStudies = async (req, res, next) => {
     }
 
     if (country) {
-      query.country = { $regex: new RegExp(`^${country}$`, 'i') }; // Case-insensitive exact match
+      query.country = { $regex: new RegExp(`^${country}$`, 'i') }; 
     }
 
-    console.log('Query:', query); // Debugging line
+    console.log('Query:', query); 
 
-    let caseStudiesData = await caseStudiesModel.find(query,'title description category country');
+    let caseStudiesData = await caseStudiesModel.find(query);
     console.log('Case Studies Data:', caseStudiesData); // Debugging line
 
     if (caseStudiesData.length === 0) {
       return res.status(404).json({ statusCode: 404, success: false, message: 'No case studies found for the provided category.' });
     }
-
+    // caseStudiesData = await caseStudiesModel.find() 
     return res.status(200).json({ statusCode: 200, success: true,count: caseStudiesData.length, caseStudies: caseStudiesData });
   } catch (err) {
     return res.status(500).json({ statusCode: 500, success: false, message: err.message });
   }
 };
+
+
 
 
 
