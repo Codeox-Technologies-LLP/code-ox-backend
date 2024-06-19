@@ -66,88 +66,88 @@ const getAboutOdoo = async (req,res) => {
 //update
 
 const updateAboutOdoo = async (req, res) => {
-    try {
-      console.log("Step 1: Extracted data:");
-      console.log("  id:", req.params.id);
-      console.log("  description:", req.body.description);
-      console.log("  title:", req.body.title);
-  
-      // 2. Validation (optional)
-      if (!req.params.id) {
-        return res.status(400).json({
-          statusCode: 400,
-          success: false,
-          message: "Missing required field (ID)",
-        });
-      } else {
-        console.log("Step 2: Validation passed (ID provided)");
-      }
-  
-      // 3. Validate for mutually exclusive updates (optional)
-      if (req.body.description && req.body.title) {
-        return res.status(400).json({
-          statusCode: 400,
-          success: false,
-          message: "Cannot update both title and description in the same request",
-        });
-      } else {
-        console.log("Step 3: Validation passed (mutually exclusive updates)");
-      }
-  
-      // 4. Update logic (using $set within conditional operator)
-      const updateData = {};
-      if (req.body.title) {
-        updateData['title'] = req.body.title;
-        console.log("Step 4: Update logic - update title");
-      } else if (req.body.description) {
-        updateData['list.$[elem].description'] = req.body.description;
-        console.log("Step 4: Update logic - update description");
-      }
-  
-      // Handle empty update scenario
-      if (Object.keys(updateData).length === 0) {
-        return res.status(200).json({
-          statusCode: 200,
-          success: true,
-          message: "No changes requested for AboutOdoo",
-        });
-      }
-  
-      const updatedAboutOdoo = await AboutodooModel.findByIdAndUpdate(
-        req.params.id,
-        { $set: updateData },
-        {
-          arrayFilters: req.params.id ? [{ 'elem._id': req.params.id }] : [], // Optional filter if updating description
-          new: true,
-          runValidators: true, // Ensure validators are run on update (optional)
-        }
-      );
-  
-      // 5. Handle update success/failure
-      if (!updatedAboutOdoo) {
-        return res.status(404).json({
-          statusCode: 404,
-          success: false,
-          message: "AboutOdoo or description not found",
-        });
-      } else {
-        console.log("Step 5: Update successful");
-        res.status(200).json({
-          statusCode: 200,
-          success: true,
-          message: "AboutOdoo updated successfully",
-          data: updatedAboutOdoo,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        statusCode: 500,
+  try {
+    console.log("Step 1: Extracted data:");
+    console.log("  id:", req.params.id);
+    console.log("  description:", req.body.description);
+    console.log("  title:", req.body.title);
+    console.log("  index:", req.body.index); // Get the index from the request body
+
+    // 2. Validation (optional)
+    if (!req.params.id) {
+      return res.status(400).json({
+        statusCode: 400,
         success: false,
-        message: "Error updating AboutOdoo description",
+        message: "Missing required field (ID)",
+      });
+    } else {
+      console.log("Step 2: Validation passed (ID provided)");
+    }
+
+    // 3. Validate for mutually exclusive updates (optional)
+    if (req.body.description && req.body.title) {
+      return res.status(400).json({
+        statusCode: 400,
+        success: false,
+        message: "Cannot update both title and description in the same request",
+      });
+    } else {
+      console.log("Step 3: Validation passed (mutually exclusive updates)");
+    }
+
+    // 4. Update logic
+    const updateData = {};
+    if (req.body.title) {
+      updateData['title'] = req.body.title;
+      console.log("Step 4: Update logic - update title");
+    } else if (req.body.description && req.body.index !== undefined) {
+      updateData[`list.${req.body.index}.description`] = req.body.description;
+      console.log("Step 4: Update logic - update description");
+    }
+
+    // Handle empty update scenario
+    if (Object.keys(updateData).length === 0) {
+      return res.status(200).json({
+        statusCode: 200,
+        success: true,
+        message: "No changes requested for AboutOdoo",
       });
     }
-  };
+
+    const updatedAboutOdoo = await AboutodooModel.findByIdAndUpdate(
+      req.params.id,
+      { $set: updateData },
+      {
+        new: true,
+        runValidators: true, // Ensure validators are run on update (optional)
+      }
+    );
+
+    // 5. Handle update success/failure
+    if (!updatedAboutOdoo) {
+      return res.status(404).json({
+        statusCode: 404,
+        success: false,
+        message: "AboutOdoo or description not found",
+      });
+    } else {
+      console.log("Step 5: Update successful");
+      res.status(200).json({
+        statusCode: 200,
+        success: true,
+        message: "AboutOdoo updated successfully",
+        data: updatedAboutOdoo,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "Error updating AboutOdoo description",
+    });
+  }
+};
   
   
   
