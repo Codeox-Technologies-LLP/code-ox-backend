@@ -26,10 +26,12 @@ const getPageContents = async (req,res) => {
 const updatePageContent = async (req,res) => {
     try {
         const { id } = req.params;
-        const { heading,description,key} = req.body;
+        const { heading, heading1, description,key} = req.body;
         const data = {};
 
         if(heading) data.heading = heading.trim();
+        if(heading1) data.heading1 = heading1.trim();
+
         if(description) data.description = description.trim();
         if(key) data.key = key.trim();
 
