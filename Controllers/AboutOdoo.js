@@ -74,6 +74,8 @@ const updateAboutOdoo = async (req, res) => {
     console.log("  title:", req.body.title);
     console.log("  index:", req.body.index); // Get the index from the request body
 
+    const id = req.params.id
+
     // 2. Validation (optional)
     if (!req.params.id) {
       return res.status(400).json({
@@ -116,7 +118,7 @@ const updateAboutOdoo = async (req, res) => {
     }
 
     const updatedAboutOdoo = await AboutodooModel.findByIdAndUpdate(
-      req.params.id,
+      id,
       { $set: updateData },
       {
         new: true,
