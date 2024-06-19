@@ -33,7 +33,7 @@ const addOdoohero = async (req, res) => {
 /// get
 const getOdoohero = async (req, res) => {
     try {
-        const data = await OdooheroModel.find({})
+        const data = await OdooheroModel.findOne({})
         res.status(200).json({ statusCode: 200, message: 'Hero fetched successfully', data: data })
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message })
