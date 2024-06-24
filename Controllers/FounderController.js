@@ -29,12 +29,31 @@ const getFounder = async (req, res) => {
     }
 }
 //update
+// const updateFounder = async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         const image = updateImage(req)
+//         const data = {
+//             image: image,
+//             name: req.body.name,
+//             role: req.body.role
+//         };
+//         const response = await founderModel.findByIdAndUpdate(id, data, { new: true });
+//         if (!response) {
+//             return res.status(404).json({ statusCode: 404, success: false, message: "No founder found with the provided ID" });
+//         }
+//         res.status(200).json({ statusCode: 200, sucess: true, message: 'Founder updated successfully', success: true, data: response });
+//     } catch (error) {
+//         res.status(500).json({ statusCode: 500, success: false, message: error.message });
+//     }
+// };
 const updateFounder = async (req, res) => {
     try {
         const id = req.params.id;
-        const image = updateImage(req)
+        const baseUrl = `${req.protocol}://${req.get('host')}/`;
+        const imagePath = req.file ? req.file.path.replace(/\\/g, "/") : '';
         const data = {
-            image: image,
+            image: req.file ? baseUrl + imagePath : undefined,
             name: req.body.name,
             role: req.body.role
         };
@@ -42,7 +61,7 @@ const updateFounder = async (req, res) => {
         if (!response) {
             return res.status(404).json({ statusCode: 404, success: false, message: "No founder found with the provided ID" });
         }
-        res.status(200).json({ statusCode: 200, sucess: true, message: 'Founder updated successfully', success: true, data: response });
+        res.status(200).json({ statusCode: 200, success: true, message: 'team updated successfully', data: response });
     } catch (error) {
         res.status(500).json({ statusCode: 500, success: false, message: error.message });
     }
