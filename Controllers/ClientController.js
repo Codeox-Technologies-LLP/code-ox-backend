@@ -43,32 +43,72 @@ const getClient = async (req, res, next) => {
     }
 };
 //update
+// const updateClient = async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         if (!mongoose.isValidObjectId(id)) {
+//             return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+//         }
+//         const { category } = req.body;
+//         const image = updateImage(req)
+//         const update = {
+//             image: image,
+//             category: category,
+//         };
+//         const updatedClient = await clientModel.findOneAndUpdate(
+//             { _id: id },
+//             update,
+//             { new: true }
+//         );
+//         if (!updatedClient) {
+//             return res.status(404).json({ statusCode: 404, message: 'Client not found' });
+//         }
+//         res.status(200).json({ statusCode: 200, success: true, message: 'client updated successfully', updatedClient });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+//     }
+// };
+
 const updateClient = async (req, res) => {
     try {
         const id = req.params.id;
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
         }
+
         const { category } = req.body;
-        const image = updateImage(req)
-        const update = {
-            image: image,
-            category: category,
-        };
+        let update = {};
+
+        const image = updateImage(req);
+        if (image) {
+            update.image = image;
+        }
+        if (category) {
+            update.category = category;
+        }
+
+        if (Object.keys(update).length === 0) {
+            return res.status(400).json({ statusCode: 400, message: 'No data to update' });
+        }
+
         const updatedClient = await clientModel.findOneAndUpdate(
             { _id: id },
             update,
             { new: true }
         );
+
         if (!updatedClient) {
             return res.status(404).json({ statusCode: 404, message: 'Client not found' });
         }
-        res.status(200).json({ statusCode: 200, success: true, message: 'client updated successfully', updatedClient });
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Client updated successfully', updatedClient });
     } catch (error) {
         console.error(error);
         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
     }
 };
+
 ///delete
 const deleteClient = async (req, res) => {
     try {
