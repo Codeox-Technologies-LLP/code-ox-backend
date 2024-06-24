@@ -51,6 +51,39 @@ const addQuery = async (req, res) => {
   }
 };
 
+//get Query
+// const getQuery = async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = parseInt(req.query.limit) || 10;
+//     const skip = (page - 1) * limit;
+
+//     const data = await querymodel.find().skip(skip).limit(limit);
+//     const totalCount = await querymodel.countDocuments();
+//     const totalPages = Math.ceil(totalCount / limit);
+//     res.status(200).json({
+//       statusCode: 200,
+//       success: true,
+//       message: "Query listing successfull",
+//       data,
+//       metaData: {
+//         totalpages: totalCount,
+//         totalPages,
+//         currentpage: page,
+//       },
+//     });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({
+//         statusCode: 500,
+//         success: false,
+//         error: "Internal server error",
+//         message: "Query listing failed",
+//       });
+//   }
+// };
+
 const getQuery = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -60,28 +93,28 @@ const getQuery = async (req, res) => {
     const data = await querymodel.find().skip(skip).limit(limit);
     const totalCount = await querymodel.countDocuments();
     const totalPages = Math.ceil(totalCount / limit);
+ 
     res.status(200).json({
       statusCode: 200,
       success: true,
-      message: "Query listing successfull",
+      message: "Query listing successful",
       data,
-      metaData: {
-        totalpages: totalCount,
-        totalPages,
-        currentpage: page,
+      Pagination: {
+        totalItems: totalCount,
+        totalPages: totalPages,
+        currentPage: page,
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        statusCode: 500,
-        success: false,
-        error: "Internal server error",
-        message: "Query listing failed",
-      });
+    res.status(500).json({
+      statusCode: 500,
+      success: false,
+      error: "Internal server error",
+      message: "Query listing failed",
+    });
   }
 };
+
 
 
 
