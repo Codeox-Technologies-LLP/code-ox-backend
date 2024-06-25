@@ -24,24 +24,99 @@ const addclient = async (req, res) => {
 };
 
 //get
-const getClient = async (req, res, next) => {
+// const getClient = async (req, res, next) => {
+//     try {
+//         const category = req.query.category ? req.query.category.toLowerCase() : null;
+//         let clients;
+//         if (category && category !== 'all') {
+//             clients = await clientModel.find({ category: category });
+//         } else {
+//             // Otherwise, fetch all clients
+//             clients = await clientModel.find({});
+//         }
+//         if (clients.length === 0) {
+//             return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found.' });
+//         }
+//         return res.status(200).json({ statusCode: 200, success: true, clients: clients });
+//     } catch (err) {
+//         return res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+//     }
+// };
+
+const getClient =  async (req, res) => {
     try {
-        const category = req.query.category ? req.query.category.toLowerCase() : null;
-        let clients;
-        if (category && category !== 'all') {
-            clients = await clientModel.find({ category: category });
+        const {category, q, id, status, page = 1, limit = 10 } = req.query;
+        let query = {};
+
+        if (category) {
+            query.category = category;
+        }
+        if (q) {
+            query.$or = [
+                { category: { $regex: q, $options: 'i' } },
+                // { heading: { $regex: q, $options: 'i' } },
+            ];
+        }
+        if (status) {
+            query.status = status;
+        }
+
+        const totalCount = await clientModel.countDocuments(query);
+        const totalPages = Math.ceil(totalCount / limit);
+        const skip = (page - 1) * limit;
+
+        let data;
+        if (id) {
+            data = await clientModel.findOne({ ...query, _id: id });
+            if (!data) {
+                return res.status(404).json({
+                    statusCode: 404,
+                    status: false,
+                    message: "No course found with the provided ID",
+                });
+            }
         } else {
-            // Otherwise, fetch all clients
-            clients = await clientModel.find({});
+            data = await clientModel.find(query)
+                .skip(skip)
+                .limit(limit);
         }
-        if (clients.length === 0) {
-            return res.status(404).json({ statusCode: 404, success: false, message: 'No clients found.' });
+
+        if (data.length === 0) {
+            return res.status(404).json({
+                statusCode: 404,
+                status: false,
+                message: "No courses found matching the criteria",
+            });
         }
-        return res.status(200).json({ statusCode: 200, success: true, clients: clients });
-    } catch (err) {
-        return res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+
+        const paginationInfo = {
+            currentPage: parseInt(page),
+            nextPage: page < totalPages ? parseInt(page) + 1 : null,
+            prevPage: page > 1 ? parseInt(page) - 1 : null,
+            totalPages,
+            totalCount,
+        };
+
+        res.status(200).json({
+            statusCode: 200,
+            status: true,
+            message: "Courses fetched successfully",
+            data,
+            pagination: paginationInfo,
+        });
+    } catch (error) {
+        console.error('Error fetching courses:', error);
+        res.status(500).json({
+            statusCode: 500,
+            status: false,
+            message: "Fetching courses failed",
+            error: error.message,
+        });
     }
-};
+}
+
+
+
 //update
 // const updateClient = async (req, res) => {
 //     try {
@@ -70,45 +145,78 @@ const getClient = async (req, res, next) => {
 //     }
 // };
 
+
+//working code
+// const updateClient = async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         if (!mongoose.isValidObjectId(id)) {
+//             return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+//         }
+
+//         const { category } = req.body;
+//         let update = {};
+
+//         const image = updateImage(req);
+//         if (image) {
+//             update.image = image;
+//         }
+//         if (category) {
+//             update.category = category;
+//         }
+
+//         if (Object.keys(update).length === 0) {
+//             return res.status(400).json({ statusCode: 400, message: 'No data to update' });
+//         }
+
+//         const updatedClient = await clientModel.findOneAndUpdate(
+//             { _id: id },
+//             update,
+//             { new: true }
+//         );
+
+//         if (!updatedClient) {
+//             return res.status(404).json({ statusCode: 404, message: 'Client not found' });
+//         }
+
+//         res.status(200).json({ statusCode: 200, success: true, message: 'Client updated successfully', updatedClient });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+//     }
+// };
+
+
 const updateClient = async (req, res) => {
     try {
         const id = req.params.id;
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({ statusCode: 400, message: 'Invalid Id' });
+        const updatedCourse = await clientModel.findByIdAndUpdate(id, req.body, {
+            new: true,
+        });
+
+        if (!updatedCourse) {
+            return res.status(404).json({
+                statusCode: 404,
+                status: false,
+                message: "No course found with this id",
+            });
         }
 
-        const { category } = req.body;
-        let update = {};
-
-        const image = updateImage(req);
-        if (image) {
-            update.image = image;
-        }
-        if (category) {
-            update.category = category;
-        }
-
-        if (Object.keys(update).length === 0) {
-            return res.status(400).json({ statusCode: 400, message: 'No data to update' });
-        }
-
-        const updatedClient = await clientModel.findOneAndUpdate(
-            { _id: id },
-            update,
-            { new: true }
-        );
-
-        if (!updatedClient) {
-            return res.status(404).json({ statusCode: 404, message: 'Client not found' });
-        }
-
-        res.status(200).json({ statusCode: 200, success: true, message: 'Client updated successfully', updatedClient });
+        res.status(200).json({
+            statusCode: 200,
+            status: true,
+            message: "Course updated successfully",
+           
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ statusCode: 500, success: false, message: 'Internal server error' });
+        res.status(500).json({
+            statusCode: 500,
+            status: false,
+            message: "Updating course failed",
+           
+        });
     }
-};
-
+}
 ///delete
 const deleteClient = async (req, res) => {
     try {
