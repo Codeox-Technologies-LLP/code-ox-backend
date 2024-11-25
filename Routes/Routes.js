@@ -38,6 +38,10 @@ const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqCont
 const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
 const { addBusiness, getBusiness, updateBusiness } = require('../Model/Business');
 const { addPageContent, getPageContents, updatePageContent, getPageContentByKey } = require('../Controllers/PageContentsController');
+const { createBlog, getAllBlogs, updateBlog, deleteBlog } = require('../Controllers/blogController');
+
+
+
 const router = express.Router();
 
 
@@ -213,6 +217,12 @@ router.post('/pagecontent',authenticate,addPageContent);
 router.get('/pagecontent',getPageContents);
 router.put('/pagecontent/:id',authenticate,updatePageContent)
 router.get('/pagecontents',getPageContentByKey)
+
+//blog
+router.post('/blogs', createBlog);          
+router.get('/blogs', getAllBlogs);           
+router.put('/blogs/:id', updateBlog);      
+router.delete('/blogs/:id', deleteBlog); 
 
 
 module.exports = router
