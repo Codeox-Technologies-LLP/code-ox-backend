@@ -38,6 +38,21 @@ const getBlogs = async (req, res) => {
     }
 };
 
+const getBlogById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const blog = await blogModel.findById(id);
+
+        if (!blog) {
+            return res.status(404).json({ statusCode: 404, success: false, message: 'Blog not found' });
+        }
+
+        res.status(200).json({ statusCode: 200, message: 'Blog fetched successfully', data: blog });
+    } catch (error) {
+        res.status(500).json({ statusCode: 500, success: false, message: 'Server Error', error: error.message });
+    }
+};
+
 // Update Blog
 const updateBlog = async (req, res) => {
     try {
@@ -92,4 +107,4 @@ const deleteBlog = async (req, res) => {
     }
 };
 
-module.exports = { addBlog, getBlogs, updateBlog, deleteBlog };
+module.exports = { addBlog, getBlogs, updateBlog, deleteBlog, getBlogById };

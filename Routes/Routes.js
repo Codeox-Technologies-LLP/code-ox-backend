@@ -38,7 +38,7 @@ const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqCont
 const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
 const { addBusiness, getBusiness, updateBusiness } = require('../Model/Business');
 const { addPageContent, getPageContents, updatePageContent, getPageContentByKey } = require('../Controllers/PageContentsController');
-const {  updateBlog, deleteBlog, getBlogs, addBlog } = require('../Controllers/blogController');
+const {  updateBlog, deleteBlog, getBlogs, addBlog, getBlogById } = require('../Controllers/blogController');
 
 
 
@@ -220,6 +220,7 @@ router.get('/pagecontents', getPageContentByKey)
 
 //blog
 router.get('/getBlogs', getBlogs);
+router.get('/getBlog/:id', getBlogById);
 router.post('/addBlog', upload.fields([{ name: 'logo' }, { name: 'profileImage' }]), addBlog);
 router.put('/updateBlog/:id', upload.fields([{ name: 'logo' }, { name: 'profileImage' }]), updateBlog);
 router.delete('/deleteBlog/:id', deleteBlog);
