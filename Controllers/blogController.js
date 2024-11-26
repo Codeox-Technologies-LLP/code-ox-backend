@@ -16,6 +16,7 @@ const addBlog = async (req, res) => {
             profileImage: profileImageData,
             name: req.body.name,
             content: req.body.content,
+            title: req.body.title,
             date: new Date(),
         };
 
@@ -55,6 +56,7 @@ const updateBlog = async (req, res) => {
         }
 
         if (req.body.name) data['name'] = req.body.name;
+        if (req.body.title) data['title'] = req.body.title;
         if (req.body.content) data['content'] = req.body.content;
 
         const response = await blogModel.findByIdAndUpdate(

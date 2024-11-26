@@ -42,7 +42,6 @@ const updateCustomizationService = async (req, res) => {
         const id = req.params.id;
         let data = {};
 
-
         if (req.body.title) data['title'] = req.body.title;
         if (req.body.description) data['description'] = req.body.description;
 
