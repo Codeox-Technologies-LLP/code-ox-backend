@@ -68,11 +68,6 @@ const getAboutOdoo = async (req,res) => {
 
 const updateAboutOdoo = async (req, res) => {
   try {
-    console.log("Step 1: Extracted data:");
-    console.log("  id:", req.params.id);
-    console.log("  description:", req.body.description);
-    console.log("  title:", req.body.title);
-    console.log("  index:", req.body.index); // Get the index from the request body
 
     const id = req.params.id
 

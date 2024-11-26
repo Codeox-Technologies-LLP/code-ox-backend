@@ -38,7 +38,7 @@ const { getFaq, addFaq, updateFaq, deleteFaq } = require('../Controllers/FaqCont
 const { addwhyChooseUs, getWhyChooseUs, updateWhyChooseUs, deleteWhyChooseUs } = require('../Controllers/whyChooseUsController');
 const { addBusiness, getBusiness, updateBusiness } = require('../Model/Business');
 const { addPageContent, getPageContents, updatePageContent, getPageContentByKey } = require('../Controllers/PageContentsController');
-const { createBlog, getAllBlogs, updateBlog, deleteBlog } = require('../Controllers/blogController');
+const {  updateBlog, deleteBlog, getBlogs, addBlog } = require('../Controllers/blogController');
 
 
 
@@ -56,7 +56,7 @@ router.get('/case-studies', getCaseStudies);
 router.put('/case-studies/:id', authenticate, upload.single('image'), updateCaseStudies);
 router.delete('/case-studies/:id', authenticate, deleteCaseStudy);
 router.post('/case-studies', authenticate, upload.single('image'), addCaseStudies);
-router.post('/case-studies/hero_add',authenticate, upload.single('image'), addHeroCaseStudy);
+router.post('/case-studies/hero_add', authenticate, upload.single('image'), addHeroCaseStudy);
 router.get('/case-studies/hero_get', getHeroCaseStudy);
 router.get('/case-studies/hero_get/:id', getSingleHeroCaseStudy);
 router.put('/case-studies/hero/:id', upload.single('image'), editHeroCaseStudy);
@@ -177,7 +177,7 @@ router.put('/aboutcodeox/:id', upload.fields([{ name: 'image', maxCount: 1 }, { 
 router.delete('/aboutcodeox/:id', deleteAboutcodeox);
 
 //odooaboutus
-router.post('/odooaboutus',  authenticate, upload.single('image'), addOdooaboutus)
+router.post('/odooaboutus', authenticate, upload.single('image'), addOdooaboutus)
 router.get('/odooaboutus', getOdooaboutus);
 router.put('/odooaboutus/:id', updateOdooAboutus);
 router.delete('/odooaboutus/:id', deleteOdooaboutus);
@@ -191,7 +191,7 @@ router.delete('/odoohero/:id', deleteOdoohero)
 //solution
 router.post('/solution', authenticate, upload.single('image'), addSolution)
 router.get('/solution', getSolution);
-router.put('/solution/:id',upload.single('image'), updateSolution);
+router.put('/solution/:id', upload.single('image'), updateSolution);
 router.delete('/solution/:id', deleteSolution);
 
 //customizationservice
@@ -209,20 +209,20 @@ router.delete('/aboutodoo/:id', deleteAboutodoo);
 
 //business count
 router.post('/business-counts', authenticate, addBusiness);
-router.get('/business-counts',getBusiness);
-router.put('/business-counts/:id',updateBusiness);
+router.get('/business-counts', getBusiness);
+router.put('/business-counts/:id', updateBusiness);
 
 //pageContent
-router.post('/pagecontent',authenticate,addPageContent);
-router.get('/pagecontent',getPageContents);
-router.put('/pagecontent/:id',authenticate,updatePageContent)
-router.get('/pagecontents',getPageContentByKey)
+router.post('/pagecontent', authenticate, addPageContent);
+router.get('/pagecontent', getPageContents);
+router.put('/pagecontent/:id', authenticate, updatePageContent)
+router.get('/pagecontents', getPageContentByKey)
 
 //blog
-router.post('/blogs', createBlog);          
-router.get('/blogs', getAllBlogs);           
-router.put('/blogs/:id', updateBlog);      
-router.delete('/blogs/:id', deleteBlog); 
+router.get('/getBlogs', getBlogs);
+router.post('/addBlog', upload.fields([{ name: 'logo' }, { name: 'profileImage' }]), addBlog);
+router.put('/updateBlog/:id', upload.fields([{ name: 'logo' }, { name: 'profileImage' }]), updateBlog);
+router.delete('/deleteBlog/:id', deleteBlog);
 
 
 module.exports = router

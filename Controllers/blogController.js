@@ -1,67 +1,93 @@
-const Blogs = require("../Model/blog");
+const blogModel = require('../Model/blog');
 const { addImage, updateImage, deleteImage } = require('../middlewares/image');
 
 // Create Blog
-const createBlog = async function (req, res) {
+const addBlog = async (req, res) => {
     try {
-        const data = req.body;
-        if (req.file) {
-            data.image = addImage(req);
+
+        const logoData = req.files['logo'] ? req.files['logo'][0].path : null;
+        const profileImageData = req.files['profileImage'] ? req.files['profileImage'][0].path : null;
+
+        if (!logoData || !profileImageData) {
+            return res.status(400).json({ message: 'Error adding images' });
         }
-        const blog = new Blogs(data);
-        await blog.save();
-        res.status(200).json({ status: true, message: "Blog created successfully", data: blog });
+        const data = {
+            logo: logoData,
+            profileImage: profileImageData,
+            name: req.body.name,
+            content: req.body.content,
+            date: new Date(),
+        };
+
+        const newBlog = new blogModel(data);
+        await newBlog.save();
+        res.status(200).json({ statusCode: 200, success: true, message: 'Blog created successfully', data: newBlog });
     } catch (error) {
-        res.status(500).json({ status: false, message: "Internal server error", error: error.message });
+        res.status(500).json({ statusCode: 500, success: false, message: 'Server Error', error: error.message });
     }
 };
 
 // Get All Blogs
-const getAllBlogs = async function (req, res) {
+const getBlogs = async (req, res) => {
     try {
-        const blogs = await Blogs.find();
-        res.status(200).json({ status: true, data: blogs });
+        const data = await blogModel.find();
+        res.status(200).json({ statusCode: 200, message: 'Blogs fetched successfully', data });
     } catch (error) {
-        res.status(500).json({ status: false, message: "Internal server error", error: error.message });
+        res.status(500).json({ statusCode: 500, success: false, message: 'Server Error', error: error.message });
     }
 };
 
 // Update Blog
-const updateBlog = async function (req, res) {
+const updateBlog = async (req, res) => {
     try {
-        const blogId = req.params.id;
-        const updatedData = req.body;
+        const id = req.params.id;
 
-        if (req.file) {
-            updatedData.image = updateImage(req);
+        let data = {};
+
+        if (req.files) {
+
+            if (req.files.logo) {
+                data['logo'] = req.files.logo[0].path || data['logo'];
+            }
+            if (req.files.profileImage) {
+                data['profileImage'] = req.files.profileImage[0].path || data['profileImage'];
+            }
         }
 
-        const blog = await Blogs.findByIdAndUpdate(blogId, updatedData, { new: true });
-        if (!blog) {
-            return res.status(404).json({ status: false, message: "Blog not found" });
+        if (req.body.name) data['name'] = req.body.name;
+        if (req.body.content) data['content'] = req.body.content;
+
+        const response = await blogModel.findByIdAndUpdate(
+            id,
+            { $set: data },
+            { new: true }
+        );
+        if (!response) {
+            return res.status(404).json({ statusCode: 404, success: false, message: 'Blog not found' });
         }
-        res.status(200).json({ status: true, message: "Blog updated successfully", data: blog });
+
+        res.status(200).json({ statusCode: 200, success: true, message: 'Blog updated successfully', data: response });
     } catch (error) {
-        res.status(500).json({ status: false, message: "Internal server error", error: error.message });
+        res.status(500).json({ statusCode: 500, success: false, message: 'Server Error', error: error.message });
     }
 };
+
 
 // Delete Blog
-const deleteBlog = async function (req, res) {
+const deleteBlog = async (req, res) => {
     try {
-        const blogId = req.params.id;
-        const blog = await Blogs.findByIdAndDelete(blogId);
-        if (!blog) {
-            return res.status(404).json({ status: false, message: "Blog not found" });
+        const id = req.params.id;
+        const response = await blogModel.findOneAndDelete({ _id: id });
+        if (!response) {
+            return res.status(404).json({ statusCode: 404, success: false, message: 'Blog not found' });
         }
 
-        // Delete associated image
-        deleteImage(blog);
+        deleteImage(response);
 
-        res.status(200).json({ status: true, message: "Blog deleted successfully" });
+        res.status(200).json({ statusCode: 200, success: true, message: 'Blog deleted successfully', data: response });
     } catch (error) {
-        res.status(500).json({ status: false, message: "Internal server error", error: error.message });
+        res.status(500).json({ statusCode: 500, success: false, message: 'Server Error', error: error.message });
     }
 };
 
-module.exports = { createBlog, getAllBlogs, updateBlog, deleteBlog };
+module.exports = { addBlog, getBlogs, updateBlog, deleteBlog };

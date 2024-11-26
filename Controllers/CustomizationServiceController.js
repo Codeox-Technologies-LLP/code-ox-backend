@@ -42,8 +42,6 @@ const updateCustomizationService = async (req, res) => {
         const id = req.params.id;
         let data = {};
 
-        // Log request body to debug
-        console.log('Request body:', req.body);
 
         if (req.body.title) data['title'] = req.body.title;
         if (req.body.description) data['description'] = req.body.description;

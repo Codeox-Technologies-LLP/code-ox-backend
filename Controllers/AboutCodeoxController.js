@@ -6,7 +6,6 @@ const addAboutcodeox = async (req, res) => {
     try {
         let imageData;
         let cardImages = [];
-        console.log(req.files,"req.files");
         if (req.file) {
             // If single file upload for 'image'
             imageData = req.file.path; // Adjust path as per your multer configuration
@@ -28,8 +27,6 @@ const addAboutcodeox = async (req, res) => {
             return res.status(400).json({ message: 'Error adding image: No file uploaded' });
         }
 
-        console.log("imageData:", imageData);
-        console.log("cardImages:", cardImages);
 
         // const cards = Array.isArray(req.body.cards) ? req.body.cards : [];
 

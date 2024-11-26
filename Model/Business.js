@@ -26,7 +26,6 @@ const getBusiness = async (req, res) => {
 const updateBusiness = async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(id);
         
         const response = await countModel.findByIdAndUpdate(id, req.body, { new: true });
         if (!response) {

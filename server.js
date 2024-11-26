@@ -18,6 +18,7 @@ const dotenvConfig = dotenv.config({
 });
 
 app.use((err, req, res, next) => {
+  
   if (err instanceof multer.MulterError) {
     // Handle Multer errors
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
