@@ -31,12 +31,52 @@ const addBlog = async (req, res) => {
 // Get All Blogs
 const getBlogs = async (req, res) => {
     try {
-        const data = await blogModel.find();
-        res.status(200).json({ statusCode: 200, message: 'Blogs fetched successfully', data });
+        const { page = 1, search = '' } = req.query;
+
+        const pageNum = parseInt(page);
+        const limitNum = 8;
+
+        const searchQuery = search
+            ? {
+                $or: [
+                    { title: { $regex: search, $options: 'i' } },
+                    { content: { $regex: search, $options: 'i' } },
+                    { name: { $regex: search, $options: 'i' } }
+                ]
+            }
+            : {};
+
+        const totalBlogs = await blogModel.countDocuments(searchQuery);
+
+        const data = await blogModel
+            .find(searchQuery)
+            .skip((pageNum - 1) * limitNum)
+            .limit(limitNum)
+            .sort({ date: -1 });
+
+        const pagination = {
+            currentPage: pageNum,
+            totalPages: Math.ceil(totalBlogs / limitNum),
+            totalBlogs,
+        };
+
+        res.status(200).json({
+            statusCode: 200,
+            message: 'Blogs fetched successfully',
+            data,
+            pagination,
+        });
     } catch (error) {
-        res.status(500).json({ statusCode: 500, success: false, message: 'Server Error', error: error.message });
+        res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: 'Server Error',
+            error: error.message,
+        });
     }
 };
+
+
 
 const getBlogById = async (req, res) => {
     try {
