@@ -19,8 +19,8 @@ const queries= new Schema({
     phone:{
         type:Number,
         required:true,
-        min:1000000000,
-       max:9999999999,
+    //     min:1000000000,
+    //    max:9999999999,
     },
     message:{
         type:String,

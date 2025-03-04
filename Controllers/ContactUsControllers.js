@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const querymodel = require("../Model/queries");
 const countryModel = require('../Model/country')
 const axios = require("axios");
+const contactSubmitResponse = require("../tools/mail");
 
 function validateEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -11,45 +12,45 @@ function validateEmail(email) {
 const addQuery = async (req, res) => {
   try {
     const { email, name, phone, message, countryCode } = req.body;
-    if (validateEmail(email)) {
-      const newquery = new querymodel({
-        email,
-        name,
-        phone,
-        message,
-        countryCode,
-      });
-      await newquery.save();
-      res
-        .status(201)
-        .json({
-          statusCode: 201,
-          success: true,
-          message: "Query submitted successfully",
-        });
-    } else {
-      console.log("Email is invalid");
-      res
-        .status(400)
-        .json({
-          statusCode: 400,
-          success: false,
-          error: "Internal server error",
-          message: "Invalid email",
-        });
-    }
-  } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({
-        statusCode: 500,
+
+    if (!validateEmail(email)) {
+      console.log("Invalid Email Provided");
+      return res.status(400).json({
+        statusCode: 400,
         success: false,
-        error: "Internal server error",
-        message: "Query submission failed",
+        error: "Invalid email",
+        message: "Please provide a valid email address.",
       });
+    }
+
+    const newQuery = new querymodel({ email, name, phone, message, countryCode });
+
+    await newQuery.save(); // Save to DB first
+
+    // Send email and handle errors properly
+    try {
+      await contactSubmitResponse(name, email);
+      console.log("Confirmation email sent successfully");
+    } catch (emailError) {
+      console.error("Failed to send email:", emailError);
+    }
+
+    return res.status(201).json({
+      statusCode: 201,
+      success: true,
+      message: "Query submitted successfully",
+    });
+  } catch (error) {
+    console.error("Error in addQuery:", error);
+    return res.status(500).json({
+      statusCode: 500,
+      success: false,
+      error: "Internal server error",
+      message: "Query submission failed",
+    });
   }
 };
+
 
 //get Query
 
